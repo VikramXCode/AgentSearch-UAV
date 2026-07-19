@@ -1,8 +1,10 @@
 from PIL import Image
+import re
 
 from models.schemas import DetectionResult
 from models.yolo_world import YOLOWorldDetector
 from models.postprocessor import DetectionPostProcessor
+from utils.search_utils import canonicalize_target
 
 class DetectionEngine:
 
@@ -28,11 +30,19 @@ class DetectionEngine:
 
         raw_count = len(raw_detections)
 
+        requested_target = canonicalize_target(target)
+
+        target_matched = [
+            d for d in raw_detections
+            if canonicalize_target(d.label) == requested_target
+        ]
+
         filtered_detections = DetectionPostProcessor.apply_nms(
-            raw_detections
+            target_matched
         )
 
         print(f"\nRaw detections : {raw_count}")
+        print(f"Target matches : {len(target_matched)}")
         print(f"After NMS      : {len(filtered_detections)}")
 
         width, height = Image.open(image_path).size
@@ -45,3 +55,11 @@ class DetectionEngine:
             raw_detections=raw_detections,
             filtered_detections=filtered_detections,
         )
+
+    @staticmethod
+    def _normalize_label(label: str) -> str:
+
+        normalized = label.strip().lower()
+        normalized = normalized.replace("_", " ").replace("-", " ")
+        normalized = re.sub(r"\s+", " ", normalized)
+        return normalized

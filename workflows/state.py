@@ -9,6 +9,7 @@ class QueryState(BaseModel):
     raw_query: str = ""
     target: str = ""
     attributes: Dict[str, str] = Field(default_factory=dict)
+    quantity: str = "all"
     search_mode: str = "text"
 
 
@@ -61,6 +62,8 @@ class MissionState(BaseModel):
 class DetectionState(BaseModel):
     objects_found: List[Dict] = Field(default_factory=list)
     image_path: Optional[str] = None
+    processed_image_path: Optional[str] = None
+    output_image_path: Optional[str] = None
 
 
 # -----------------------------

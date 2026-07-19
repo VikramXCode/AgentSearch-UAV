@@ -1,1 +1,184 @@
-[]
+[
+  {
+    "timestamp": "2026-07-19T07:38:09.772382Z",
+    "query": "Find all red cars",
+    "target": "car",
+    "attributes": {
+      "color": "red"
+    },
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T07:38:36.213131Z",
+    "query": "Detect cars",
+    "target": "car",
+    "attributes": {},
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": false,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T07:40:37.955998Z",
+    "query": "blue car",
+    "target": "car",
+    "attributes": {
+      "color": "blue"
+    },
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 2,
+    "confidence_score": 0.7172982096672058,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "Completed"
+  },
+  {
+    "timestamp": "2026-07-19T07:45:51.923844Z",
+    "query": "blue car",
+    "target": "car",
+    "attributes": {
+      "color": "blue",
+      "quantity": "all"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T07:48:44.306416Z",
+    "query": "blue car",
+    "target": "car",
+    "attributes": {
+      "color": "blue"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 2,
+    "confidence_score": 0.7802920937538147,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "Completed"
+  },
+  {
+    "timestamp": "2026-07-19T07:59:11.617735Z",
+    "query": "red bike",
+    "target": "motorcycle",
+    "attributes": {
+      "color": "red"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World + SAHI",
+    "use_sahi": true,
+    "use_super_resolution": true,
+    "verification_enabled": true,
+    "objects_found": 5,
+    "confidence_score": 0.0,
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T08:05:15.641787Z",
+    "query": "car",
+    "target": "car",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": true,
+    "verification_enabled": false,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "image_path": "C:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch-UAV\\AgentSearch-UAV\\sample_images\\cars.jpg",
+    "processed_image_path": "outputs\\preprocessed\\cars_srx2.jpg",
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T08:05:54.883359Z",
+    "query": "blue car",
+    "target": "car",
+    "attributes": {
+      "color": "blue"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": true,
+    "verification_enabled": true,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "image_path": "C:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch-UAV\\AgentSearch-UAV\\sample_images\\cars.jpg",
+    "processed_image_path": "outputs\\preprocessed\\cars_srx2.jpg",
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "No matching objects detected"
+  },
+  {
+    "timestamp": "2026-07-19T08:07:21.731827Z",
+    "query": "blue car",
+    "target": "car",
+    "attributes": {
+      "color": "blue"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": true,
+    "verification_enabled": true,
+    "objects_found": 2,
+    "confidence_score": 0.7867991924285889,
+    "image_path": "sample_images/world.png",
+    "processed_image_path": "outputs\\preprocessed\\world_srx2.jpg",
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "Completed"
+  },
+  {
+    "timestamp": "2026-07-19T08:08:07.563724Z",
+    "query": "red bike",
+    "target": "motorcycle",
+    "attributes": {
+      "color": "red"
+    },
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World + SAHI",
+    "use_sahi": true,
+    "use_super_resolution": true,
+    "verification_enabled": true,
+    "objects_found": 4,
+    "confidence_score": 0.9258595705032349,
+    "image_path": "sample_images/world.png",
+    "processed_image_path": "outputs\\preprocessed\\world_srx2.jpg",
+    "output_image_path": "outputs\\detection_result.jpg",
+    "status": "Completed"
+  }
+]

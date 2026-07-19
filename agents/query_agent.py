@@ -1,4 +1,5 @@
 from workflows.state import AgentState
+from utils.search_utils import extract_query_components
 
 
 class QueryAgent:
@@ -13,36 +14,18 @@ class QueryAgent:
 
         state.query.raw_query = user_query
 
-        # Simple parser (we'll replace this with an LLM later)
-        words = user_query.lower().split()
-
-        colors = [
-            "red",
-            "blue",
-            "green",
-            "white",
-            "black",
-            "yellow",
-            "orange",
-            "gray",
-            "grey",
-            "brown"
-        ]
-
-        detected_color = None
-
-        for word in words:
-            if word in colors:
-                detected_color = word
-                break
+        components = extract_query_components(user_query)
 
         state.query.attributes = {}
 
-        if detected_color:
-            state.query.attributes["color"] = detected_color
+        if components.color:
+            state.query.attributes["color"] = components.color
 
-        if len(words) > 0:
-            state.query.target = words[-1]
+        if components.size:
+            state.query.attributes["size"] = components.size
+
+        state.query.quantity = components.quantity
+        state.query.target = components.target
 
         state.query.search_mode = "text"
 

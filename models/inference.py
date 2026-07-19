@@ -1,5 +1,6 @@
 from models.detector import DetectionEngine
 from utils.visualizer import DetectionVisualizer
+from utils.paths import DETECTION_OUTPUT_PATH
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
     print("==============================")
 
     if len(result.filtered_detections) == 0:
-        print("No objects found.")
+        print("No objects detected.")
         return
 
     for i, detection in enumerate(result.filtered_detections, start=1):
@@ -38,7 +39,7 @@ def main():
         print(f"Confidence : {detection.confidence:.3f}")
         print(f"BBox       : {detection.bbox}")
 
-    output_path = "outputs/detection_result.jpg"
+    output_path = DETECTION_OUTPUT_PATH
 
     DetectionVisualizer.draw(
         image_path=image_path,

@@ -1,6 +1,8 @@
 import torch
 from torchvision.ops import nms
 
+from utils.search_utils import normalize_label
+
 
 class DetectionPostProcessor:
 
@@ -13,25 +15,31 @@ class DetectionPostProcessor:
         if len(detections) == 0:
             return detections
 
-        boxes = torch.tensor(
-            [d.bbox for d in detections],
-            dtype=torch.float32,
-        )
+        grouped = {}
 
-        scores = torch.tensor(
-            [d.confidence for d in detections],
-            dtype=torch.float32,
-        )
-
-        keep = nms(
-            boxes,
-            scores,
-            iou_threshold,
-        )
+        for detection in detections:
+            grouped.setdefault(normalize_label(detection.label), []).append(detection)
 
         filtered = []
 
-        for idx in keep.tolist():
-            filtered.append(detections[idx])
+        for _, group in grouped.items():
+            boxes = torch.tensor(
+                [d.bbox for d in group],
+                dtype=torch.float32,
+            )
 
-        return filtered
+            scores = torch.tensor(
+                [d.confidence for d in group],
+                dtype=torch.float32,
+            )
+
+            keep = nms(
+                boxes,
+                scores,
+                iou_threshold,
+            )
+
+            for idx in keep.tolist():
+                filtered.append(group[idx])
+
+        return sorted(filtered, key=lambda detection: detection.confidence, reverse=True)

@@ -11,6 +11,10 @@ def main():
 
     detections = detector.detect(image, target)
 
+    if len(detections) == 0:
+        print("\nNo matching objects detected.\n")
+        return
+
     print("\nDetected:", len(detections), "objects\n")
 
     for i, detection in enumerate(detections, start=1):
