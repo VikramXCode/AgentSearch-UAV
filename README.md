@@ -81,7 +81,7 @@ It will ask for:
 - image path
 - target object
 
-### 3. Main pipeline
+### 3. Main pipeline (query)
 
 ```powershell
 python -m workflows.graph
@@ -91,7 +91,7 @@ It will ask for:
 
 - search query
 - image path
-
+  
 It then runs query parsing, knowledge loading, strategy selection, detection, optional verification, explanation, annotation saving, and prints the final AgentState JSON.
 
 ### 4. IoU sanity check
