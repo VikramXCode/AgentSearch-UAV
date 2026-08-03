@@ -4,17 +4,26 @@ from utils.search_utils import extract_query_components
 
 class QueryAgent:
 
-    def run(self, state: AgentState) -> AgentState:
+    def run(
+        self,
+        state: AgentState,
+        query: str | None = None,
+    ) -> AgentState:
 
         print("\n==============================")
         print("      QUERY AGENT")
         print("==============================")
 
-        user_query = input("Enter your search query: ")
+        # CLI fallback
+        if query is None:
+            query = input("Enter your search query: ").strip()
 
-        state.query.raw_query = user_query
+        if not query:
+            raise ValueError("Search query is required.")
 
-        components = extract_query_components(user_query)
+        state.query.raw_query = query
+
+        components = extract_query_components(query)
 
         state.query.attributes = {}
 
@@ -26,7 +35,6 @@ class QueryAgent:
 
         state.query.quantity = components.quantity
         state.query.target = components.target
-
         state.query.search_mode = "text"
 
         print("\nParsed Query")

@@ -43,6 +43,8 @@ python -m pip install pillow opencv-python sahi ultralytics
 python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
 ```
 
+
+
 ## Run the demos
 
 Run all commands from the project root so the package imports like `from models...` and `from workflows...` resolve correctly.
