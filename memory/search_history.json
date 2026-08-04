@@ -170,5 +170,41 @@
     "processed_image_path": "outputs/preprocessed/world_srx2.jpg",
     "output_image_path": "outputs/detection_result.jpg",
     "status": "Completed"
+  },
+  {
+    "timestamp": "2026-08-03T15:04:07.113645Z",
+    "query": "find a dog",
+    "target": "dog",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World + SAHI",
+    "use_sahi": true,
+    "use_super_resolution": true,
+    "verification_enabled": false,
+    "objects_found": 3,
+    "confidence_score": 0.9141491850217184,
+    "image_path": "/Users/vikram/Proj Work/UAV backup/AgentSearch-UAV/api/uploads/e49c01d5539246d99df3da58fe87cebf_world.png",
+    "processed_image_path": "outputs/preprocessed/e49c01d5539246d99df3da58fe87cebf_world_srx2.jpg",
+    "output_image_path": "outputs/detection_result.jpg",
+    "status": "Completed"
+  },
+  {
+    "timestamp": "2026-08-03T15:11:17.902716Z",
+    "query": "find a dog",
+    "target": "dog",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World + SAHI",
+    "use_sahi": true,
+    "use_super_resolution": true,
+    "verification_enabled": false,
+    "objects_found": 3,
+    "confidence_score": 0.9141491850217184,
+    "image_path": "sample_images/world.png",
+    "processed_image_path": "outputs/preprocessed/world_srx2.jpg",
+    "output_image_path": "outputs/detection_result.jpg",
+    "status": "Completed"
   }
 ]

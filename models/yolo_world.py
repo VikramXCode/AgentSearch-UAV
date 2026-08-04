@@ -3,6 +3,7 @@ import time
 
 from models.schemas import Detection
 from models.base_detector import BaseDetector
+from utils.model_paths import resolve_yolo_world_weights
 
 
 class YOLOWorldDetector(BaseDetector):
@@ -20,9 +21,9 @@ class YOLOWorldDetector(BaseDetector):
         "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
     ]
 
-    def __init__(self, model_path: str = "weights/yolov8s-world.pt"):
+    def __init__(self, model_path: str | None = None):
 
-        self.model_path = model_path
+        self.model_path = resolve_yolo_world_weights(model_path)
         self.model = None
 
         self.load_model()

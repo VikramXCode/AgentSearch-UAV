@@ -20,9 +20,9 @@ class DetectionRunResult:
 
 class DetectionAgent:
 
-    def __init__(self):
-        self.yolo_detector = DetectionEngine()
-        self.sahi_detector = SAHIEngine()
+    def __init__(self, model_path: str | None = None):
+        self.yolo_detector = DetectionEngine(model_path=model_path)
+        self.sahi_detector = SAHIEngine(model_path=model_path)
 
     def run(
         self,

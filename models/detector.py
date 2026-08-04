@@ -8,9 +8,9 @@ from utils.search_utils import canonicalize_target
 
 class DetectionEngine:
 
-    def __init__(self):
+    def __init__(self, model_path: str | None = None):
 
-        self.detector = YOLOWorldDetector()
+        self.detector = YOLOWorldDetector(model_path=model_path)
     def detect(
         self,
         image_path: str,

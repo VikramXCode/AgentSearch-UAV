@@ -4,6 +4,7 @@ from sahi.predict import get_sliced_prediction
 from models.postprocessor import DetectionPostProcessor
 from models.schemas import Detection
 from utils.search_utils import canonicalize_target, normalize_label
+from utils.model_paths import resolve_yolo_world_weights
 
 
 class SAHIEngine:
@@ -23,13 +24,15 @@ class SAHIEngine:
         "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
     ]
 
-    def __init__(self):
+    def __init__(self, model_path: str | None = None):
 
         print("\nLoading SAHI Engine...")
 
+        self.model_path = resolve_yolo_world_weights(model_path)
+
         self.model = AutoDetectionModel.from_pretrained(
             model_type="ultralytics",
-            model_path="weights/yolov8s-world.pt",
+            model_path=self.model_path,
             confidence_threshold=0.10,
             device="cpu"
         )
