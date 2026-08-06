@@ -6,50 +6,147 @@ import torch
 from PIL import Image
 
 try:
-	import clip
-except ImportError as exc:  # pragma: no cover - handled at runtime
-	clip = None
-	_clip_import_error = exc
+    import clip
+except ImportError as exc:
+    clip = None
+    _clip_import_error = exc
 else:
-	_clip_import_error = None
+    _clip_import_error = None
 
 
 class CLIPEngine:
 
-	# Cache the model once so the verification step can reuse it across many detections.
-	def __init__(self, model_name: str = "ViT-B/32"):
-		if clip is None:
-			raise RuntimeError(
-				"CLIP is not installed. Install the `clip` package from the CLIP repository before running verification."
-			) from _clip_import_error
+    def __init__(self, model_name: str = "ViT-B/32"):
 
-		self.model_name = model_name
-		self.device = "cuda" if torch.cuda.is_available() else "cpu"
-		self.model, self.preprocess = clip.load(model_name, device=self.device, jit=False)
-		self.model.eval()
+        if clip is None:
+            raise RuntimeError(
+                "CLIP is not installed. Install OpenAI CLIP before "
+                "running verification."
+            ) from _clip_import_error
 
-	@classmethod
-	@lru_cache(maxsize=1)
-	def shared(cls) -> "CLIPEngine":
-		return cls()
+        self.model_name = model_name
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
-	def score_image_against_texts(self, image: Image.Image, texts: list[str]) -> dict[str, float]:
+        print(f"Loading CLIP {model_name} on {self.device}...")
 
-		if len(texts) == 0:
-			return {}
+        self.model, self.preprocess = clip.load(
+            model_name,
+            device=self.device,
+            jit=False,
+        )
 
-		pil_image = image.convert("RGB")
-		image_tensor = self.preprocess(pil_image).unsqueeze(0).to(self.device)
-		text_tokens = clip.tokenize(texts).to(self.device)
+        self.model.eval()
 
-		with torch.no_grad():
-			image_features = self.model.encode_image(image_tensor)
-			text_features = self.model.encode_text(text_tokens)
+        print("CLIP loaded successfully.")
 
-			image_features = image_features / image_features.norm(dim=-1, keepdim=True)
-			text_features = text_features / text_features.norm(dim=-1, keepdim=True)
+    @classmethod
+    @lru_cache(maxsize=1)
+    def shared(cls) -> "CLIPEngine":
+        return cls()
 
-			logits = image_features @ text_features.T
-			probabilities = logits.softmax(dim=-1)[0].detach().cpu().tolist()
+    def score_image_against_texts(
+        self,
+        image: Image.Image,
+        texts: list[str],
+    ) -> dict[str, float]:
+        """
+        Return cosine similarities instead of softmax probabilities.
 
-		return {text: float(score) for text, score in zip(texts, probabilities)}
+        This is important because softmax always forces the prompts
+        to compete and produces a winner even when every prompt is bad.
+        """
+
+        if not texts:
+            return {}
+
+        image_tensor = (
+            self.preprocess(image.convert("RGB"))
+            .unsqueeze(0)
+            .to(self.device)
+        )
+
+        text_tokens = clip.tokenize(texts).to(self.device)
+
+        with torch.inference_mode():
+
+            image_features = self.model.encode_image(image_tensor)
+            text_features = self.model.encode_text(text_tokens)
+
+            image_features = image_features / image_features.norm(
+                dim=-1,
+                keepdim=True,
+            )
+
+            text_features = text_features / text_features.norm(
+                dim=-1,
+                keepdim=True,
+            )
+
+            similarities = (
+                image_features @ text_features.T
+            )[0]
+
+        values = similarities.detach().float().cpu().tolist()
+
+        return {
+            text: float(score)
+            for text, score in zip(texts, values)
+        }
+
+    def score_images_against_texts(
+        self,
+        images: list[Image.Image],
+        texts: list[str],
+    ) -> list[dict[str, float]]:
+        """
+        Batch CLIP verification.
+
+        One GPU forward pass can verify multiple YOLO detections.
+        """
+
+        if not images or not texts:
+            return []
+
+        image_batch = torch.stack(
+            [
+                self.preprocess(image.convert("RGB"))
+                for image in images
+            ]
+        ).to(self.device)
+
+        text_tokens = clip.tokenize(texts).to(self.device)
+
+        with torch.inference_mode():
+
+            image_features = self.model.encode_image(image_batch)
+            text_features = self.model.encode_text(text_tokens)
+
+            image_features = image_features / image_features.norm(
+                dim=-1,
+                keepdim=True,
+            )
+
+            text_features = text_features / text_features.norm(
+                dim=-1,
+                keepdim=True,
+            )
+
+            similarities = image_features @ text_features.T
+
+        similarities = similarities.detach().float().cpu()
+
+        results = []
+
+        for row in similarities:
+
+            results.append(
+                {
+                    text: float(score)
+                    for text, score in zip(
+                        texts,
+                        row.tolist(),
+                    )
+                }
+            )
+
+        return results

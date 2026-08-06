@@ -105,7 +105,8 @@ def extract_per_class_metrics(metrics) -> list[dict]:
     if box_metrics is None:
         return []
 
-    class_ids = list(getattr(box_metrics, "ap_class_index", []) or [])
+    class_ids_raw = getattr(box_metrics, "ap_class_index", None)
+    class_ids = list(class_ids_raw) if class_ids_raw is not None else []
     all_ap = getattr(box_metrics, "all_ap", None)
     map50_95_values = getattr(box_metrics, "maps", None)
     map50_values = getattr(box_metrics, "ap50", None)

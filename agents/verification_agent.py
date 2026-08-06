@@ -5,14 +5,21 @@ from PIL import Image
 
 from models.clip_engine import CLIPEngine
 from models.schemas import Detection
-from utils.search_utils import build_verification_prompts, canonicalize_target
+from utils.search_utils import (
+    build_verification_prompts,
+    canonicalize_target,
+)
 from workflows.state import AgentState
 
 
 class VerificationAgent:
 
+    # These are deliberately conservative starting values.
+    # They should eventually be calibrated using validation data.
+    MIN_CLIP_SIMILARITY = 0.20
+    MIN_ATTRIBUTE_MARGIN = 0.01
+
     def __init__(self):
-        # Load CLIP lazily so the pipeline can start even when verification is not needed.
         self.clip_engine = None
 
     def run(self, state: AgentState) -> AgentState:
@@ -24,126 +31,397 @@ class VerificationAgent:
         if self.clip_engine is None:
             self.clip_engine = CLIPEngine.shared()
 
-        image_path = state.detection.processed_image_path or state.detection.image_path
-        verified = self._filter_detections(state, image_path)
+        image_path = (
+            state.detection.processed_image_path
+            or state.detection.image_path
+        )
 
-        state.verification.verified_objects = [
-            {
-                "label": detection.label,
-                "confidence": detection.confidence,
-                "bbox": detection.bbox,
-            }
-            for detection in verified
-        ]
-        state.verification.confidence_score = mean([detection.confidence for detection in verified]) if verified else 0.0
+        verified = self._filter_detections(
+            state,
+            image_path,
+        )
 
+        state.verification.verified_objects = verified
+
+        if verified:
+            state.verification.confidence_score = mean(
+                item["confidence"]
+                for item in verified
+            )
+        else:
+            state.verification.confidence_score = 0.0
+
+        print()
         print(f"Verified objects: {len(verified)}")
-        print(f"Verification confidence: {state.verification.confidence_score:.3f}")
+        print(
+            "Verification confidence: "
+            f"{state.verification.confidence_score:.3f}"
+        )
 
         return state
 
-    def _filter_detections(self, state: AgentState, image_path: str | None) -> list[Detection]:
+    def _filter_detections(
+        self,
+        state: AgentState,
+        image_path: str | None,
+    ) -> list[dict]:
 
         if not image_path:
-            image_path = state.detection.image_path
-
-        if not image_path or not os.path.exists(image_path):
             return []
 
-        target = canonicalize_target(state.query.target)
-        requested_size = state.query.attributes.get("size", "").strip().lower()
-        quantity = state.query.quantity or state.query.attributes.get("quantity", "all")
+        if not os.path.exists(image_path):
+            print(
+                f"Verification image does not exist: "
+                f"{image_path}"
+            )
+            return []
 
         image = Image.open(image_path).convert("RGB")
-        prompt_candidates = build_verification_prompts(state.query.target, state.query.attributes)
-        requested_prompt = prompt_candidates[0] if prompt_candidates else target
 
-        candidates = []
+        target = canonicalize_target(
+            state.query.target
+        )
 
-        for object_item in state.detection.objects_found:
+        attributes = state.query.attributes
+
+        requested_size = (
+            attributes.get("size", "")
+            .strip()
+            .lower()
+        )
+
+        quantity = (
+            state.query.quantity
+            or attributes.get("quantity", "all")
+        )
+
+        prompts = build_verification_prompts(
+            target,
+            attributes,
+        )
+
+        if not prompts:
+            return []
+
+        requested_prompt = prompts[0]
+
+        detections = []
+        crops = []
+
+        # ----------------------------------
+        # Stage 1 — geometric filtering
+        # ----------------------------------
+
+        for item in state.detection.objects_found:
+
             detection = Detection(
-                label=object_item["label"],
-                confidence=float(object_item["confidence"]),
-                bbox=[float(value) for value in object_item["bbox"]],
+                label=item["label"],
+                confidence=float(
+                    item["confidence"]
+                ),
+                bbox=[
+                    float(value)
+                    for value in item["bbox"]
+                ],
             )
 
-            if float(detection.confidence) < state.strategy.confidence_threshold:
+            if (
+                detection.confidence
+                < state.strategy.confidence_threshold
+            ):
                 continue
 
-            if canonicalize_target(detection.label) != target:
+            if (
+                canonicalize_target(detection.label)
+                != target
+            ):
                 continue
 
-            if requested_size and not self._matches_size(detection.bbox, image.size, requested_size):
+            if (
+                requested_size
+                and not self._matches_size(
+                    detection.bbox,
+                    image.size,
+                    requested_size,
+                )
+            ):
                 continue
 
-            crop = self._crop_image(image, detection.bbox)
+            crop = self._crop_image_with_context(
+                image,
+                detection.bbox,
+            )
+
             if crop is None:
                 continue
 
-            scores = self.clip_engine.score_image_against_texts(crop, prompt_candidates)
+            detections.append(detection)
+            crops.append(crop)
 
-            if len(scores) == 0:
+        if not detections:
+            return []
+
+        # ----------------------------------
+        # Stage 2 — batched CLIP inference
+        # ----------------------------------
+
+        score_results = (
+            self.clip_engine
+            .score_images_against_texts(
+                crops,
+                prompts,
+            )
+        )
+
+        candidates = []
+
+        has_attributes = bool(
+            attributes.get("color")
+            or attributes.get("size")
+        )
+
+        for detection, scores in zip(
+            detections,
+            score_results,
+        ):
+
+            if not scores:
                 continue
 
-            print(f"\nDetected: {detection.label}")
-            print("Similarity:")
+            requested_score = scores.get(
+                requested_prompt,
+                -1.0,
+            )
 
-            for prompt, similarity in sorted(scores.items(), key=lambda item: item[1], reverse=True):
-                print(f"  {prompt} = {similarity:.2f}")
+            alternatives = [
+                score
+                for prompt, score in scores.items()
+                if prompt != requested_prompt
+            ]
 
-            selected_prompt, selected_score = max(scores.items(), key=lambda item: item[1])
-            print(f"Selected: {selected_prompt} ({selected_score:.2f})")
+            best_alternative = (
+                max(alternatives)
+                if alternatives
+                else -1.0
+            )
 
-            if selected_prompt != requested_prompt:
-                print("Accepted: no")
+            margin = (
+                requested_score
+                - best_alternative
+            )
+
+            selected_prompt, selected_score = max(
+                scores.items(),
+                key=lambda item: item[1],
+            )
+
+            print()
+            print(
+                f"Candidate: {detection.label} "
+                f"{detection.confidence:.3f}"
+            )
+
+            print(
+                f"Requested: {requested_prompt} "
+                f"{requested_score:.3f}"
+            )
+
+            print(
+                f"Best match: {selected_prompt} "
+                f"{selected_score:.3f}"
+            )
+
+            print(
+                f"Attribute margin: {margin:.3f}"
+            )
+
+            # ----------------------------------
+            # CLIP acceptance
+            # ----------------------------------
+
+            if (
+                requested_score
+                < self.MIN_CLIP_SIMILARITY
+            ):
+                print(
+                    "Rejected: CLIP similarity "
+                    "too low"
+                )
                 continue
 
-            print("Accepted: yes")
+            if has_attributes:
+
+                if selected_prompt != requested_prompt:
+                    print(
+                        "Rejected: another attribute "
+                        "prompt matched better"
+                    )
+                    continue
+
+                if (
+                    margin
+                    < self.MIN_ATTRIBUTE_MARGIN
+                ):
+                    print(
+                        "Rejected: attribute evidence "
+                        "too weak"
+                    )
+                    continue
+
+            # ----------------------------------
+            # Combined confidence
+            # ----------------------------------
+
+            clip_quality = max(
+                0.0,
+                min(
+                    1.0,
+                    (requested_score + 1.0) / 2.0,
+                ),
+            )
+
+            combined_confidence = (
+                0.70 * detection.confidence
+                + 0.30 * clip_quality
+            )
+
+            print(
+                "Accepted: "
+                f"combined={combined_confidence:.3f}"
+            )
 
             candidates.append(
                 {
-                    "detection": Detection(
-                        label=detection.label,
-                        confidence=detection.confidence,
-                        bbox=detection.bbox,
+                    "label": detection.label,
+                    "confidence": float(
+                        combined_confidence
                     ),
-                    "clip_similarity": float(selected_score),
-                    "selected_prompt": selected_prompt,
+                    "detector_confidence": float(
+                        detection.confidence
+                    ),
+                    "clip_similarity": float(
+                        requested_score
+                    ),
+                    "clip_margin": float(margin),
+                    "bbox": detection.bbox,
                 }
             )
 
-        if quantity == "one" and len(candidates) > 1:
-            candidates = [max(candidates, key=lambda item: (item["clip_similarity"], item["detection"].confidence))]
+        # ----------------------------------
+        # Quantity handling
+        # ----------------------------------
 
-        return [candidate["detection"] for candidate in candidates]
+        candidates.sort(
+            key=lambda item: item["confidence"],
+            reverse=True,
+        )
+
+        if quantity == "one":
+            return candidates[:1]
+
+        return candidates
 
     @staticmethod
-    def _matches_size(bbox: list[float], image_size: tuple[int, int], requested_size: str) -> bool:
+    def _matches_size(
+        bbox: list[float],
+        image_size: tuple[int, int],
+        requested_size: str,
+    ) -> bool:
 
         image_width, image_height = image_size
-        box_width = max(1.0, bbox[2] - bbox[0])
-        box_height = max(1.0, bbox[3] - bbox[1])
-        relative_area = (box_width * box_height) / float(image_width * image_height)
 
-        if requested_size == "small":
+        box_width = max(
+            1.0,
+            bbox[2] - bbox[0],
+        )
+
+        box_height = max(
+            1.0,
+            bbox[3] - bbox[1],
+        )
+
+        relative_area = (
+            box_width * box_height
+        ) / float(
+            image_width * image_height
+        )
+
+        if requested_size in {
+            "small",
+            "tiny",
+            "little",
+        }:
             return relative_area <= 0.08
+
         if requested_size == "medium":
-            return 0.08 < relative_area < 0.20
-        if requested_size == "large":
+            return (
+                0.08
+                < relative_area
+                < 0.20
+            )
+
+        if requested_size in {
+            "large",
+            "big",
+        }:
             return relative_area >= 0.20
 
         return True
 
     @staticmethod
-    def _crop_image(image: Image.Image, bbox: list[float]) -> Image.Image | None:
+    def _crop_image_with_context(
+        image: Image.Image,
+        bbox: list[float],
+        padding_ratio: float = 0.10,
+    ) -> Image.Image | None:
 
-        x1, y1, x2, y2 = [int(value) for value in bbox]
-        x1 = max(0, min(x1, image.width - 1))
-        y1 = max(0, min(y1, image.height - 1))
-        x2 = max(x1 + 1, min(x2, image.width))
-        y2 = max(y1 + 1, min(y2, image.height))
+        x1, y1, x2, y2 = bbox
+
+        width = x2 - x1
+        height = y2 - y1
+
+        if width <= 0 or height <= 0:
+            return None
+
+        pad_x = width * padding_ratio
+        pad_y = height * padding_ratio
+
+        x1 = int(
+            max(
+                0,
+                x1 - pad_x,
+            )
+        )
+
+        y1 = int(
+            max(
+                0,
+                y1 - pad_y,
+            )
+        )
+
+        x2 = int(
+            min(
+                image.width,
+                x2 + pad_x,
+            )
+        )
+
+        y2 = int(
+            min(
+                image.height,
+                y2 + pad_y,
+            )
+        )
 
         if x2 <= x1 or y2 <= y1:
             return None
 
-        return image.crop((x1, y1, x2, y2))
+        return image.crop(
+            (
+                x1,
+                y1,
+                x2,
+                y2,
+            )
+        )
