@@ -34,7 +34,10 @@ class QueryAgent:
             state.query.attributes["size"] = components.size
 
         state.query.quantity = components.quantity
+        state.query.quantity_value = components.quantity_value
         state.query.target = components.target
+        state.query.original_target = components.original_target
+        state.query.canonical_query = components.canonical_query
         state.query.search_mode = "text"
 
         print("\nParsed Query")

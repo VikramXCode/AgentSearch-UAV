@@ -1,0 +1,10 @@
+{
+  "model_path": "weights/best.pt",
+  "dataset": "VisDrone2019-DET-val (548 images, 38,759 valid annotations)",
+  "image_size": 960,
+  "nms_iou": 0.45,
+  "matching_iou": 0.5,
+  "hardware": "CPU (12th Gen Intel Core i5-1240P)",
+  "operating_system": "Windows 11",
+  "python_version": "3.13.7"
+}

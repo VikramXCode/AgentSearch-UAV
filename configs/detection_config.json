@@ -1,0 +1,77 @@
+{
+  "pipeline_version": "2.5.0",
+  "base_model": "weights/best.pt",
+  "image_size": 960,
+  "confidence_threshold": 0.35,
+  "use_class_specific_thresholds": true,
+  "class_thresholds_file": "configs/class_thresholds.json",
+  "adaptive_sahi": {
+    "enabled": true,
+    "min_density_trigger": 5,
+    "min_small_ratio_trigger": 0.25,
+    "default_slice_width": 640,
+    "default_slice_height": 640,
+    "default_overlap": 0.20,
+    "dense_slice_width": 480,
+    "dense_slice_height": 480,
+    "dense_overlap": 0.28
+  },
+  "selective_super_resolution": {
+    "enabled": true,
+    "scale": 2,
+    "max_rois_per_frame": 4,
+    "low_conf_trigger": 0.35,
+    "tiny_area_trigger": 576.0,
+    "roi_padding_ratio": 0.25
+  },
+  "detection_fusion": {
+    "enabled": true,
+    "method": "weighted_box_fusion",
+    "iou_threshold": 0.55,
+    "enable_consensus_boost": true,
+    "source_weights": {
+      "full_image": 1.0,
+      "sahi": 1.10,
+      "enhanced_roi": 1.15
+    }
+  },
+  "scale_aware_postprocessing": {
+    "enabled": true,
+    "tiny_max_area": 576,
+    "small_max_area": 1024,
+    "medium_max_area": 9216,
+    "tiny_conf_discount": 0.05,
+    "large_conf_boost": 0.05
+  },
+  "improved_soft_nms": {
+    "enabled": true,
+    "method": "class_adaptive",
+    "iou_threshold": 0.32,
+    "duplicate_cutoff_iou": 0.55,
+    "score_threshold": 0.35,
+    "sigma": 0.25,
+    "score_decay": 0.85,
+    "use_scale_aware": true,
+    "scale_iou_map": {
+      "tiny": 0.25,
+      "small": 0.30,
+      "medium": 0.35,
+      "large": 0.45
+    }
+  },
+  "class_conflict_resolution": {
+    "enabled": true,
+    "conflict_iou_threshold": 0.45,
+    "enable_geometric_rules": true,
+    "enable_overlap_arbitration": true
+  },
+  "false_positive_filter": {
+    "enabled": true,
+    "min_width": 3.0,
+    "min_height": 3.0,
+    "min_area": 9.0,
+    "min_aspect_ratio": 0.06,
+    "max_aspect_ratio": 16.0,
+    "edge_margin_ratio": 0.002
+  }
+}

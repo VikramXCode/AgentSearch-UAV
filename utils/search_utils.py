@@ -12,7 +12,37 @@ COLOR_WORDS = {
     "orange",
     "gray",
     "grey",
+    "silver",
     "brown",
+    "pink",
+    "purple",
+    "gold",
+    "cyan",
+    "magenta",
+}
+
+COLOR_ALIASES = {
+    "red": "red",
+    "crimson": "red",
+    "scarlet": "red",
+    "ruby": "red",
+    "blue": "blue",
+    "navy": "blue",
+    "azure": "blue",
+    "green": "green",
+    "emerald": "green",
+    "white": "white",
+    "black": "black",
+    "dark": "black",
+    "yellow": "yellow",
+    "orange": "orange",
+    "gray": "gray",
+    "grey": "gray",
+    "silver": "silver",
+    "brown": "brown",
+    "pink": "pink",
+    "purple": "purple",
+    "gold": "gold",
 }
 
 SIZE_WORDS = {
@@ -22,19 +52,41 @@ SIZE_WORDS = {
     "big",
     "tiny",
     "little",
+    "distant",
+    "far",
+    "blurry",
+    "blurred",
 }
 
-QUANTITY_ALL_WORDS = {
-    "all",
-    "every",
-    "each",
+SIZE_ALIASES = {
+    "small": "small",
+    "tiny": "small",
+    "little": "small",
+    "big": "large",
+    "large": "large",
+    "medium": "medium",
+    "distant": "small",
+    "far": "small",
+    "blurry": "small",
+    "blurred": "small",
 }
 
-QUANTITY_ONE_WORDS = {
-    "one",
-    "single",
-    "only",
+NUMBER_WORDS = {
+    "zero": 0,
+    "one": 1,
+    "two": 2,
+    "three": 3,
+    "four": 4,
+    "five": 5,
+    "six": 6,
+    "seven": 7,
+    "eight": 8,
+    "nine": 9,
+    "ten": 10,
 }
+
+QUANTITY_ALL_WORDS = {"all", "every", "each"}
+QUANTITY_ONE_WORDS = {"one", "single", "only", "a", "an"}
 
 STOP_WORDS = {
     "find",
@@ -46,8 +98,6 @@ STOP_WORDS = {
     "look",
     "for",
     "the",
-    "a",
-    "an",
     "of",
     "all",
     "every",
@@ -55,38 +105,96 @@ STOP_WORDS = {
     "one",
     "single",
     "only",
-    *COLOR_WORDS,
-    *SIZE_WORDS,
+    "a",
+    "an",
+    "by",
+    "in",
+    "on",
+    "at",
+    "to",
+    "with",
+    "and",
+    "or",
+    "some",
+    "many",
+    "there",
+    "near",
+    "around",
+    "color",
+    "colors",
+    "colored",
+    "coloured",
+    "type",
 }
 
 TARGET_ALIASES = {
-    "bike": "motorcycle",
-    "bikes": "motorcycle",
-    "motorbike": "motorcycle",
-    "motorbikes": "motorcycle",
-    "bicycle": "bicycle",
-    "bicycles": "bicycle",
     "car": "car",
     "cars": "car",
+    "vehicle": "car",
+    "vehicles": "car",
+    "automobile": "car",
+    "automobiles": "car",
+    "sedan": "car",
+    "sedans": "car",
+    "van": "car",
+    "vans": "car",
+    "suv": "car",
+    "suvs": "car",
+    "jeep": "car",
+    "jeeps": "car",
+    "taxi": "car",
+    "taxis": "car",
+    "motorcycle": "motorcycle",
+    "motorcycles": "motorcycle",
+    "motorbike": "motorcycle",
+    "motorbikes": "motorcycle",
+    "motor": "motorcycle",
+    "motors": "motorcycle",
+    "bike": "motorcycle",
+    "bikes": "motorcycle",
+    "bicycle": "bicycle",
+    "bicycles": "bicycle",
     "truck": "truck",
     "trucks": "truck",
     "lorry": "truck",
     "lorries": "truck",
-    "cat": "cat",
-    "cats": "cat",
-    "dog": "dog",
-    "dogs": "dog",
     "person": "person",
     "people": "person",
-    "motorcycle": "motorcycle",
-    "motorcycles": "motorcycle",
+    "pedestrian": "person",
+    "pedestrians": "person",
     "bus": "bus",
     "buses": "bus",
+    "tricycle": "tricycle",
+    "tricycles": "tricycle",
+    "awning-tricycle": "tricycle",
+    "awning tricycle": "tricycle",
+    "awning tricycles": "tricycle",
+    "awning-tricycles": "tricycle",
     "boat": "boat",
     "boats": "boat",
     "bird": "bird",
     "birds": "bird",
-    "truck": "truck",
+    "cat": "cat",
+    "cats": "cat",
+    "dog": "dog",
+    "dogs": "dog",
+    "horse": "horse",
+    "horses": "horse",
+    "cow": "cow",
+    "cows": "cow",
+    "sheep": "sheep",
+    "bottle": "bottle",
+    "bottles": "bottle",
+    "chair": "chair",
+    "chairs": "chair",
+    "bench": "bench",
+    "benches": "bench",
+    "backpack": "backpack",
+    "backpacks": "backpack",
+    "traffic light": "traffic light",
+    "traffic lights": "traffic light",
+    "stop sign": "stop sign",
+    "stop signs": "stop sign",
 }
 
 KNOWN_TARGETS = {
@@ -96,6 +204,8 @@ KNOWN_TARGETS = {
     "motorcycle",
     "bus",
     "truck",
+    "tricycle",
+    "van",
     "boat",
     "bird",
     "cat",
@@ -121,120 +231,241 @@ KNOWN_TARGETS = {
     "bench",
 }
 
+VISDRONE_CLASSES = [
+    "pedestrian",
+    "people",
+    "bicycle",
+    "car",
+    "van",
+    "truck",
+    "tricycle",
+    "awning-tricycle",
+    "bus",
+    "motor",
+]
+
+VISDRONE_TARGET_MAP = {
+    "car": ["car", "van"],
+    "vehicle": ["car", "van", "truck", "bus"],
+    "person": ["pedestrian", "people"],
+    "pedestrian": ["pedestrian"],
+    "people": ["people"],
+    "motorcycle": ["motor"],
+    "motor": ["motor"],
+    "bicycle": ["bicycle"],
+    "truck": ["truck"],
+    "bus": ["bus"],
+    "van": ["van"],
+    "tricycle": ["tricycle", "awning-tricycle"],
+    "awning-tricycle": ["awning-tricycle"],
+}
+
+
+def get_visdrone_classes_for_target(target: str) -> list[str]:
+    """Map a query target to matching VisDrone class names."""
+    canonical = canonicalize_target(target)
+    if canonical in VISDRONE_TARGET_MAP:
+        return VISDRONE_TARGET_MAP[canonical]
+    normalized = normalize_label(target)
+    if normalized in VISDRONE_TARGET_MAP:
+        return VISDRONE_TARGET_MAP[normalized]
+    if normalized in VISDRONE_CLASSES:
+        return [normalized]
+    return []
+
 
 @dataclass(frozen=True)
 class QueryComponents:
     target: str
+    original_target: str = ""
     color: str = ""
     size: str = ""
     quantity: str = "all"
+    quantity_value: int | None = None
+    canonical_query: str = ""
 
 
 def normalize_text(text: str) -> str:
-
     normalized = text.strip().lower()
     normalized = normalized.replace("_", " ").replace("-", " ")
+    normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
     normalized = re.sub(r"\s+", " ", normalized)
-    return normalized
+    return normalized.strip()
 
 
 def normalize_label(label: str) -> str:
-
     return normalize_text(label)
 
 
-def extract_query_components(query: str) -> QueryComponents:
+def _normalize_word(token: str) -> str:
+    token = normalize_text(token)
+    return token
 
+
+def _extract_quantity(tokens: list[str]) -> tuple[str, int | None]:
+    numeric_match = re.search(r"\b(\d+)\b", " ".join(tokens))
+    if numeric_match:
+        return numeric_match.group(1), int(numeric_match.group(1))
+
+    for token in tokens:
+        if token in QUANTITY_ALL_WORDS:
+            return "all", None
+        if token in NUMBER_WORDS:
+            return str(NUMBER_WORDS[token]), NUMBER_WORDS[token]
+
+    if any(token in QUANTITY_ONE_WORDS for token in tokens):
+        return "one", 1
+
+    return "all", None
+
+
+def extract_query_components(query: str) -> QueryComponents:
     normalized = normalize_text(query)
     tokens = normalized.split()
 
-    color = next((token for token in tokens if token in COLOR_WORDS), "")
-    size = next((token for token in tokens if token in SIZE_WORDS), "")
+    color = ""
+    for token in tokens:
+        if token in COLOR_ALIASES:
+            color = COLOR_ALIASES[token]
+            break
+        if token in COLOR_WORDS:
+            color = token
+            break
 
-    if any(token in QUANTITY_ALL_WORDS for token in tokens):
-        quantity = "all"
-    elif any(token in QUANTITY_ONE_WORDS for token in tokens):
-        quantity = "one"
-    else:
-        quantity = "all"
+    size = next((SIZE_ALIASES[token] for token in tokens if token in SIZE_ALIASES), "")
 
-    target = _extract_target(tokens)
+    quantity, quantity_value = _extract_quantity(tokens)
+    original_target = _extract_target(tokens)
+    target = canonicalize_target(original_target) if original_target else ""
+
+    canonical_query = _build_canonical_query(target, color, size, quantity)
 
     return QueryComponents(
         target=target,
+        original_target=original_target,
         color=color,
         size=size,
         quantity=quantity,
+        quantity_value=quantity_value,
+        canonical_query=canonical_query,
     )
 
 
 def canonicalize_target(target: str) -> str:
-
     normalized = normalize_label(target)
+    if not normalized:
+        return ""
 
-    if normalized in TARGET_ALIASES:
-        return TARGET_ALIASES[normalized]
+    aliases = TARGET_ALIASES
+    if normalized in aliases:
+        return aliases[normalized]
+
+    if normalized.endswith("s"):
+        singular = normalized[:-1]
+        if singular in aliases:
+            return aliases[singular]
+
+    lookup = normalized.replace(" ", " ")
+    if lookup in aliases:
+        return aliases[lookup]
 
     return normalized
 
 
 def build_verification_prompts(target: str, attributes: dict[str, str]) -> list[str]:
-
     canonical_target = canonicalize_target(target)
+    if not canonical_target:
+        return []
+
     color = attributes.get("color", "").strip().lower()
     size = attributes.get("size", "").strip().lower()
+    size = SIZE_ALIASES.get(size, size)
 
-    prompts = []
+    prompts: list[str] = []
 
-    # Start with the most specific prompt, then add broader fallbacks and
-    # comparison options so CLIP can rank the requested object against alternates.
     if color and size:
-        prompts.append(f"{color} {size} {canonical_target}")
+        prompts.extend([
+            f"{color} {size} {canonical_target}",
+            f"a {color} {size} {canonical_target}",
+            f"{color} {canonical_target}",
+            f"a {color} {canonical_target}",
+            f"{color} vehicle",
+            canonical_target,
+        ])
+    elif color:
+        prompts.extend([
+            f"{color} {canonical_target}",
+            f"a {color} {canonical_target}",
+            f"{color} vehicle",
+            f"a {color} automobile",
+            canonical_target,
+        ])
+    elif size:
+        prompts.extend([
+            f"{size} {canonical_target}",
+            f"a {size} {canonical_target}",
+            f"a {canonical_target}",
+            canonical_target,
+        ])
+    else:
+        prompts.extend([
+            canonical_target,
+            f"a {canonical_target}",
+            f"a vehicle",
+        ])
 
-    if color:
-        prompts.append(f"{color} {canonical_target}")
+    if canonical_target == "car":
+        prompts.extend(["vehicle", "automobile", "sedan", "car"]) 
+    elif canonical_target == "motorcycle":
+        prompts.extend(["motorbike", "bike", "motorcycle"])
+    elif canonical_target == "truck":
+        prompts.extend(["lorry", "truck", "vehicle"]) 
 
-    if size:
-        prompts.append(f"{size} {canonical_target}")
-
-    prompts.append(canonical_target)
-
-    if color:
-        for alternative_color in sorted(COLOR_WORDS):
-            if alternative_color != color:
-                prompts.append(f"{alternative_color} {canonical_target}")
-
-    if size:
-        for alternative_size in ("small", "medium", "large"):
-            if alternative_size != size:
-                prompts.append(f"{alternative_size} {canonical_target}")
-
-    unique_prompts = []
-    seen = set()
-
+    unique_prompts: list[str] = []
+    seen: set[str] = set()
     for prompt in prompts:
-        if prompt not in seen:
-            seen.add(prompt)
-            unique_prompts.append(prompt)
+        normalized_prompt = normalize_text(prompt)
+        if normalized_prompt and normalized_prompt not in seen:
+            unique_prompts.append(normalized_prompt)
+            seen.add(normalized_prompt)
 
-    return unique_prompts
+    return unique_prompts[:8]
+
+
+def _build_canonical_query(target: str, color: str, size: str, quantity: str) -> str:
+    canonical_parts = []
+    if quantity not in {"all", ""}:
+        canonical_parts.append(str(quantity))
+    if color:
+        canonical_parts.append(color)
+    if size:
+        canonical_parts.append(size)
+    if target:
+        canonical_parts.append(target)
+    return " ".join(canonical_parts).strip()
 
 
 def _extract_target(tokens: list[str]) -> str:
+    phrases = []
+    for index in range(len(tokens)):
+        for span in range(len(tokens) - index, 0, -1):
+            phrase = " ".join(tokens[index:index + span])
+            normalized = normalize_text(phrase)
+            if not normalized:
+                continue
+            if normalized in TARGET_ALIASES or normalized in KNOWN_TARGETS:
+                phrases.append(normalized)
+                break
+        if phrases:
+            break
 
-    candidates = [token for token in tokens if token not in STOP_WORDS]
-
-    if not candidates:
+    if not phrases:
+        for token in reversed(tokens):
+            normalized = normalize_text(token)
+            if normalized and normalized not in STOP_WORDS:
+                canonical = canonicalize_target(normalized)
+                if canonical:
+                    return normalized
         return ""
 
-    for size in range(len(candidates), 0, -1):
-        for index in range(0, len(candidates) - size + 1):
-            phrase = " ".join(candidates[index:index + size])
-
-            if phrase in TARGET_ALIASES:
-                return TARGET_ALIASES[phrase]
-
-            if phrase in KNOWN_TARGETS:
-                return phrase
-
-    return TARGET_ALIASES.get(candidates[-1], candidates[-1])
+    return phrases[0]

@@ -1,0 +1,11 @@
+Class Name,GT Total,Pure Misses (to BG),Misclassified (to other classes),Total FN @ 0.10,Miss Rate (FN/GT)
+pedestrian,8844,2398,541,2939,33.23%
+people,5125,1568,1583,3151,61.48%
+bicycle,1287,484,441,925,71.87%
+car,14064,1246,448,1694,12.04%
+van,1975,181,941,1122,56.81%
+truck,750,143,235,378,50.40%
+tricycle,1045,253,481,734,70.24%
+awning-tricycle,532,138,289,427,80.26%
+bus,251,51,73,124,49.40%
+motor,4886,900,988,1888,38.64%

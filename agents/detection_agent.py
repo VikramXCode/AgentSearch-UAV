@@ -3,11 +3,16 @@ from dataclasses import dataclass
 from models.detector import DetectionEngine
 from models.sahi_engine import SAHIEngine
 from models.schemas import Detection
+from models.detection_config import DetectionConfig, DEFAULT_CONFIG
+from models.detection_quality_optimizer import DetectionQualityOptimizer
 
 from utils.visualizer import DetectionVisualizer
 from utils.paths import DETECTION_OUTPUT_PATH
 
 from workflows.state import AgentState
+
+
+import time
 
 
 @dataclass
@@ -16,6 +21,7 @@ class DetectionRunResult:
     output_image_path: str
     processed_image_path: str
     detector_name: str
+    detection_time: float = 0.0
 
 
 class DetectionAgent:
@@ -62,11 +68,12 @@ class DetectionAgent:
             run_result.output_image_path
         )
 
+        state.detection.detection_time = run_result.detection_time
         state.strategy.detector = run_result.detector_name
 
         print(
-            f"Raw mission detections: "
-            f"{len(state.detection.objects_found)}"
+            f"Raw mission detections: {len(state.detection.objects_found)} "
+            f"(in {run_result.detection_time:.3f}s)"
         )
 
         return state
@@ -79,16 +86,22 @@ class DetectionAgent:
 
         target = state.query.target
 
+        # Create config from strategy state
+        config = self._create_config_from_strategy(state.strategy)
+
         # ==============================================
         # SAHI + YOLO-WORLD
         # ==============================================
 
         if state.strategy.enable_sahi:
 
+            t_start = time.perf_counter()
             detections = self.sahi_detector.detect(
                 image_path,
                 target,
+                config=config,
             )
+            detection_time = time.perf_counter() - t_start
 
             normalized_detections = [
                 Detection(
@@ -112,13 +125,16 @@ class DetectionAgent:
 
         else:
 
+            t_start = time.perf_counter()
             result = self.yolo_detector.detect(
                 image_path=image_path,
                 target=target,
                 confidence=(
                     state.strategy.confidence_threshold
                 ),
+                config=config,
             )
+            detection_time = result.inference_time if result.inference_time > 0 else (time.perf_counter() - t_start)
 
             normalized_detections = list(
                 result.filtered_detections
@@ -141,7 +157,14 @@ class DetectionAgent:
             output_image_path=DETECTION_OUTPUT_PATH,
             processed_image_path=image_path,
             detector_name=detector_name,
+            detection_time=detection_time,
         )
+
+    def _create_config_from_strategy(self, strategy_state) -> DetectionConfig:
+        """Create detection config from strategy state."""
+        config = DEFAULT_CONFIG
+        config.base_confidence_threshold = strategy_state.confidence_threshold
+        return config
 
     def save_annotated_image(
         self,

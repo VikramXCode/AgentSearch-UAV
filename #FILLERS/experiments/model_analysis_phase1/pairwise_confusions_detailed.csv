@@ -1,0 +1,6 @@
+Class Pair,Class A,Class B,GT A Total,GT B Total,A Pred as B,A Confusion Rate,B Pred as A,B Confusion Rate,Total Mutual Confusions
+pedestrian ↔ people,pedestrian,people,8844,5125,303,3.43%,1097,21.40%,1400
+bicycle ↔ motor,bicycle,motor,1287,4886,264,20.51%,279,5.71%,543
+car ↔ van,car,van,14064,1975,333,2.37%,868,43.95%,1201
+truck ↔ bus,truck,bus,750,251,12,1.60%,42,16.73%,54
+tricycle ↔ awning-tricycle,tricycle,awning-tricycle,1045,532,63,6.03%,64,12.03%,127

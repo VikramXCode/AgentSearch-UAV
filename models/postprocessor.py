@@ -9,7 +9,7 @@ class DetectionPostProcessor:
     @staticmethod
     def apply_nms(
         detections,
-        iou_threshold=0.50,
+        iou_threshold=0.35,
     ):
 
         if len(detections) == 0:

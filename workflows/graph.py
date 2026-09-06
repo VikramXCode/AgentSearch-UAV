@@ -1,4 +1,7 @@
 import os
+import sys
+import time
+import argparse
 from datetime import datetime, timezone
 
 from agents.detection_agent import DetectionAgent
@@ -13,7 +16,7 @@ from workflows.state import AgentState
 from utils.paths import DETECTION_OUTPUT_PATH
 
 
-def run_pipeline(query: str, image_path: str) -> AgentState:
+def run_pipeline(query: str, image_path: str) -> tuple[AgentState, float]:
 
     if not query.strip():
         raise ValueError("Query is required.")
@@ -24,6 +27,7 @@ def run_pipeline(query: str, image_path: str) -> AgentState:
     if not os.path.exists(image_path):
         raise FileNotFoundError(f"Image not found: {image_path}")
 
+    pipeline_start_time = time.perf_counter()
     state = AgentState()
 
     # ==========================================
@@ -125,36 +129,40 @@ def run_pipeline(query: str, image_path: str) -> AgentState:
 
         else:
 
-            state.verification.verified_objects = list(
-                state.detection.objects_found
-            )
+            filtered_found = [
+                obj for obj in state.detection.objects_found
+                if float(obj.get("confidence", 0.0)) >= state.strategy.confidence_threshold
+            ]
+
+            state.verification.verified_objects = filtered_found
 
             state.verification.confidence_score = (
                 _average_confidence(
-                    state.detection.objects_found
+                    filtered_found
                 )
             )
 
         final_objects = (
             state.verification.verified_objects
             if state.strategy.enable_clip_verification
-            else state.detection.objects_found
+            else [
+                obj for obj in state.detection.objects_found
+                if float(obj.get("confidence", 0.0)) >= state.strategy.confidence_threshold
+            ]
         )
 
         # ======================================
         # FINAL ANNOTATED IMAGE
         # ======================================
 
-        if final_objects:
-
-            detection_agent.save_annotated_image(
-                image_path=(
-                    state.detection.processed_image_path
-                    or state.detection.image_path
-                ),
-                detections=final_objects,
-                output_path=DETECTION_OUTPUT_PATH,
-            )
+        detection_agent.save_annotated_image(
+            image_path=(
+                state.detection.processed_image_path
+                or state.detection.image_path
+            ),
+            detections=final_objects,
+            output_path=DETECTION_OUTPUT_PATH,
+        )
 
         state.mission.current_step = 6
 
@@ -182,7 +190,8 @@ def run_pipeline(query: str, image_path: str) -> AgentState:
 
         raise
 
-    return state
+    total_inference_time = time.perf_counter() - pipeline_start_time
+    return state, total_inference_time
 
 
 def _average_confidence(
@@ -200,21 +209,26 @@ def _average_confidence(
 
 def main():
 
+    parser = argparse.ArgumentParser(description="AgentSearch-UAV Pipeline Runner")
+    parser.add_argument("--query", "-q", type=str, default="", help="Search query (e.g. 'find red cars')")
+    parser.add_argument("--image", "-i", type=str, default="", help="Path to input image")
+    args = parser.parse_args()
+
     print("\n==============================")
     print("      UAV SEARCH SYSTEM")
     print("==============================")
 
-    query = input(
-        "Enter search query: "
-    ).strip()
+    query = args.query.strip()
+    if not query:
+        query = input("Enter search query: ").strip()
 
-    image_path = input(
-        "Enter image path: "
-    ).strip()
+    image_path = args.image.strip()
+    if not image_path:
+        image_path = input("Enter image path: ").strip()
 
     try:
 
-        state = run_pipeline(
+        state, total_inference_time = run_pipeline(
             query=query,
             image_path=image_path,
         )
@@ -284,7 +298,7 @@ def main():
     print(
         "Verification: "
         + (
-            "CLIP"
+            "CLIP (Two-Stage HSV + AI)"
             if state.strategy.enable_clip_verification
             else "None"
         )
@@ -312,6 +326,13 @@ def main():
         f"Output Image: "
         f"{state.detection.output_image_path or DETECTION_OUTPUT_PATH}"
     )
+
+    print("\nTIMING BREAKDOWN:")
+    print(f"  Detection Time          : {state.detection.detection_time:.3f}s")
+    print(f"  Color Filtering Time    : {state.verification.color_filter_time:.3f}s")
+    print(f"  AI Verification Time    : {state.verification.ai_verification_time:.3f}s")
+    print(f"  Total Verification Time : {state.verification.total_verification_time:.3f}s")
+    print(f"  Total Inference Time    : {total_inference_time:.3f}s")
 
     print("------------------------------------------")
 

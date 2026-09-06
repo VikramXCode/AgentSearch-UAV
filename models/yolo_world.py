@@ -3,7 +3,8 @@ import time
 
 from models.schemas import Detection
 from models.base_detector import BaseDetector
-from utils.model_paths import resolve_yolo_world_weights
+from utils.model_paths import resolve_yolo_world_weights, is_visdrone_checkpoint, VISDRONE_CLASS_NAMES
+from utils.search_utils import get_visdrone_classes_for_target, canonicalize_target
 
 
 class YOLOWorldDetector(BaseDetector):
@@ -21,20 +22,32 @@ class YOLOWorldDetector(BaseDetector):
         "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
     ]
 
+    _MODEL_CACHE: dict = {}
+
     def __init__(self, model_path: str | None = None):
 
         self.model_path = resolve_yolo_world_weights(model_path)
         self.model = None
+        self.is_visdrone = False
 
         self.load_model()
 
     def load_model(self):
+        if self.model_path in YOLOWorldDetector._MODEL_CACHE:
+            self.model = YOLOWorldDetector._MODEL_CACHE[self.model_path]
+            self.is_visdrone = is_visdrone_checkpoint(self.model) or is_visdrone_checkpoint(self.model_path)
+            return
 
-        print("\nLoading YOLO-World...")
+        print("\nLoading Object Detection Model...")
 
         self.model = YOLO(self.model_path)
+        self.is_visdrone = is_visdrone_checkpoint(self.model) or is_visdrone_checkpoint(self.model_path)
+        YOLOWorldDetector._MODEL_CACHE[self.model_path] = self.model
 
-        print("YOLO-World Loaded Successfully!")
+        if self.is_visdrone:
+            print("Loaded fine-tuned VisDrone detector (10 aerial UAV classes).")
+        else:
+            print("Loaded open-vocabulary YOLO-World detector.")
 
     def detect(
         self,
@@ -43,11 +56,12 @@ class YOLOWorldDetector(BaseDetector):
         confidence: float = 0.25,
     ):
 
-        # Use a broad vocabulary to preserve true class identity.
-        # If only one class is provided to YOLO-World, unrelated objects can be
-        # coerced into that class label.
-        vocabulary = self._build_vocabulary(classes)
-        self.model.set_classes(vocabulary)
+        # For open-vocabulary YOLO-World, configure vocabulary dynamically.
+        # For fine-tuned VisDrone checkpoints, preserve the trained 10-class head
+        # so feature-to-class alignment remains intact.
+        if not self.is_visdrone and hasattr(self.model, "set_classes"):
+            vocabulary = self._build_vocabulary(classes)
+            self.model.set_classes(vocabulary)
 
         # Measure complete inference time
         start_time = time.perf_counter()
@@ -98,16 +112,37 @@ class YOLOWorldDetector(BaseDetector):
         return detections, inference_time
 
     def _build_vocabulary(self, classes: list[str]) -> list[str]:
+        """Build vocabulary with synonyms for better detection."""
+        
+        # Synonym mapping for common objects
+        SYNONYMS = {
+            "person": ["human", "pedestrian", "people", "man", "woman"],
+            "car": ["automobile", "vehicle", "sedan", "truck"],
+            "dog": ["canine", "puppy"],
+            "cat": ["feline", "kitten"],
+            "bird": ["avian", "eagle", "hawk"],
+            "airplane": ["aircraft", "plane", "jet"],
+            "boat": ["ship", "vessel", "yacht"],
+        }
 
         requested = [c.strip() for c in classes if c and c.strip()]
         base = list(self.DEFAULT_CLASSES)
 
         existing = {c.lower() for c in base}
 
+        # Add requested classes and their synonyms
         for cls in requested:
-            if cls.lower() not in existing:
+            cls_lower = cls.lower()
+            if cls_lower not in existing:
                 base.append(cls)
-                existing.add(cls.lower())
+                existing.add(cls_lower)
+            
+            # Add synonyms if they exist
+            if cls_lower in SYNONYMS:
+                for synonym in SYNONYMS[cls_lower]:
+                    if synonym.lower() not in existing:
+                        base.append(synonym)
+                        existing.add(synonym.lower())
 
         return base
 

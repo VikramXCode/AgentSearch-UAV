@@ -1,0 +1,4 @@
+Scene Density Category,Condition,Images,GT Count,Precision @ 0.10,Recall @ 0.10,F1 @ 0.10,TP,FP,FN
+Sparse,Sparse Scene (<=25 objs/img),84,1123,0.0582,0.8887,0.1093,998,16147,125
+Moderate,Moderate Scene (26-75 objs/img),238,12363,0.1428,0.8236,0.2434,10182,61117,2181
+Dense,Dense Scene (>75 objs/img),226,25273,0.2647,0.7100,0.3856,17945,49855,7328

@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "thresholds": {
+    "pedestrian": 0.28,
+    "people": 0.2,
+    "bicycle": 0.22,
+    "car": 0.34,
+    "van": 0.26,
+    "truck": 0.28,
+    "tricycle": 0.15,
+    "awning-tricycle": 0.14,
+    "bus": 0.26,
+    "motor": 0.22
+  },
+  "calibration_details": {}
+}

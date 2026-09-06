@@ -1,5 +1,5 @@
 model: weights/yolov8s-world.pt
-data: configs/visdrone_yolo_prepared.yaml
+data: configs/visdrone.yaml
 project: runs/visdrone_yoloworld
 name: visdrone_v1
 epochs: 50

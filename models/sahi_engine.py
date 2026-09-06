@@ -2,9 +2,12 @@ from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
 
 from models.postprocessor import DetectionPostProcessor
+from models.enhanced_postprocessor import EnhancedPostProcessor
 from models.schemas import Detection
+from models.detection_config import DetectionConfig, DEFAULT_CONFIG
+from models.detection_quality_optimizer import DetectionQualityOptimizer
 from utils.search_utils import canonicalize_target, normalize_label
-from utils.model_paths import resolve_yolo_world_weights
+from utils.model_paths import resolve_yolo_world_weights, is_visdrone_checkpoint
 
 
 class SAHIEngine:
@@ -24,18 +27,33 @@ class SAHIEngine:
         "clock", "vase", "scissors", "teddy bear", "hair drier", "toothbrush"
     ]
 
+    _MODEL_CACHE: dict = {}
+
     def __init__(self, model_path: str | None = None):
 
-        print("\nLoading SAHI Engine...")
-
         self.model_path = resolve_yolo_world_weights(model_path)
+
+        if self.model_path in SAHIEngine._MODEL_CACHE:
+            self.model = SAHIEngine._MODEL_CACHE[self.model_path]
+            self.is_visdrone = is_visdrone_checkpoint(getattr(self.model, "model", None)) or is_visdrone_checkpoint(self.model_path)
+            return
+
+        print("\nLoading SAHI Engine...")
 
         self.model = AutoDetectionModel.from_pretrained(
             model_type="ultralytics",
             model_path=self.model_path,
-            confidence_threshold=0.10,
+            confidence_threshold=0.25,
             device="cpu"
         )
+
+        self.is_visdrone = is_visdrone_checkpoint(getattr(self.model, "model", None)) or is_visdrone_checkpoint(self.model_path)
+        SAHIEngine._MODEL_CACHE[self.model_path] = self.model
+
+        if self.is_visdrone:
+            print("SAHI Engine configured for fine-tuned VisDrone detector.")
+        else:
+            print("SAHI Engine configured for open-vocabulary YOLO-World.")
 
         print("SAHI Engine Loaded Successfully!")
 
@@ -43,16 +61,25 @@ class SAHIEngine:
         self,
         image_path: str,
         target: str,
+        config: DetectionConfig | None = None,
     ):
+
+        if config is None:
+            config = DEFAULT_CONFIG
 
         requested_target = canonicalize_target(target)
 
-        # Set a broad vocabulary, then filter the predictions down to the
-        # requested class after inference. This avoids the one-class coercion
-        # bug that can relabel unrelated objects as the user prompt.
-        self.model.model.set_classes(self._build_vocabulary(requested_target))
+        # For open-vocabulary YOLO-World, set vocabulary dynamically.
+        # For fine-tuned VisDrone checkpoints, do NOT overwrite the 10-class head.
+        if not self.is_visdrone and hasattr(self.model.model, "set_classes"):
+            self.model.model.set_classes(self._build_vocabulary(requested_target))
 
-        slice_height, slice_width, overlap_height_ratio, overlap_width_ratio = self._get_slice_config(image_path)
+        self.model.confidence_threshold = config.base_confidence_threshold
+
+        slice_height, slice_width, overlap_height_ratio, overlap_width_ratio = self._get_slice_config(
+            image_path,
+            small_object_focus=config.enable_small_object_detection
+        )
 
         result = get_sliced_prediction(
             image=image_path,
@@ -86,7 +113,17 @@ class SAHIEngine:
                 )
             )
 
-        deduped = DetectionPostProcessor.apply_nms(detections, iou_threshold=0.45)
+        # Use enhanced post-processor with configuration
+        from PIL import Image
+        img = Image.open(image_path)
+        image_width, image_height = img.size
+
+        deduped = EnhancedPostProcessor.apply_nms(
+            detections,
+            config=config,
+            image_width=image_width,
+            image_height=image_height,
+        )
 
         if len(deduped) != len(detections):
             print(f"Merged duplicate slice detections: {len(detections)} -> {len(deduped)}")
@@ -101,28 +138,39 @@ class SAHIEngine:
         ]
 
     def _build_vocabulary(self, requested_target: str) -> list[str]:
+        """Build vocabulary with synonyms for better detection."""
+        
+        # Synonym mapping for common objects
+        SYNONYMS = {
+            "person": ["human", "pedestrian", "people", "man", "woman"],
+            "car": ["automobile", "vehicle", "sedan", "truck"],
+            "dog": ["canine", "puppy"],
+            "cat": ["feline", "kitten"],
+            "bird": ["avian", "eagle", "hawk"],
+            "airplane": ["aircraft", "plane", "jet"],
+            "boat": ["ship", "vessel", "yacht"],
+        }
 
         vocabulary = list(self.DEFAULT_CLASSES)
 
         if requested_target not in vocabulary:
             vocabulary.append(requested_target)
+        
+        # Add synonyms if they exist
+        target_lower = requested_target.lower()
+        if target_lower in SYNONYMS:
+            for synonym in SYNONYMS[target_lower]:
+                if synonym not in vocabulary:
+                    vocabulary.append(synonym)
 
         return vocabulary
 
-    def _get_slice_config(self, image_path: str) -> tuple[int, int, float, float]:
+    def _get_slice_config(self, image_path: str, small_object_focus: bool = False) -> tuple[int, int, float, float]:
 
         from PIL import Image
 
         width, height = Image.open(image_path).size
-        max_side = max(width, height)
-        area = width * height
-
-        # Larger UAV images benefit from bigger slices and slightly smaller overlap
-        # so the detector stays efficient without losing coverage.
-        if area >= 4_000_000 or max_side >= 2400:
-            return 640, 640, 0.20, 0.20
-
-        if area >= 1_500_000 or max_side >= 1600:
-            return 512, 512, 0.20, 0.20
-
-        return 384, 384, 0.25, 0.25
+        
+        # Use configuration system
+        config = DEFAULT_CONFIG
+        return config.get_slice_config(width, height, small_object_focus=small_object_focus)
