@@ -93,3 +93,5 @@ htmlcov/
 # OS Files
 # ==========================
 Thumbs.db
+# macOS AppleDouble metadata
+._*

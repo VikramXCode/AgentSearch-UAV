@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-08-06T06:15:33.516817Z",
+  "checkpoint": "weights/yolov8s-world.pt",
+  "dataset": "configs/visdrone_yolo_prepared.yaml",
+  "model_name": "yolov8s-world",
+  "metrics": {
+    "precision": 0.07249287937389573,
+    "recall": 0.09366702424129444,
+    "map50": 0.03816882435859179,
+    "map50_95": 0.018750345612458377
+  },
+  "per_class": [
+    {
+      "class_id": 0,
+      "class_name": "pedestrian",
+      "map50": 0.253546954203444,
+      "map50_95": 0.12229498030775117
+    },
+    {
+      "class_id": 1,
+      "class_name": "people",
+      "map50": 0.029425104809676823,
+      "map50_95": 0.0063996400931189785
+    },
+    {
+      "class_id": 2,
+      "class_name": "bicycle",
+      "map50": 0.0005755822816626547,
+      "map50_95": 0.0001498095357793694
+    },
+    {
+      "class_id": 3,
+      "class_name": "car",
+      "map50": 0.004542420587052675,
+      "map50_95": 0.002726488885910268
+    },
+    {
+      "class_id": 4,
+      "class_name": "van",
+      "map50": 0.0003125,
+      "map50_95": 0.0002858689376443418
+    },
+    {
+      "class_id": 5,
+      "class_name": "truck",
+      "map50": 0.06484668732728159,
+      "map50_95": 0.03956507480075462
+    },
+    {
+      "class_id": 6,
+      "class_name": "tricycle",
+      "map50": 0.0038715678919762674,
+      "map50_95": 0.002067479042824696
+    },
+    {
+      "class_id": 7,
+      "class_name": "awning-tricycle",
+      "map50": 0.02348534529043248,
+      "map50_95": 0.013466193509068391
+    },
+    {
+      "class_id": 8,
+      "class_name": "bus",
+      "map50": 0.0006836926536573755,
+      "map50_95": 0.0004277416241926102
+    },
+    {
+      "class_id": 9,
+      "class_name": "motor",
+      "map50": 0.00039838854073410924,
+      "map50_95": 0.00012017938753930568
+    }
+  ],
+  "raw_results_dict": {
+    "metrics/precision(B)": 0.07249287937389573,
+    "metrics/recall(B)": 0.09366702424129444,
+    "metrics/mAP50(B)": 0.03816882435859179,
+    "metrics/mAP50-95(B)": 0.018750345612458377,
+    "fitness": 0.018750345612458377
+  }
+}
