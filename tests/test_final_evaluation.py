@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from scripts.evaluate_final_comparison import (
+from evaluation.comprehensive_evaluator import (
     compute_box_iou_matrix,
     compute_coco_101_point_ap,
     evaluate_predictions_comprehensive,

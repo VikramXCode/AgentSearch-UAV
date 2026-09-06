@@ -422,3 +422,54 @@ class ComprehensiveEvaluator:
             "confusion_matrix": confusion_matrix.tolist(),
             "latencies": latencies or {},
         }
+
+
+def evaluate_predictions_comprehensive(
+    predictions: Dict[str, List[Dict[str, Any]]],
+    ground_truths: Dict[str, List[Dict[str, Any]]],
+    iou_threshold: float = 0.50,
+) -> Dict[str, Any]:
+    """Helper function to evaluate predictions against provided ground truths dictionary."""
+    evaluator = object.__new__(ComprehensiveEvaluator)
+    evaluator.iou_threshold = iou_threshold
+    evaluator.ground_truths = ground_truths
+    evaluator.image_metadata = {
+        img: {"width": 1000, "height": 1000, "num_objects": len(boxes)}
+        for img, boxes in ground_truths.items()
+    }
+    for boxes in evaluator.ground_truths.values():
+        for b in boxes:
+            if "size_cat" not in b and "bbox" in b:
+                area = (b["bbox"][2] - b["bbox"][0]) * (b["bbox"][3] - b["bbox"][1])
+                b["size_cat"] = "small" if area < 32 * 32 else ("medium" if area <= 96 * 96 else "large")
+
+    res = evaluator.evaluate_predictions(predictions)
+    flattened = dict(res)
+    flattened.update(res["overall"])
+    return flattened
+
+
+def save_comparison_csv(
+    results_table: List[Dict[str, Any]],
+    output_path: Union[str, Path],
+) -> None:
+    """Save benchmark comparison metrics to CSV."""
+    import csv
+
+    fieldnames = [
+        "System/Model Name",
+        "Precision",
+        "Recall",
+        "mAP@50",
+        "mAP@50-95",
+        "F1-Score",
+    ]
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(output_path, mode="w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row in results_table:
+            writer.writerow(row)
+
+
