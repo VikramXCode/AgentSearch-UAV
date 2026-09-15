@@ -1,0 +1,9 @@
+Evaluation Metric,Phase 1 Baseline (best.pt),Optimized Pipeline (v2.5.0),Absolute Improvement,Relative Gain %,Status
+mAP@50 (PR-Curve),0.4335 (43.4%),0.3664 (36.6%),-0.0671,-15.48%,Degraded
+mAP@50-95 (PR-Curve),0.2665 (26.7%),0.2436 (24.4%),-0.0229,-8.59%,Degraded
+Precision,0.4454 (44.5%),0.4723 (47.2%),+0.0269,+6.04%,Improved
+Recall,0.6648 (66.5%),0.6861 (68.6%),+0.0213,+3.20%,Improved
+F1-Score,0.5334 (53.3%),0.5595 (56.0%),+0.0261,+4.89%,Improved
+Small Objects Recall,0.6563 (65.6%),0.7257 (72.6%),+0.0694,+10.57%,Improved
+Medium Objects Recall,0.8607 (86.1%),0.8343 (83.4%),-0.0264,-3.07%,Degraded
+Large Objects Recall,0.9147 (91.5%),1.0000 (100.0%),+0.0853,+9.33%,Improved

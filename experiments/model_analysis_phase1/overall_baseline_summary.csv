@@ -1,0 +1,15 @@
+Evaluation Category,Metric Name,Score,Evaluation Condition / Derivation
+PR-Curve Metric,mAP@50,0.4335,Complete confidence-ranked predictions across full PR-curve
+PR-Curve Metric,mAP@50-95,0.2665,COCO 10-threshold average [0.50:0.05:0.95] across full PR-curve
+Best Operating Point,Best F1-Score,0.6165,Achieved at Confidence Threshold = 0.26
+Best Operating Point,Precision at Best F1,0.7066,At Best F1 Threshold (0.26)
+Best Operating Point,Recall at Best F1,0.5468,At Best F1 Threshold (0.26)
+Fixed Threshold,Precision at conf=0.10,0.4454,Fixed operating confidence threshold = 0.10
+Fixed Threshold,Recall at conf=0.10,0.6648,Fixed operating confidence threshold = 0.10
+Fixed Threshold,F1-Score at conf=0.10,0.5334,Fixed operating confidence threshold = 0.10
+Fixed Threshold,Precision at conf=0.30,0.7492,Fixed operating confidence threshold = 0.30
+Fixed Threshold,Recall at conf=0.30,0.5206,Fixed operating confidence threshold = 0.30
+Fixed Threshold,F1-Score at conf=0.30,0.6143,Fixed operating confidence threshold = 0.30
+Fixed Threshold,Precision at conf=0.50,0.8858,Fixed operating confidence threshold = 0.50
+Fixed Threshold,Recall at conf=0.50,0.3928,Fixed operating confidence threshold = 0.50
+Fixed Threshold,F1-Score at conf=0.50,0.5442,Fixed operating confidence threshold = 0.50

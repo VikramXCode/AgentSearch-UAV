@@ -1,0 +1,2 @@
+System,Precision,Recall,mAP@50,mAP@50-95,F1-Score,Total_Detections,Total_TP,Total_FP,Total_FN,Total_GT,Avg_Latency_sec,Images_Evaluated
+Baseline YOLO-World,35.68%,24.89%,8.06%,5.44%,29.32%,27039,9648,17391,29111,38759,0.344,548

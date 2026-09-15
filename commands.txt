@@ -1,0 +1,21 @@
+
+cd "c:\Users\hp\OneDrive\Documents\Projects\AgentSearch\AgentSearch-UAV"
+C:\v\agentsearch-venv\Scripts\Activate.ps1
+
+python -m pip install -r requirements.txt
+python -m pip install pillow opencv-python sahi ultralytics
+python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+
+
+
+python -m models.inference
+python -m workflows.graph
+
+# Benchmark All 5 Detection Systems on 30 images
+python scripts\evaluate_all_systems_benchmark.py --num-images 30
+
+# Benchmark Optimized Pipeline on 30 images
+python scripts\evaluate_optimized_pipeline.py --num-images 30
+
+
+

@@ -1,0 +1,6 @@
+System,Precision,Recall,mAP@50,F1-Score,Precision_raw,Recall_raw,mAP50_raw,F1_raw,Avg_Latency_sec,Total_Detections,Total_TP,Total_FP,Total_FN,Total_GT
+Baseline YOLO-World,29.84%,22.31%,7.06%,25.53%,0.2984,0.2231,0.0706,0.2553,0.214,1123,319,750,1111,1430
+Fine-Tuned YOLO-World,67.01%,58.67%,32.23%,62.56%,0.6701,0.5867,0.3223,0.6256,0.362,1252,839,413,591,1430
+SAHI Pipeline,66.50%,65.38%,45.70%,65.94%,0.665,0.6538,0.457,0.6594,3.292,1406,935,471,495,1430
+Super-Resolution Pipeline,65.15%,58.04%,34.03%,61.39%,0.6515,0.5804,0.3403,0.6139,0.52,1274,830,444,600,1430
+AgentSearch-UAV Multi-Agent Pipeline,61.43%,65.03%,45.44%,63.18%,0.6143,0.6503,0.4544,0.6318,3.654,1514,930,584,500,1430

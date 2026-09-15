@@ -1,49 +1,43 @@
 from workflows.state import AgentState
+from utils.search_utils import extract_query_components
 
 
 class QueryAgent:
 
-    def run(self, state: AgentState) -> AgentState:
+    def run(
+        self,
+        state: AgentState,
+        query: str | None = None,
+    ) -> AgentState:
 
         print("\n==============================")
         print("      QUERY AGENT")
         print("==============================")
 
-        user_query = input("Enter your search query: ")
+        # CLI fallback
+        if query is None:
+            query = input("Enter your search query: ").strip()
 
-        state.query.raw_query = user_query
+        if not query:
+            raise ValueError("Search query is required.")
 
-        # Simple parser (we'll replace this with an LLM later)
-        words = user_query.lower().split()
+        state.query.raw_query = query
 
-        colors = [
-            "red",
-            "blue",
-            "green",
-            "white",
-            "black",
-            "yellow",
-            "orange",
-            "gray",
-            "grey",
-            "brown"
-        ]
-
-        detected_color = None
-
-        for word in words:
-            if word in colors:
-                detected_color = word
-                break
+        components = extract_query_components(query)
 
         state.query.attributes = {}
 
-        if detected_color:
-            state.query.attributes["color"] = detected_color
+        if components.color:
+            state.query.attributes["color"] = components.color
 
-        if len(words) > 0:
-            state.query.target = words[-1]
+        if components.size:
+            state.query.attributes["size"] = components.size
 
+        state.query.quantity = components.quantity
+        state.query.quantity_value = components.quantity_value
+        state.query.target = components.target
+        state.query.original_target = components.original_target
+        state.query.canonical_query = components.canonical_query
         state.query.search_mode = "text"
 
         print("\nParsed Query")

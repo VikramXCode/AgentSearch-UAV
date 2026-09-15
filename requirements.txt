@@ -12,6 +12,8 @@ distro==1.9.0
 fastapi==0.139.0
 frozenlist==1.8.0
 h11==0.16.0
+Pillow
+opencv-python
 httpcore==1.0.9
 httpx==0.28.1
 httpx-sse==0.4.3
@@ -28,6 +30,12 @@ langchain-text-splitters==1.1.2
 langgraph==1.2.8
 langgraph-checkpoint==4.1.1
 langgraph-prebuilt==1.1.0
+Flask
+flask-cors
+sahi
+ultralytics
+torch
+torchvision
 langgraph-sdk==0.4.2
 langsmith==0.10.0
 multidict==6.7.1
@@ -58,3 +66,5 @@ websockets==15.0.1
 xxhash==3.8.1
 yarl==1.24.2
 zstandard==0.25.0
+clip @ git+https://github.com/ultralytics/CLIP.git
+imageio-ffmpeg>=0.5.1
