@@ -11,4 +11,11 @@ python -m pip install torch torchvision --index-url https://download.pytorch.org
 python -m models.inference
 python -m workflows.graph
 
+# Benchmark All 5 Detection Systems on 30 images
+python scripts\evaluate_all_systems_benchmark.py --num-images 30
+
+# Benchmark Optimized Pipeline on 30 images
+python scripts\evaluate_optimized_pipeline.py --num-images 30
+
+
 

@@ -1,5 +1,6 @@
 import sys
 import json
+import threading
 from pathlib import Path
 from time import perf_counter
 from uuid import uuid4
@@ -8,6 +9,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import cv2
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
@@ -19,6 +21,10 @@ from workflows.graph import run_pipeline
 
 app = Flask(__name__)
 CORS(app)
+
+# Video Background Processing Jobs
+VIDEO_JOBS: dict[str, dict] = {}
+VIDEO_JOBS_LOCK = threading.Lock()
 
 
 # =========================================================
@@ -68,6 +74,7 @@ def home():
             "/detect",
             "/result",
             "/detect-video",
+            "/video-progress/<job_id>",
             "/result-video",
             "/samples",
             "/sample-image",
@@ -333,87 +340,241 @@ def detect():
 
 
 # =========================================================
-# VIDEO DETECTION API
+# VIDEO DETECTION API & PROGRESS JOBS
 # =========================================================
+
+def _execute_video_pipeline(job_id: str, video_path: str, query: str, output_dir: Path) -> dict:
+    start = perf_counter()
+    tracker = VideoTracker()
+
+    def progress_callback(cur: int, total: int, fps: float, stage: str):
+        with VIDEO_JOBS_LOCK:
+            if job_id in VIDEO_JOBS:
+                pct = round((cur / max(1, total)) * 100, 1) if total > 0 else 0.0
+                VIDEO_JOBS[job_id].update({
+                    "current_frame": cur,
+                    "total_frames": total,
+                    "progress": pct,
+                    "fps": round(fps, 1),
+                    "stage": stage,
+                })
+
+    result = tracker.process_video(
+        video_path=video_path,
+        query=query,
+        output_dir=str(output_dir),
+        progress_callback=progress_callback,
+    )
+    elapsed = perf_counter() - start
+
+    unique_targets = len(set(d.get("track_id", idx) for idx, d in enumerate(result.detections)))
+    avg_conf = 0.85
+    if result.detections:
+        avg_conf = round(sum(d.get("confidence", 0.8) for d in result.detections) / len(result.detections), 3)
+
+    payload = {
+        "success": True,
+        "status": "success",
+        "job_id": job_id,
+        "query": query,
+        "output_video": f"/result-video?path={result.output_video_path}",
+        "result_video": f"/result-video?path={result.output_video_path}",
+        "count": unique_targets,
+        "objects_found": unique_targets,
+        "confidence": avg_conf,
+        "metrics": {
+            "fps": round(result.fps, 2),
+            "total_processing_time": round(result.total_processing_time, 2),
+            "detection_time": round(result.detection_time, 2),
+            "tracking_time": round(result.tracking_time, 2),
+            "frames_processed": result.frames_processed,
+            "skipped_frames": result.skipped_frames,
+            "tracked_targets": unique_targets,
+            "average_time_per_video": round(elapsed, 2),
+            "input_resolution": result.metrics.get("input_resolution", "1920x1080"),
+            "input_fps": result.metrics.get("input_fps", 25.0),
+        },
+        "timing": {
+            "detection_time": round(result.detection_time, 3),
+            "tracking_time": round(result.tracking_time, 3),
+            "total_time": round(elapsed, 3),
+        },
+        "detections": result.detections[:60],
+        "explanation": {
+            "summary": f"Video tracking completed. Verified {unique_targets} target track(s) for query '{query}' across {result.frames_processed} frames at {round(result.fps, 1)} FPS.",
+            "reasoning": [
+                f"Resolved query '{query}' to target detectors with anti-flicker MOT tracking",
+                f"Processed {result.frames_processed} frames sequentially preserving resolution and frame order",
+                f"Applied Exponential Moving Average (EMA) smoothing and trajectory tracking",
+                f"Encoded universal H.264 video output with hardware-compatible yuv420p format",
+            ],
+            "target": query,
+            "tools_used": ["YOLO-World Detector", "Multi-Object Tracker (EMA)", "H.264 Video Transcoder"],
+        },
+    }
+
+    # Record mission to persistent search history
+    try:
+        from datetime import datetime, timezone
+        history_entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "query": query,
+            "target": query,
+            "attributes": {},
+            "quantity": "all",
+            "search_mode": "video",
+            "detector": "VisDrone YOLO-World + MOT",
+            "use_sahi": False,
+            "use_super_resolution": False,
+            "verification_enabled": True,
+            "objects_found": unique_targets,
+            "confidence_score": avg_conf,
+            "image_path": str(video_path),
+            "output_video_path": str(result.output_video_path),
+            "fps": round(result.fps, 2),
+            "status": "Completed",
+        }
+        history_list = []
+        if HISTORY_FILE.exists():
+            with open(HISTORY_FILE, "r", encoding="utf-8") as f:
+                history_list = json.load(f)
+            if not isinstance(history_list, list):
+                history_list = []
+        history_list.append(history_entry)
+        with open(HISTORY_FILE, "w", encoding="utf-8") as f:
+            json.dump(history_list, f, indent=2)
+    except Exception as hist_err:
+        print(f"Failed to record video history: {hist_err}")
+
+    return payload
+
+
+def _process_video_job_worker(job_id: str, video_path: str, query: str, output_dir: Path):
+    try:
+        payload = _execute_video_pipeline(job_id, video_path, query, output_dir)
+        with VIDEO_JOBS_LOCK:
+            if job_id in VIDEO_JOBS:
+                VIDEO_JOBS[job_id]["status"] = "completed"
+                VIDEO_JOBS[job_id]["progress"] = 100.0
+                VIDEO_JOBS[job_id]["stage"] = "Completed"
+                VIDEO_JOBS[job_id]["result"] = payload
+    except Exception as exc:
+        print(f"Error processing video job {job_id}: {exc}")
+        with VIDEO_JOBS_LOCK:
+            if job_id in VIDEO_JOBS:
+                VIDEO_JOBS[job_id]["status"] = "failed"
+                VIDEO_JOBS[job_id]["stage"] = "Failed"
+                VIDEO_JOBS[job_id]["error"] = str(exc)
+
 
 @app.route("/detect-video", methods=["POST"])
 def detect_video():
-    if "video" not in request.files:
-        return jsonify({"status": "error", "message": "No video uploaded"}), 400
-
-    video = request.files["video"]
+    # -----------------------------------------------------
+    # Validate query
+    # -----------------------------------------------------
     query = request.form.get("query", "").strip()
     if not query:
         return jsonify({"status": "error", "message": "Search query is required"}), 400
 
-    if not video.filename:
-        return jsonify({"status": "error", "message": "Invalid video filename"}), 400
+    # -----------------------------------------------------
+    # Determine video source (upload or sample preset)
+    # -----------------------------------------------------
+    video_path = None
 
-    extension = Path(video.filename).suffix.lower()
-    if extension not in ALLOWED_VIDEO_EXTENSIONS:
-        return jsonify({"status": "error", "message": f"Unsupported video format: {extension}"}), 400
+    if "video" in request.files and request.files["video"].filename:
+        video = request.files["video"]
+        extension = Path(video.filename).suffix.lower()
+        if extension not in ALLOWED_VIDEO_EXTENSIONS:
+            return jsonify({"status": "error", "message": f"Unsupported video format: {extension}"}), 400
 
-    safe_name = secure_filename(video.filename) or f"video_{uuid4().hex[:8]}.mp4"
-    unique_name = f"{uuid4().hex}_{safe_name}"
-    video_path = UPLOAD_FOLDER / unique_name
-    video.save(video_path)
+        safe_name = secure_filename(video.filename) or f"video_{uuid4().hex[:8]}.mp4"
+        unique_name = f"{uuid4().hex}_{safe_name}"
+        video_path = UPLOAD_FOLDER / unique_name
+        video.save(video_path)
+    elif request.form.get("video_name"):
+        sample_name = Path(request.form.get("video_name")).name
+        candidate = SAMPLE_VIDEO_FOLDER / sample_name
+        if candidate.exists():
+            video_path = candidate
+        else:
+            return jsonify({"status": "error", "message": f"Sample video '{sample_name}' not found"}), 404
+    else:
+        return jsonify({"status": "error", "message": "No video payload provided"}), 400
 
-    try:
-        output_dir = OUTPUT_FOLDER / f"video_{uuid4().hex}"
-        output_dir.mkdir(parents=True, exist_ok=True)
-        start = perf_counter()
-        tracker = VideoTracker()
-        result = tracker.process_video(
-            video_path=str(video_path),
-            query=query,
-            output_dir=str(output_dir),
-            max_skip_frames=0,
-            recheck_every=25,
-        )
-        elapsed = perf_counter() - start
+    # Verify video can be opened
+    test_cap = cv2.VideoCapture(str(video_path))
+    if not test_cap.isOpened():
+        test_cap.release()
+        return jsonify({"status": "error", "message": "Could not read video stream or file is corrupted"}), 400
+    test_cap.release()
 
-        # Convert detections to clean format
-        unique_targets = len(set(d.get("track_id", idx) for idx, d in enumerate(result.detections)))
+    job_id = f"vjob_{uuid4().hex[:12]}"
+    output_dir = OUTPUT_FOLDER / f"video_{job_id}"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-        return jsonify({
-            "success": True,
-            "status": "success",
+    is_sync = request.args.get("sync") == "1" or request.form.get("sync") == "1"
+
+    with VIDEO_JOBS_LOCK:
+        VIDEO_JOBS[job_id] = {
+            "job_id": job_id,
+            "status": "processing",
             "query": query,
-            "output_video": f"/result-video?path={result.output_video_path}",
-            "result_video": f"/result-video?path={result.output_video_path}",
-            "count": unique_targets,
-            "objects_found": unique_targets,
-            "confidence": 0.85,
-            "metrics": {
-                "fps": round(result.fps, 2),
-                "total_processing_time": round(result.total_processing_time, 2),
-                "detection_time": round(result.detection_time, 2),
-                "tracking_time": round(result.tracking_time, 2),
-                "frames_processed": result.frames_processed,
-                "skipped_frames": result.skipped_frames,
-                "tracked_targets": unique_targets,
-                "average_time_per_video": round(elapsed, 2),
-            },
-            "timing": {
-                "detection_time": round(result.detection_time, 3),
-                "tracking_time": round(result.tracking_time, 3),
-                "total_time": round(elapsed, 3),
-            },
-            "detections": result.detections[:50],  # Sample of tracked targets
-            "explanation": {
-                "summary": f"Video tracking completed. Tracked {unique_targets} instance(s) of '{query}' across {result.frames_processed} frames at {round(result.fps, 1)} FPS.",
-                "reasoning": [
-                    f"Analyzed video stream with fine-tuned YOLO-World detector for target: '{query}'",
-                    f"Processed {result.frames_processed} frames with continuous motion and template tracking",
-                    f"Generated real-time annotated video output at {round(result.fps, 1)} FPS",
-                ],
-                "target": query,
-                "tools_used": ["YOLO-World Detector", "Video Tracker & Frame Matcher"],
-            },
-        })
-    except Exception as exc:
-        print(f"Video detection error: {exc}")
-        return jsonify({"status": "error", "message": str(exc)}), 500
+            "progress": 0.0,
+            "current_frame": 0,
+            "total_frames": 0,
+            "fps": 0.0,
+            "stage": "Initializing UAV vision pipeline...",
+            "result": None,
+            "error": None,
+        }
+
+    if is_sync:
+        try:
+            payload = _execute_video_pipeline(job_id, str(video_path), query, output_dir)
+            with VIDEO_JOBS_LOCK:
+                VIDEO_JOBS[job_id]["status"] = "completed"
+                VIDEO_JOBS[job_id]["result"] = payload
+            return jsonify(payload)
+        except Exception as exc:
+            return jsonify({"status": "error", "message": str(exc)}), 500
+
+    # Run in background thread for real-time progress polling
+    worker_thread = threading.Thread(
+        target=_process_video_job_worker,
+        args=(job_id, str(video_path), query, output_dir),
+        daemon=True,
+    )
+    worker_thread.start()
+
+    return jsonify({
+        "success": True,
+        "status": "processing",
+        "job_id": job_id,
+        "query": query,
+        "message": "Video tracking pipeline engaged",
+    })
+
+
+@app.route("/video-progress/<job_id>", methods=["GET"])
+def get_video_progress(job_id: str):
+    with VIDEO_JOBS_LOCK:
+        job = VIDEO_JOBS.get(job_id)
+
+    if not job:
+        return jsonify({"status": "error", "message": f"Job '{job_id}' not found"}), 404
+
+    return jsonify({
+        "success": True,
+        "job_id": job["job_id"],
+        "status": job["status"],
+        "progress": job["progress"],
+        "current_frame": job["current_frame"],
+        "total_frames": job["total_frames"],
+        "fps": job["fps"],
+        "stage": job["stage"],
+        "result": job["result"],
+        "error": job["error"],
+    })
 
 
 @app.route("/result-video")
@@ -422,11 +583,13 @@ def result_video():
     if not requested_path:
         return jsonify({"status": "error", "message": "Result path is required"}), 400
 
-    path = Path(requested_path)
-    if not path.exists():
-        return jsonify({"status": "error", "message": "Result video not found"}), 404
+    path = Path(requested_path).resolve()
 
-    return send_file(path, mimetype="video/mp4")
+    # Safety check: ensure path is within project root
+    if not str(path).startswith(str(PROJECT_ROOT.resolve())) or not path.exists():
+        return jsonify({"status": "error", "message": "Result video not found or invalid"}), 404
+
+    return send_file(path, mimetype="video/mp4", conditional=True)
 
 
 # =========================================================
@@ -641,8 +804,10 @@ def get_history():
 # =========================================================
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 5005))
     app.run(
         host="0.0.0.0",
-        port=5001,
+        port=port,
         debug=True,
     )

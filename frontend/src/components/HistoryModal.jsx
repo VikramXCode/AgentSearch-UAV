@@ -9,7 +9,7 @@ export default function HistoryModal({ isOpen, onClose, onSelectHistoryItem }) {
   useEffect(() => {
     if (isOpen) {
       setLoading(true);
-      fetch('http://localhost:5001/history')
+      fetch('http://localhost:5005/history')
         .then((res) => res.json())
         .then((data) => {
           if (data.status === 'success') {

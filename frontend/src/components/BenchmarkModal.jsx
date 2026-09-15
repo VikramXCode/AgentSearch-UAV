@@ -8,7 +8,7 @@ export default function BenchmarkModal({ isOpen, onClose }) {
 
   useEffect(() => {
     if (isOpen) {
-      fetch('http://localhost:5001/benchmark')
+      fetch('http://localhost:5005/benchmark')
         .then((res) => res.json())
         .then((d) => {
           if (d.status === 'success') {

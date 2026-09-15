@@ -12,27 +12,35 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/detect': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
       '/result': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
       '/samples': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
       '/sample-image': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
       '/detect-video': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
       '/result-video': {
-        target: 'http://localhost:5001',
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/history': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/benchmark': {
+        target: 'http://localhost:5005',
         changeOrigin: true,
       },
     },

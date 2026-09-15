@@ -48,6 +48,20 @@ export default function ImageComparison({
     document.body.removeChild(a);
   };
 
+  const updateSliderFromEvent = (clientX, clientY) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+    const y = Math.max(0, Math.min(rect.height, clientY - rect.top));
+    const pct = (x / rect.width) * 100;
+    setSliderPos(pct);
+    setCursorCoords({
+      x: Math.round(x),
+      y: Math.round(y),
+      show: true,
+    });
+  };
+
   const handleMouseMove = (e) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -66,35 +80,47 @@ export default function ImageComparison({
     });
   };
 
+  const handleMouseDown = (e) => {
+    if (viewMode === 'split') {
+      updateSliderFromEvent(e.clientX, e.clientY);
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (viewMode === 'split' && e.touches.length > 0) {
+      updateSliderFromEvent(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
+
   const handleMouseLeave = () => {
     setCursorCoords((prev) => ({ ...prev, show: false }));
   };
 
   return (
-    <div className="cmd-panel rounded-xl p-5 sm:p-6 border border-slate-800/90 space-y-4">
+    <div className="cmd-panel rounded-2xl p-5 sm:p-6 border border-slate-800/90 shadow-xl space-y-4">
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-4 border-b border-slate-800/80">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded bg-slate-900 border border-slate-700/80 flex items-center justify-center text-cyan-400">
-            <Layers className="w-4 h-4 text-cyan-400" />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <Layers className="w-5 h-5 text-cyan-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm sm:text-base font-bold text-white tracking-tight font-mono uppercase">
+              <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
                 {mode === 'video'
-                  ? 'Aerial Video Stream Tracking Telemetry'
-                  : 'Surveillance Imagery Comparison Console'}
+                  ? 'Video Stream Target Tracking'
+                  : 'Target Detection & Image Comparison'}
               </h2>
               {results && (
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-500/40">
-                  {detectionCount} Verified Target(s)
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-500/40 font-semibold">
+                  {detectionCount} Target(s) Verified
                 </span>
               )}
             </div>
-            <p className="text-xs text-slate-400 font-mono mt-0.5">
+            <p className="text-xs text-slate-400">
               {mode === 'video'
                 ? 'Dual-stream visual inspection & spatial trajectory verification'
-                : 'Raw aerial feed vs. query-verified bounding box detections'}
+                : 'Slide to compare raw aerial input against verified target detections'}
             </p>
           </div>
         </div>
@@ -166,6 +192,9 @@ export default function ImageComparison({
           <div
             ref={containerRef}
             onMouseMove={handleMouseMove}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchMove}
+            onTouchMove={handleTouchMove}
             onMouseLeave={handleMouseLeave}
             className="relative aspect-video w-full rounded-lg overflow-hidden border border-slate-800 bg-black flex items-center justify-center select-none cursor-ew-resize shadow-inner"
           >

@@ -67,3 +67,4 @@ xxhash==3.8.1
 yarl==1.24.2
 zstandard==0.25.0
 clip @ git+https://github.com/ultralytics/CLIP.git
+imageio-ffmpeg>=0.5.1

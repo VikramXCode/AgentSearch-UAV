@@ -35,14 +35,14 @@ from models.optimized_detection_pipeline import OptimizedDetectionPipeline
 from models.super_resolution import SuperResolutionEngine
 
 
-def run_all_systems_benchmark(num_images: int = 30):
+def run_all_systems_benchmark(num_images: int = 100):
     candidates = [
-        PROJECT_ROOT / "#FILLERS" / "datasets" / "VisDrone2019" / "VisDrone2019-DET-val",
         PROJECT_ROOT / "datasets" / "VisDrone2019" / "VisDrone2019-DET-val",
+        PROJECT_ROOT / "#FILLERS" / "datasets" / "VisDrone2019" / "VisDrone2019-DET-val",
     ]
     val_dir = next((c for c in candidates if c.exists()), candidates[0])
     images_dir = val_dir / "images"
-    output_dir = PROJECT_ROOT / "#FILLERS" / "experiments" / "all_systems_benchmark"
+    output_dir = PROJECT_ROOT / "experiments" / "all_systems_benchmark"
     output_dir.mkdir(parents=True, exist_ok=True)
 
     evaluator = ComprehensiveEvaluator(val_dir=val_dir, iou_threshold=0.50)
@@ -316,4 +316,11 @@ def run_all_systems_benchmark(num_images: int = 30):
 
 
 if __name__ == "__main__":
-    run_all_systems_benchmark(num_images=30)
+    import argparse
+    parser = argparse.ArgumentParser(description="Benchmark detection systems on VisDrone-val")
+    parser.add_argument("pos_num_images", nargs="?", type=int, default=None, help="Number of images to evaluate (positional)")
+    parser.add_argument("--num-images", "-n", type=int, default=30, help="Number of images to evaluate (default: 30)")
+    args = parser.parse_args()
+
+    n_imgs = args.pos_num_images if args.pos_num_images is not None else args.num_images
+    run_all_systems_benchmark(num_images=n_imgs)

@@ -5,9 +5,6 @@ import { AlertTriangle, RefreshCw, Sparkles, Download, FileCode, Layers, Termina
 import Header from './components/Header';
 import TargetSearchPanel from './components/TargetSearchPanel';
 import ImageComparison from './components/ImageComparison';
-import LivePipelineGraph from './components/LivePipelineGraph';
-import PipelineToolCards from './components/PipelineToolCards';
-import DetectionResults from './components/DetectionResults';
 import DetectedObjectList from './components/DetectedObjectList';
 import AIExplanationPanel from './components/AIExplanationPanel';
 import TechnicalProcessingLog from './components/TechnicalProcessingLog';
@@ -15,7 +12,7 @@ import ZoomModal from './components/ZoomModal';
 import BenchmarkModal from './components/BenchmarkModal';
 import HistoryModal from './components/HistoryModal';
 
-const API_BASE = 'http://localhost:5001';
+const API_BASE = 'http://localhost:5005';
 
 export default function App() {
   // Mode: 'image' or 'video'
@@ -30,6 +27,7 @@ export default function App() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(null);
   const [error, setError] = useState(null);
 
   // Benchmarks & Samples
@@ -57,7 +55,7 @@ export default function App() {
     {
       timestamp: new Date().toLocaleTimeString(),
       level: 'info',
-      message: 'Establishing telemetry connection to Flask backend on port 5001...',
+      message: 'Establishing telemetry connection to Flask backend on port 5005...',
     },
   ]);
 
@@ -95,6 +93,27 @@ export default function App() {
     }
   }, []);
 
+  // Handle selecting a sample image / video
+  const handleSelectSample = useCallback(async (sample, sampleType = 'image') => {
+    try {
+      addLog(`Selected preset benchmark ${sampleType}: ${sample.name}`, 'info');
+      const fullUrl = `${API_BASE}${sample.url}`;
+      setPreviewUrl(fullUrl);
+
+      const response = await fetch(fullUrl);
+      const blob = await response.blob();
+      const file = new File(
+        [blob],
+        sample.name,
+        { type: sampleType === 'video' ? 'video/mp4' : (blob.type || 'image/png') }
+      );
+      setSelectedFile(file);
+      setError(null);
+    } catch (err) {
+      addLog(`Failed to load benchmark payload: ${err.message}`, 'error');
+    }
+  }, [addLog]);
+
   // Fetch Sample Images and Videos from Backend
   const fetchSamples = useCallback(async () => {
     try {
@@ -108,6 +127,13 @@ export default function App() {
         if (data.samples && data.samples.length > 0) {
           setSamples(data.samples);
           addLog(`Loaded ${data.samples.length} UAV benchmark aerial scenes`, 'info');
+          // Auto-select first sample if user hasn't selected a file
+          setSelectedFile((currFile) => {
+            if (!currFile) {
+              handleSelectSample(data.samples[0], 'image');
+            }
+            return currFile;
+          });
         }
       }
 
@@ -121,7 +147,7 @@ export default function App() {
     } catch (err) {
       console.warn('Could not fetch preset sample files:', err);
     }
-  }, [addLog]);
+  }, [addLog, handleSelectSample]);
 
   useEffect(() => {
     checkBackendHealth();
@@ -147,27 +173,6 @@ export default function App() {
     }
   };
 
-  // Handle selecting a sample image / video
-  const handleSelectSample = async (sample, sampleType = 'image') => {
-    try {
-      addLog(`Selected preset benchmark ${sampleType}: ${sample.name}`, 'info');
-      const fullUrl = `${API_BASE}${sample.url}`;
-      setPreviewUrl(fullUrl);
-
-      const response = await fetch(fullUrl);
-      const blob = await response.blob();
-      const file = new File(
-        [blob],
-        sample.name,
-        { type: sampleType === 'video' ? 'video/mp4' : (blob.type || 'image/png') }
-      );
-      setSelectedFile(file);
-      setError(null);
-    } catch (err) {
-      addLog(`Failed to load benchmark payload: ${err.message}`, 'error');
-    }
-  };
-
   // Handle Loading Query from History Modal
   const handleSelectHistoryItem = (item) => {
     if (item.query) {
@@ -188,6 +193,7 @@ export default function App() {
     }
 
     setIsSearching(true);
+    setVideoProgress(null);
     setError(null);
     setResults(null);
     setPipelineStages(null);
@@ -228,14 +234,60 @@ export default function App() {
         body: formData,
       });
 
-      const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
-
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || `Server responded with HTTP ${res.status}`);
       }
 
-      const data = await res.json();
+      let data = await res.json();
+
+      // If video job is queued, poll for progress until completion
+      if (mode === 'video' && data.job_id && data.status === 'processing') {
+        const jobId = data.job_id;
+        addLog(`[Video Stream Processing] Background job engaged: ${jobId}`, 'info');
+
+        let isCompleted = false;
+        let lastLoggedPct = -1;
+
+        while (!isCompleted) {
+          await new Promise((resolve) => setTimeout(resolve, 350));
+          try {
+            const pollRes = await fetch(`${API_BASE}/video-progress/${jobId}`);
+            if (!pollRes.ok) continue;
+
+            const jobStatus = await pollRes.json();
+            setVideoProgress({
+              percent: jobStatus.progress || 0,
+              currentFrame: jobStatus.current_frame || 0,
+              totalFrames: jobStatus.total_frames || 0,
+              fps: jobStatus.fps || 0,
+              stage: jobStatus.stage || 'Tracking targets in video stream...',
+            });
+
+            // Periodically log milestone progress to tactical log
+            const currentPct = Math.round(jobStatus.progress || 0);
+            if (currentPct > 0 && currentPct % 25 === 0 && currentPct !== lastLoggedPct) {
+              lastLoggedPct = currentPct;
+              addLog(`[Video Progress] ${currentPct}% processed (${jobStatus.current_frame}/${jobStatus.total_frames} frames @ ${jobStatus.fps} FPS)`, 'info');
+            }
+
+            if (jobStatus.status === 'completed') {
+              isCompleted = true;
+              data = jobStatus.result;
+            } else if (jobStatus.status === 'failed') {
+              throw new Error(jobStatus.error || 'Video tracking failed');
+            }
+          } catch (pollErr) {
+            if (pollErr.message && !pollErr.message.includes('fetch')) {
+              throw pollErr;
+            }
+          }
+        }
+      }
+
+      const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+
+
 
       addLog(`[Inference Complete] Pipeline executed in ${elapsed}s`, 'success');
       addLog(
@@ -318,27 +370,27 @@ export default function App() {
       />
 
       {/* Main Mission Control Center */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
         {/* Backend Disconnected Warning Banner */}
         {!backendConnected && (
-          <div className="rounded-lg p-3.5 bg-rose-950/30 border border-rose-800/60 text-rose-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
+          <div className="rounded-xl p-4 bg-rose-950/40 border border-rose-800/60 text-rose-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono">
             <div className="flex items-center gap-2.5">
-              <AlertTriangle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+              <AlertTriangle className="w-5 h-5 text-rose-400 flex-shrink-0" />
               <div>
                 <span className="text-xs font-bold text-rose-200 uppercase">
                   AGENTSEARCH CORE DISCONNECTED
                 </span>
                 <p className="text-[11px] text-rose-400/90 mt-0.5">
-                  Backend unreachable at <code className="bg-rose-950/80 px-1 py-0.2 rounded text-rose-200">http://localhost:5001</code>.
+                  Backend unreachable at <code className="bg-rose-950/80 px-1 py-0.2 rounded text-rose-200">http://localhost:5005</code>.
                   Ensure <code className="text-rose-200 font-bold">python -m api.main</code> is running.
                 </p>
               </div>
             </div>
             <button
               onClick={checkBackendHealth}
-              className="px-2.5 py-1 rounded text-xs font-semibold bg-rose-900/60 hover:bg-rose-800/80 text-rose-200 border border-rose-700/60 transition-colors flex items-center gap-1.5 flex-shrink-0"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-900/60 hover:bg-rose-800/80 text-rose-200 border border-rose-700/60 transition-colors flex items-center gap-1.5 flex-shrink-0"
             >
-              <RefreshCw className="w-3 h-3" />
+              <RefreshCw className="w-3.5 h-3.5" />
               Retry Connection
             </button>
           </div>
@@ -346,21 +398,21 @@ export default function App() {
 
         {/* Global Error Banner */}
         {error && (
-          <div className="rounded-lg p-3 bg-amber-950/30 border border-amber-800/60 text-amber-300 flex items-center justify-between gap-3 font-mono text-xs">
+          <div className="rounded-xl p-3.5 bg-amber-950/40 border border-amber-800/60 text-amber-300 flex items-center justify-between gap-3 font-mono text-xs">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
               <span>{error}</span>
             </div>
             <button
               onClick={() => setError(null)}
-              className="text-[11px] text-amber-400 hover:text-amber-200 underline"
+              className="text-[11px] text-amber-400 hover:text-amber-200 underline cursor-pointer"
             >
               Dismiss
             </button>
           </div>
         )}
 
-        {/* SECTION 1 — TARGET SEARCH PANEL (INPUT INGEST) */}
+        {/* SECTION 1 — TARGET SEARCH & INPUT DIRECTIVE */}
         <section id="section-search">
           <TargetSearchPanel
             query={query}
@@ -376,19 +428,11 @@ export default function App() {
             onSelectSample={handleSelectSample}
             mode={mode}
             setMode={handleModeChange}
+            videoProgress={videoProgress}
           />
         </section>
 
-        {/* SECTION 2 — CENTERPIECE: MULTI-AGENT PIPELINE GRAPH */}
-        <section id="section-pipeline">
-          <LivePipelineGraph
-            stages={pipelineStages}
-            isSearching={isSearching}
-            mode={mode}
-          />
-        </section>
-
-        {/* SECTION 3 — SURVEILLANCE IMAGE / VIDEO COMPARISON */}
+        {/* SECTION 2 — INTERACTIVE IMAGE SLIDER & DETECTION RESULTS */}
         <section id="section-comparison">
           <ImageComparison
             originalMedia={previewUrl}
@@ -401,36 +445,18 @@ export default function App() {
           />
         </section>
 
-        {/* SECTION 4 — TOOL TRIGGER & EXECUTION RATIONALE AUDIT */}
-        <section id="section-tool-status">
-          <PipelineToolCards
-            toolsStatus={toolsStatus}
-            isSearching={isSearching}
-          />
-        </section>
-
-        {/* SECTION 5 & 6 — DETECTION RESULTS & TARGETS DATA MATRIX */}
-        <div className="grid grid-cols-1 gap-6">
-          {/* SECTION 5 — QUANTITATIVE DETECTION RESULTS */}
-          <section id="section-results">
-            <DetectionResults
-              results={results}
-              isSearching={isSearching}
-              mode={mode}
-            />
-          </section>
-
-          {/* SECTION 6 — VERIFIED TARGETS DATA MATRIX */}
-          <section id="section-object-list">
+        {/* SECTION 3 — VERIFIED TARGETS & TRAJECTORY MATRIX */}
+        {(results?.detections?.length > 0 || isSearching) && (
+          <section id="section-matrix">
             <DetectedObjectList
               detections={results?.detections}
               isSearching={isSearching}
               mode={mode}
             />
           </section>
-        </div>
+        )}
 
-        {/* SECTION 7 — AI EXPLANATION & DECISION REASONING */}
+        {/* SECTION 4 — AI EXPLANATION & DECISION REASONING */}
         <section id="section-explanation">
           <AIExplanationPanel
             explanation={results?.explanation}
@@ -440,23 +466,31 @@ export default function App() {
           />
         </section>
 
-        {/* State JSON Export Action */}
-        {results && (
-          <div className="flex items-center justify-end gap-3 pt-1">
-            <button
-              onClick={handleExportState}
-              className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono font-semibold text-cyan-300 flex items-center gap-2 transition-all shadow-sm"
-            >
-              <FileCode className="w-3.5 h-3.5 text-cyan-400" />
-              <span>Export AgentState Telemetry JSON</span>
-            </button>
-          </div>
-        )}
+        {/* Advanced Developer & Telemetry Tools (Collapsed by default) */}
+        <details className="group rounded-xl border border-slate-800/80 bg-slate-950/40 p-4 font-mono text-xs transition-all">
+          <summary className="cursor-pointer text-slate-400 hover:text-slate-200 flex items-center justify-between select-none py-1">
+            <div className="flex items-center gap-2 font-semibold text-slate-300">
+              <Terminal className="w-4 h-4 text-cyan-400" />
+              <span>Advanced Telemetry & Diagnostics (Optional)</span>
+            </div>
+            <span className="text-[11px] text-slate-500 group-open:rotate-180 transition-transform">▼</span>
+          </summary>
 
-        {/* SECTION 8 — REAL-TIME TELEMETRY LOG */}
-        <section id="section-log">
-          <TechnicalProcessingLog logs={logs} onClearLogs={clearLogs} />
-        </section>
+          <div className="mt-4 pt-4 border-t border-slate-800/80 space-y-4">
+            {results && (
+              <div className="flex items-center justify-end">
+                <button
+                  onClick={handleExportState}
+                  className="px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 text-xs font-mono font-semibold text-cyan-300 flex items-center gap-2 transition-all shadow-sm"
+                >
+                  <FileCode className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Export AgentState Telemetry JSON</span>
+                </button>
+              </div>
+            )}
+            <TechnicalProcessingLog logs={logs} onClearLogs={clearLogs} />
+          </div>
+        </details>
       </main>
 
       {/* Command Center Footer */}
