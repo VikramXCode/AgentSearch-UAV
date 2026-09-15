@@ -300,14 +300,14 @@ export default function TargetSearchPanel({
                   <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
                 )}
                 <h3 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">
-                  Sample Scenes
+                  Treasure Media
                 </h3>
               </div>
-              <span className="text-[9px] font-mono text-slate-500">1-Click Presets</span>
+              <span className="text-[9px] font-mono text-cyan-500">treasure/</span>
             </div>
 
             <p className="text-[11px] text-slate-400 mb-2">
-              Select verified UAV benchmark footage:
+              Select media from treasure folder:
             </p>
 
             <div className="space-y-1.5">
@@ -332,27 +332,12 @@ export default function TargetSearchPanel({
                     </button>
                   ))
                 ) : (
-                  ['12 sec.mp4', 'traffic video clip 1.mp4'].map((name, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => onSelectSample({ name, url: `/sample-video?name=${name}` }, 'video')}
-                      className={`w-full px-2.5 py-1.5 rounded-lg border flex items-center justify-between text-xs font-mono transition-all text-left group cursor-pointer ${
-                        selectedFile?.name === name
-                          ? 'bg-cyan-950/40 border-cyan-500/60 text-cyan-300 font-semibold'
-                          : 'bg-slate-950 hover:bg-slate-900 border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 truncate">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                        <span className="truncate">{name}</span>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-cyan-400 flex-shrink-0" />
-                    </button>
-                  ))
+                  <div className="text-[11px] text-slate-500 italic p-3 border border-dashed border-slate-800 rounded-lg text-center">
+                    No videos in <code className="text-cyan-400">treasure/videos</code>. Drop .mp4 files there or upload above.
+                  </div>
                 )
               ) : samples && samples.length > 0 ? (
-                samples.slice(0, 3).map((sample, idx) => (
+                samples.map((sample, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -371,24 +356,9 @@ export default function TargetSearchPanel({
                   </button>
                 ))
               ) : (
-                ['uav3.png', 'cctv.jpg', 'red car.jpg'].map((name, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => onSelectSample({ name, url: `/sample-image?name=${name}` }, 'image')}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border flex items-center justify-between text-xs font-mono transition-all text-left group cursor-pointer ${
-                      selectedFile?.name === name
-                        ? 'bg-cyan-950/40 border-cyan-500/60 text-cyan-300 font-semibold'
-                        : 'bg-slate-950 hover:bg-slate-900 border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      <span className="truncate">{name}</span>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-cyan-400 flex-shrink-0" />
-                  </button>
-                ))
+                <div className="text-[11px] text-slate-500 italic p-3 border border-dashed border-slate-800 rounded-lg text-center">
+                  No images in <code className="text-cyan-400">treasure/images</code>. Drop image files there or upload above.
+                </div>
               )}
             </div>
           </div>

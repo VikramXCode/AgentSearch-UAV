@@ -35,13 +35,20 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 UPLOAD_FOLDER = PROJECT_ROOT / "api" / "uploads"
 OUTPUT_FOLDER = PROJECT_ROOT / "outputs"
-SAMPLE_FOLDER = PROJECT_ROOT / "sample_images"
-SAMPLE_VIDEO_FOLDER = PROJECT_ROOT / "sample_images" / "video_test"
+TREASURE_FOLDER = PROJECT_ROOT / "treasure"
+TREASURE_IMAGES_FOLDER = TREASURE_FOLDER / "images"
+TREASURE_VIDEOS_FOLDER = TREASURE_FOLDER / "videos"
 MEMORY_FOLDER = PROJECT_ROOT / "memory"
 HISTORY_FILE = MEMORY_FOLDER / "search_history.json"
 
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
+TREASURE_IMAGES_FOLDER.mkdir(parents=True, exist_ok=True)
+TREASURE_VIDEOS_FOLDER.mkdir(parents=True, exist_ok=True)
+
+# Compatibility aliases
+SAMPLE_FOLDER = TREASURE_IMAGES_FOLDER
+SAMPLE_VIDEO_FOLDER = TREASURE_VIDEOS_FOLDER
 
 ALLOWED_EXTENSIONS = {
     ".jpg",
@@ -362,7 +369,8 @@ def _execute_video_pipeline(job_id: str, video_path: str, query: str, output_dir
     result = tracker.process_video(
         video_path=video_path,
         query=query,
-        output_dir=str(output_dir),
+        output_dir=str(OUTPUT_FOLDER),
+        output_filename="detected_video.mp4",
         progress_callback=progress_callback,
     )
     elapsed = perf_counter() - start
@@ -377,8 +385,8 @@ def _execute_video_pipeline(job_id: str, video_path: str, query: str, output_dir
         "status": "success",
         "job_id": job_id,
         "query": query,
-        "output_video": f"/result-video?path={result.output_video_path}",
-        "result_video": f"/result-video?path={result.output_video_path}",
+        "output_video": f"/result-video?t={int(perf_counter() * 1000)}",
+        "result_video": f"/result-video?t={int(perf_counter() * 1000)}",
         "count": unique_targets,
         "objects_found": unique_targets,
         "confidence": avg_conf,
@@ -509,8 +517,7 @@ def detect_video():
     test_cap.release()
 
     job_id = f"vjob_{uuid4().hex[:12]}"
-    output_dir = OUTPUT_FOLDER / f"video_{job_id}"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = OUTPUT_FOLDER
 
     is_sync = request.args.get("sync") == "1" or request.form.get("sync") == "1"
 
@@ -580,16 +587,16 @@ def get_video_progress(job_id: str):
 @app.route("/result-video")
 def result_video():
     requested_path = request.args.get("path")
-    if not requested_path:
-        return jsonify({"status": "error", "message": "Result path is required"}), 400
+    if requested_path:
+        path = Path(requested_path).resolve()
+        if str(path).startswith(str(PROJECT_ROOT.resolve())) and path.exists() and path.stat().st_size > 0:
+            return send_file(path, mimetype="video/mp4", conditional=True)
 
-    path = Path(requested_path).resolve()
+    default_video = OUTPUT_FOLDER / "detected_video.mp4"
+    if default_video.exists() and default_video.stat().st_size > 0:
+        return send_file(default_video, mimetype="video/mp4", conditional=True)
 
-    # Safety check: ensure path is within project root
-    if not str(path).startswith(str(PROJECT_ROOT.resolve())) or not path.exists():
-        return jsonify({"status": "error", "message": "Result video not found or invalid"}), 404
-
-    return send_file(path, mimetype="video/mp4", conditional=True)
+    return jsonify({"status": "error", "message": "Result video not found or invalid"}), 404
 
 
 # =========================================================
@@ -598,15 +605,20 @@ def result_video():
 
 @app.route("/result")
 def result_image():
-    result_path = OUTPUT_FOLDER / "detection_result.jpg"
+    result_path = OUTPUT_FOLDER / "detected_image.png"
 
-    if not result_path.exists():
-        return jsonify({
-            "status": "error",
-            "message": "Result image not found. Execute a detection first.",
-        }), 404
+    if not result_path.exists() or result_path.stat().st_size == 0:
+        alt_path = OUTPUT_FOLDER / "detection_result.jpg"
+        if alt_path.exists() and alt_path.stat().st_size > 0:
+            result_path = alt_path
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "Result image not found. Execute a detection first.",
+            }), 404
 
-    response = send_file(result_path, mimetype="image/jpeg", max_age=0)
+    mime = "image/png" if result_path.suffix.lower() == ".png" else "image/jpeg"
+    response = send_file(result_path, mimetype=mime, max_age=0)
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"

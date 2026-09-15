@@ -455,6 +455,7 @@ class VideoTracker:
         video_path: str,
         query: str,
         output_dir: str | None = None,
+        output_filename: str = "detected_video.mp4",
         confidence_threshold: float = 0.25,
         detect_interval: int = 1,
         progress_callback: Callable[[int, int, float, str], None] | None = None,
@@ -493,8 +494,8 @@ class VideoTracker:
 
         out_dir = Path(output_dir) if output_dir else video_path_obj.parent
         out_dir.mkdir(parents=True, exist_ok=True)
-        out_video_path = out_dir / "tracked_result.mp4"
-        raw_output_path = out_dir / "tracked_raw.mp4"
+        out_video_path = out_dir / output_filename
+        raw_output_path = out_dir / f"raw_{output_filename}"
 
         # Initialize video writer
         fourcc = cv2.VideoWriter_fourcc(*"mp4v")
