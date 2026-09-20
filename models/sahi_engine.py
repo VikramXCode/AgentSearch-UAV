@@ -97,7 +97,7 @@ class SAHIEngine:
             predicted_label = canonicalize_target(obj.category.name)
 
             # Filter strictly by the actual model prediction, not the user input.
-            if predicted_label != requested_target:
+            if requested_target != "" and predicted_label != requested_target:
                 continue
 
             detections.append(

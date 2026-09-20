@@ -1,6 +1,6 @@
 {
   "pipeline_version": "2.5.0",
-  "base_model": "weights/best.pt",
+  "base_model": "runs/detect/experiments/model_search/E3_yolo11l_1536_aug/weights/best.pt",
   "image_size": 960,
   "confidence_threshold": 0.35,
   "use_class_specific_thresholds": true,

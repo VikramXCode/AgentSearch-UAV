@@ -78,6 +78,7 @@ def home():
         "version": "2.5.0",
         "message": "AgentSearch-UAV Multi-Agent Vision Server is online",
         "endpoints": [
+            "/health",
             "/detect",
             "/result",
             "/detect-video",
@@ -90,6 +91,29 @@ def home():
             "/benchmark",
             "/history",
         ],
+    })
+
+
+@app.route("/health")
+def health_check():
+    import torch
+    from utils.model_paths import DEFAULT_YOLO_WORLD_WEIGHTS
+    
+    cuda_available = torch.cuda.is_available()
+    e3_exists = Path(DEFAULT_YOLO_WORLD_WEIGHTS).exists()
+    
+    clip_available = True
+    try:
+        import clip
+    except ImportError:
+        clip_available = False
+
+    return jsonify({
+        "status": "success" if e3_exists else "error",
+        "cuda_available": cuda_available,
+        "e3_detector_found": e3_exists,
+        "e3_path": str(DEFAULT_YOLO_WORLD_WEIGHTS),
+        "clip_available": clip_available
     })
 
 
@@ -119,10 +143,11 @@ def detect():
     # Validate query
     # -----------------------------------------------------
     query = request.form.get("query", "").strip()
-    if not query:
+    has_ref = "reference_image" in request.files and request.files["reference_image"].filename
+    if not query and not has_ref:
         return jsonify({
             "status": "error",
-            "message": "Search query is required",
+            "message": "Search query or reference image is required",
         }), 400
 
     # -----------------------------------------------------
@@ -143,6 +168,14 @@ def detect():
     image_path = UPLOAD_FOLDER / unique_name
     image.save(image_path)
 
+    reference_image_path = None
+    if has_ref:
+        ref_image = request.files["reference_image"]
+        ref_safe = secure_filename(ref_image.filename) or f"ref_{uuid4().hex[:8]}.png"
+        ref_path = UPLOAD_FOLDER / f"{uuid4().hex}_{ref_safe}"
+        ref_image.save(ref_path)
+        reference_image_path = str(ref_path)
+
     try:
         # =================================================
         # RUN REAL MULTI-AGENT PIPELINE
@@ -151,6 +184,7 @@ def detect():
         pipeline_result = run_pipeline(
             query=query,
             image_path=str(image_path),
+            reference_image_path=reference_image_path,
         )
         if isinstance(pipeline_result, tuple):
             state, total_pipeline_time = pipeline_result

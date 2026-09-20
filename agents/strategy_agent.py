@@ -47,6 +47,10 @@ class StrategyAgent:
             state.strategy.enable_clip_verification = True
             reasoning.append("Semantic attribute search detected. Enable CLIP verification.")
 
+        if getattr(state.query, "reference_image_path", None) is not None:
+            state.strategy.enable_clip_verification = True
+            reasoning.append("Reference image provided. Enable CLIP verification for similarity scoring.")
+
         state.strategy.detector = detector
         state.strategy.execution_priority = self._build_execution_priority(state, detector, execution)
         state.strategy.reasoning = reasoning
@@ -82,6 +86,11 @@ class StrategyAgent:
         if any(keyword in query_text for keyword in ("low resolution", "blurry", "blurred", "tiny", "small", "distant", "far", "hard to see")):
             state.strategy.enable_super_resolution = True
             state.strategy.reasoning.append("Low-quality or small-object search detected. Enable Super Resolution.")
+
+        # Disable SAHI if doing image-to-image matching to keep it fast
+        if getattr(state.query, "reference_image_path", None) is not None:
+            state.strategy.enable_sahi = False
+            state.strategy.reasoning.append("Reference image provided. Disabling SAHI for standard E3 performance.")
 
         # Keep confidence threshold >= 0.30 by default for user-facing results
         state.strategy.confidence_threshold = max(0.30, state.strategy.confidence_threshold)

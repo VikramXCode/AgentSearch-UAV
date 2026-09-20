@@ -69,6 +69,51 @@ class CLIPEngine:
         self._text_features_cache[texts_key] = text_features
         return text_features
 
+    def get_image_features(self, images: list[Image.Image], batch_size: int = 32) -> torch.Tensor:
+        """
+        Get normalized image embeddings for a list of PIL images.
+        """
+        if not images:
+            return torch.empty((0, self.model.visual.output_dim), device=self.device)
+
+        all_features = []
+        for i in range(0, len(images), batch_size):
+            chunk_images = images[i : i + batch_size]
+            image_tensors = torch.stack([
+                self.preprocess(img.convert("RGB")) for img in chunk_images
+            ]).to(self.device)
+
+            with torch.inference_mode():
+                image_features = self.model.encode_image(image_tensors)
+                image_features = image_features / image_features.norm(dim=-1, keepdim=True)
+                all_features.append(image_features)
+        
+        return torch.cat(all_features, dim=0)
+
+    def score_images_against_image(
+        self,
+        candidate_images: list[Image.Image],
+        reference_image: Image.Image,
+        batch_size: int = 32,
+    ) -> list[float]:
+        """
+        Batch CLIP verification returning cosine similarities of candidates against a single reference image.
+        """
+        if not candidate_images or reference_image is None:
+            return []
+
+        # Get reference embedding [1, embedding_dim]
+        reference_features = self.get_image_features([reference_image])
+
+        # Get candidate embeddings [num_candidates, embedding_dim]
+        candidate_features = self.get_image_features(candidate_images, batch_size=batch_size)
+
+        # Cosine similarities: [num_candidates, 1]
+        with torch.inference_mode():
+            similarities = candidate_features @ reference_features.T
+            
+        return similarities.detach().float().cpu().numpy().flatten().tolist()
+
     def score_image_against_texts(
         self,
         image: Image.Image,

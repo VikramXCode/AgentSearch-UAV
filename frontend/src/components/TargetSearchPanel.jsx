@@ -35,7 +35,6 @@ export default function TargetSearchPanel({
   selectedFile,
   setSelectedFile,
   previewUrl,
-  setPreviewUrl,
   isSearching,
   onRunSearch,
   samples = [],
@@ -44,9 +43,14 @@ export default function TargetSearchPanel({
   mode = 'image',
   setMode,
   videoProgress = null,
+  selectedReferenceFile,
+  setSelectedReferenceFile,
+  referencePreviewUrl,
+  setReferencePreviewUrl,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const refFileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -96,6 +100,25 @@ export default function TargetSearchPanel({
     setSelectedFile(null);
     setPreviewUrl(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleReferenceFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file (JPG, PNG, WEBP).');
+        return;
+      }
+      setSelectedReferenceFile(file);
+      setReferencePreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const clearReferenceFile = (e) => {
+    e.stopPropagation();
+    setSelectedReferenceFile(null);
+    setReferencePreviewUrl(null);
+    if (refFileInputRef.current) refFileInputRef.current.value = '';
   };
 
   const exampleQueries = mode === 'video' ? EXAMPLE_VIDEO_QUERIES : EXAMPLE_IMAGE_QUERIES;
@@ -180,6 +203,36 @@ export default function TargetSearchPanel({
               {item.label}
             </button>
           ))}
+        </div>
+
+        {/* Reference Image Input */}
+        <div className="pt-2">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => refFileInputRef.current?.click()}
+              className="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition-colors"
+            >
+              <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
+              {referencePreviewUrl ? "Change Reference Image" : "Upload Reference Image (Optional)"}
+            </button>
+            <input
+              type="file"
+              ref={refFileInputRef}
+              onChange={handleReferenceFileChange}
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              className="hidden"
+            />
+            {referencePreviewUrl && (
+              <div className="flex items-center gap-2 border border-slate-700 rounded-lg p-1 pr-2 bg-slate-900">
+                <img src={referencePreviewUrl} alt="Reference" className="w-8 h-8 object-cover rounded" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-mono text-cyan-300 truncate max-w-[100px]">{selectedReferenceFile?.name || 'Ref'}</span>
+                  <button onClick={clearReferenceFile} className="text-[9px] text-rose-400 hover:underline text-left">Clear</button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

@@ -26,6 +26,8 @@ export default function App() {
   const [query, setQuery] = useState('Find red cars');
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+  const [selectedReferenceFile, setSelectedReferenceFile] = useState(null);
+  const [referencePreviewUrl, setReferencePreviewUrl] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [videoProgress, setVideoProgress] = useState(null);
   const [error, setError] = useState(null);
@@ -163,6 +165,8 @@ export default function App() {
     setDetectionMedia(null);
     setSelectedFile(null);
     setPreviewUrl(null);
+    setSelectedReferenceFile(null);
+    setReferencePreviewUrl(null);
     setError(null);
     if (newMode === 'video') {
       setQuery('car');
@@ -187,8 +191,8 @@ export default function App() {
       setError(`Please upload or select a UAV ${mode} payload to engage detection.`);
       return;
     }
-    if (!query || !query.trim()) {
-      setError('Please provide a search directive query (e.g., "Find red cars" or "car").');
+    if (!query.trim() && !selectedReferenceFile) {
+      setError('Please provide a search directive query or a reference image.');
       return;
     }
 
@@ -226,6 +230,14 @@ export default function App() {
           const blob = await response.blob();
           formData.append('image', blob, 'uav_frame.png');
         }
+      }
+
+      if (selectedReferenceFile) {
+        formData.append('reference_image', selectedReferenceFile);
+      } else if (referencePreviewUrl) {
+        const response = await fetch(referencePreviewUrl);
+        const blob = await response.blob();
+        formData.append('reference_image', blob, 'ref_image.png');
       }
 
       const startTime = performance.now();
@@ -421,6 +433,10 @@ export default function App() {
             setSelectedFile={setSelectedFile}
             previewUrl={previewUrl}
             setPreviewUrl={setPreviewUrl}
+            selectedReferenceFile={selectedReferenceFile}
+            setSelectedReferenceFile={setSelectedReferenceFile}
+            referencePreviewUrl={referencePreviewUrl}
+            setReferencePreviewUrl={setReferencePreviewUrl}
             isSearching={isSearching}
             onRunSearch={handleRunSearch}
             samples={samples}
