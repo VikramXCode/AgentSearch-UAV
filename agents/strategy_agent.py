@@ -15,7 +15,19 @@ class StrategyAgent:
         reasoning = []
         execution = []
 
-        detector = self._detector_name
+        from utils.search_utils import get_visdrone_classes_for_target
+        if target:
+            visdrone_classes = get_visdrone_classes_for_target(target)
+            if len(visdrone_classes) > 0:
+                detector = "YOLO-World-E3"
+                reasoning.append(f"Target '{target}' mapped to known E3 vocabulary: {visdrone_classes}. Routing to baseline high-accuracy detector.")
+            else:
+                detector = "YOLO-World-OV"
+                reasoning.append(f"Target '{target}' is out-of-vocabulary. Routing to Open-Vocabulary fallback detector.")
+        else:
+            # Pure image query without target text
+            detector = "YOLO-World-OV"
+            reasoning.append("Empty target for Image-as-Query. Routing to Open-Vocabulary detector with robust COCO vocabulary to propose candidates.")
 
         small_objects = {
             "person",
@@ -92,10 +104,16 @@ class StrategyAgent:
             state.strategy.enable_sahi = False
             state.strategy.reasoning.append("Reference image provided. Disabling SAHI for standard E3 performance.")
 
+        # Force disable SAHI for Open-Vocabulary to prevent massive inference overhead
+        if state.strategy.detector == "YOLO-World-OV":
+            if state.strategy.enable_sahi:
+                state.strategy.enable_sahi = False
+                state.strategy.reasoning.append("Disabling SAHI for Open-Vocabulary detector to prevent massive inference overhead.")
+
         # Keep confidence threshold >= 0.30 by default for user-facing results
         state.strategy.confidence_threshold = max(0.30, state.strategy.confidence_threshold)
 
-        state.strategy.execution_priority = self._build_execution_priority(state, self._detector_name, state.strategy.execution_priority)
+        state.strategy.execution_priority = self._build_execution_priority(state, state.strategy.detector, state.strategy.execution_priority)
         return state
 
     def _build_execution_priority(self, state: AgentState, detector: str, execution: list[str]) -> list[str]:

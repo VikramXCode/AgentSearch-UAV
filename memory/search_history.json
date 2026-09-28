@@ -2546,5 +2546,23 @@
     "processed_image_path": "datasets/VisDrone2019/VisDrone2019-DET-val/images/0000001_02999_d_0000005.jpg",
     "output_image_path": "outputs/detected_image.png",
     "status": "Completed"
+  },
+  {
+    "timestamp": "2026-09-20T12:00:49.569954Z",
+    "query": "car",
+    "target": "car",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World + SAHI",
+    "use_sahi": true,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 16,
+    "confidence_score": 0.7415,
+    "image_path": "datasets/VisDrone2019/VisDrone2019-DET-val/images/0000001_02999_d_0000005.jpg",
+    "processed_image_path": "datasets/VisDrone2019/VisDrone2019-DET-val/images/0000001_02999_d_0000005.jpg",
+    "output_image_path": "outputs/detected_image.png",
+    "status": "Completed"
   }
 ]

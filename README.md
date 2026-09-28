@@ -1,85 +1,43 @@
-# **MAIN START**
+# AgentUAV / AgentSearch-UAV (V2 Architecture)
 
-  # shortcut to run all frontend + backend terminals (way 1)
+This repository contains the final V2 architecture of the AgentUAV system—a dynamically routed, multi-agent pipeline designed for rigorous UAV object detection, verification, and tracking across complex aerial streams.
 
-Terminal -> Run tasks -> Start All
+## FINAL CAPABILITIES
 
---------*---------
+The final architecture supports the following robust modes:
+1. **Image + Text Query**: Target detection from a natural language query in a still image.
+2. **Image + Reference Image**: Cross-verifying and filtering candidates against a visual reference crop.
+3. **Video + Text Query**: Temporal tracking and detection natively processed on a `.mp4`/`.mov` array via textual specification.
+4. **Video + Reference Image**: Temporal tracking bounded by visual reference matching.
 
-# MANUAL (way 2)
+## FINAL DETECTION ROUTING
+Model initialization is actively governed via a memory-safe Mutual Exclusion Model Registry:
+- **Known/in-ontology target** → Routed mathematically to `YOLOv8s + P2 specialist` (optimized for dense, small-object VisDrone aerial views).
+- **Unknown/open-world target** → Dynamically routed to the open-world `YOLO-World` inference model.
 
+*(Note: The previous E3 / YOLO11-L experiments were highly informative and remain preserved in the `historical_artifacts/` directory for record-keeping but are deactivated from the runtime path.)*
 
-# Terminal 1: Start the Backend API Server:
+## VIDEO PIPELINE
+The `TrackingAgentV2` continuously tracks objects per frame:
+- **Primary Loop**: Detection → Verification → Tracking
+- **Failure Handling**: Tracking degradation → Redetection trigger → Verification → Tracking resumes seamlessly.
 
+*(No quantitative MOTA/HOTA tracking accuracy metrics, ReID, or exact-instance recognition capabilities are mathematically claimed. System tracks objects contextually via bounding dynamics.)*
 
+## GETTING STARTED
 
-cd "c:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch\\AgentSearch-UAV"
+The system supports a fully functional backend Flask API endpoint mapped to a React frontend.
 
-C:\\v\\agentsearch-venv\\Scripts\\Activate.ps1
+**1. Launch the Backend API (Terminal 1)**
+```bash
+PYTHONPATH=. python api/main.py
+```
 
-python -m api.main
-
-
-
-
-# Terminal 2: Start the Frontend UI:
-
-cd "c:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch\\AgentSearch-UAV"
-
-C:\\v\\agentsearch-venv\\Scripts\\Activate.ps1
-
-cd "c:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch\\AgentSearch-UAV\\frontend"
-
+**2. Launch the Frontend UI (Terminal 2)**
+```bash
+cd frontend
+npm install  # (First time only)
 npm run dev
+```
 
---------*--------
-
-
-# Benchmark All 5 Detection Systems on 30 images
-python scripts\evaluate_all_systems_benchmark.py --num-images 30
-
-# Benchmark Optimized Pipeline on 30 images
-python scripts\evaluate_optimized_pipeline.py --num-images 30
-
-
-
-
---------*--------
-
-
-
-#### **GENERAL** 
-
-
-
-python -m pip install -r requirements.txt
-
-python -m pip install pillow opencv-python sahi ultralytics
-
-python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-
-
-
-
-
-
-
-python -m models.inference
-
-python -m workflows.graph
-
-
-
-
-
-
-
-
-
-
-
-
-
-
---------------------------------------------------
-
+Navigate your browser to the local Vite port (usually `http://localhost:5173`). Upload local media files and invoke queries freely.

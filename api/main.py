@@ -102,6 +102,11 @@ def health_check():
     cuda_available = torch.cuda.is_available()
     e3_exists = Path(DEFAULT_YOLO_WORLD_WEIGHTS).exists()
     
+    # Check OV detector
+    from utils.model_paths import PROJECT_ROOT
+    ov_path = PROJECT_ROOT / "weights" / "yolov8l-worldv2.pt"
+    ov_exists = ov_path.exists()
+    
     clip_available = True
     try:
         import clip
@@ -113,6 +118,8 @@ def health_check():
         "cuda_available": cuda_available,
         "e3_detector_found": e3_exists,
         "e3_path": str(DEFAULT_YOLO_WORLD_WEIGHTS),
+        "ov_detector_found": ov_exists,
+        "ov_path": str(ov_path),
         "clip_available": clip_available
     })
 
@@ -846,12 +853,37 @@ def get_history():
 
 
 # =========================================================
+# V2 INTEGRATION
+# =========================================================
+
+from api.v2_api import v2_blueprint
+app.register_blueprint(v2_blueprint)
+
+# =========================================================
 # RUN SERVER
 # =========================================================
 
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5005))
+    
+    # Pre-load models into cache before starting server to avoid lazy loading blocks
+    print("Pre-loading models...")
+    try:
+        from models.yolo_world import YOLOWorldDetector
+        from utils.model_paths import DEFAULT_YOLO_WORLD_WEIGHTS, PROJECT_ROOT
+        
+        if Path(DEFAULT_YOLO_WORLD_WEIGHTS).exists():
+            YOLOWorldDetector(model_path=str(DEFAULT_YOLO_WORLD_WEIGHTS))
+            
+        ov_path = PROJECT_ROOT / "weights" / "yolov8l-worldv2.pt"
+        if ov_path.exists():
+            YOLOWorldDetector(model_path=str(ov_path))
+        else:
+            print(f"OV Model {ov_path} not found. Skipping preload (must be downloaded manually).")
+    except Exception as e:
+        print(f"Warning: Model pre-loading failed: {e}")
+        
     app.run(
         host="0.0.0.0",
         port=port,

@@ -44,7 +44,7 @@ class SAHIEngine:
             model_type="ultralytics",
             model_path=self.model_path,
             confidence_threshold=0.25,
-            device="cpu"
+            device="cuda"
         )
 
         self.is_visdrone = is_visdrone_checkpoint(getattr(self.model, "model", None)) or is_visdrone_checkpoint(self.model_path)

@@ -27,7 +27,16 @@ class DetectionRunResult:
 class DetectionAgent:
 
     def __init__(self, model_path: str | None = None):
-        self.yolo_detector = DetectionEngine(model_path=model_path)
+        from utils.model_paths import DEFAULT_YOLO_WORLD_WEIGHTS, PROJECT_ROOT
+        from pathlib import Path
+        self.e3_detector = DetectionEngine(model_path=str(DEFAULT_YOLO_WORLD_WEIGHTS))
+        
+        ov_path = PROJECT_ROOT / "weights" / "yolov8l-worldv2.pt"
+        if Path(ov_path).exists():
+            self.ov_detector = DetectionEngine(model_path=str(ov_path))
+        else:
+            self.ov_detector = None
+            
         self.sahi_detector = SAHIEngine(model_path=model_path)
 
     def run(
@@ -124,9 +133,16 @@ class DetectionAgent:
         # ==============================================
 
         else:
-
+            active_detector = self.ov_detector if state.strategy.detector == "YOLO-World-OV" else self.e3_detector
+            
+            if active_detector is None:
+                raise RuntimeError(
+                    "Open-Vocabulary detector requested but 'yolov8l-worldv2.pt' is not downloaded. "
+                    "Please download it manually into the weights/ directory."
+                )
+                
             t_start = time.perf_counter()
-            result = self.yolo_detector.detect(
+            result = active_detector.detect(
                 image_path=image_path,
                 target=target,
                 confidence=(
@@ -140,7 +156,7 @@ class DetectionAgent:
                 result.filtered_detections
             )
 
-            detector_name = result.model_name
+            detector_name = "YOLO-World-OV" if state.strategy.detector == "YOLO-World-OV" else result.model_name
 
         # ==============================================
         # ANNOTATE

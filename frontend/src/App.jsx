@@ -211,7 +211,7 @@ export default function App() {
       const formData = new FormData();
       formData.append('query', query.trim());
 
-      let endpoint = `${API_BASE}/detect`;
+      let endpoint = `${API_BASE}/v2/detect`;
 
       if (mode === 'video') {
         endpoint = `${API_BASE}/detect-video`;
@@ -264,7 +264,7 @@ export default function App() {
         while (!isCompleted) {
           await new Promise((resolve) => setTimeout(resolve, 350));
           try {
-            const pollRes = await fetch(`${API_BASE}/video-progress/${jobId}`);
+            const pollRes = await fetch(`${API_BASE}/v2/video-progress/${jobId}`);
             if (!pollRes.ok) continue;
 
             const jobStatus = await pollRes.json();
@@ -319,7 +319,7 @@ export default function App() {
 
       setResults(data);
       setPipelineStages(data.pipeline);
-      setToolsStatus(data.tools_status);
+      setToolsStatus(data.tools_status || data.tools);
 
       // Set Detection Output media
       if (mode === 'video') {
@@ -328,7 +328,9 @@ export default function App() {
           : `${API_BASE}/result-video?t=${Date.now()}`;
         setDetectionMedia(videoOutput);
       } else {
-        const resultImageUrl = `${API_BASE}/result?t=${Date.now()}`;
+        const resultImageUrl = data.annotated_image_url 
+          ? `${API_BASE}${data.annotated_image_url}?t=${Date.now()}`
+          : `${API_BASE}/result?t=${Date.now()}`;
         setDetectionMedia(resultImageUrl);
       }
 

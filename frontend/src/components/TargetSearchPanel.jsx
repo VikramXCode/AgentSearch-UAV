@@ -35,6 +35,7 @@ export default function TargetSearchPanel({
   selectedFile,
   setSelectedFile,
   previewUrl,
+  setPreviewUrl,
   isSearching,
   onRunSearch,
   samples = [],

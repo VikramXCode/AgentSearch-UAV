@@ -21,3 +21,8 @@ class SuperResolutionEngine:
         save_pil_image(upscaled, output_path)
 
         return output_path
+        
+    def upscale_pil(self, image: Image.Image, scale: int = 2) -> Image.Image:
+        """Upscale a PIL image directly in memory using Lanczos resampling."""
+        width, height = image.size
+        return image.resize((width * scale, height * scale), Image.Resampling.LANCZOS)
