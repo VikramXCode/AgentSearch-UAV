@@ -131,7 +131,12 @@ class OpenWorldDetectorAdapter(BaseDetectorAdapter):
             raise RuntimeError("Model instance not loaded.")
             
         # Extract vocabulary from QuerySpec
-        vocab = [query_spec.raw_query] if query_spec.raw_query else []
+        vocab = []
+        if query_spec.target and query_spec.target != "object":
+            vocab.append(query_spec.target)
+        elif query_spec.raw_query:
+            vocab.append(query_spec.raw_query)
+            
         for constraint in query_spec.constraints:
             if constraint.constraint_type == "attribute":
                 vocab.append(constraint.value)

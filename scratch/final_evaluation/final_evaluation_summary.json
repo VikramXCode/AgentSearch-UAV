@@ -1,0 +1,30 @@
+{
+  "metadata": {
+    "p2_checkpoint": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/runs/detect/runs/detect/experiments/model_search/EXP11_yolov8s_p2_1536/weights/best.pt",
+    "yolo_world_checkpoint": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/weights/yolov8s-world.pt",
+    "images_evaluated": 448,
+    "peak_vram_gb": 0.5795383453369141
+  },
+  "condition_A_P2": {
+    "map50": 0.4663,
+    "map50_95": 0.3015,
+    "precision": 0.7559,
+    "recall": 0.68,
+    "f1": 0.7159,
+    "total_runtime_s": 17.148096323013306,
+    "mean_latency_ms": 38.277000721011845
+  },
+  "condition_B_P2_SAHI": {
+    "map50": 0.402,
+    "map50_95": 0.2572,
+    "precision": 0.7095,
+    "recall": 0.6291,
+    "f1": 0.6669,
+    "total_runtime_s": 35.42130923271179,
+    "mean_latency_ms": 79.06542239444596,
+    "runtime_multiplier": 2.0656117487032795
+  },
+  "yolo_world_compute": {
+    "mean_latency_ms": 543.7276124954224
+  }
+}

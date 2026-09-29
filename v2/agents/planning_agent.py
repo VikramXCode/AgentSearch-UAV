@@ -65,7 +65,7 @@ class PlanningAgentV2:
     def _decide_initial_detection(self, state: AgentStateV2) -> ActionType:
         target = state.query_spec.target.lower()
         if target in self.KNOWN_AERIAL_TARGETS and not state.query_spec.constraints:
-            state.plan.decision_rationale = f"Target '{target}' is known and simple. Routing to specialist."
+            state.plan.decision_rationale = f"Target '{target}' is known. Routing to specialist."
             return ActionType.DETECT_SPECIALIST
         else:
             state.plan.decision_rationale = f"Target '{target}' is unknown or query has complex constraints. Routing to open-world detector."

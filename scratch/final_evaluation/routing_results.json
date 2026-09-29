@@ -1,0 +1,38 @@
+[
+  {
+    "query": "pedestrian",
+    "expected_route": "DETECT_SPECIALIST",
+    "actual_route": "DETECT_SPECIALIST",
+    "correct": true
+  },
+  {
+    "query": "car",
+    "expected_route": "DETECT_SPECIALIST",
+    "actual_route": "DETECT_SPECIALIST",
+    "correct": true
+  },
+  {
+    "query": "bus",
+    "expected_route": "DETECT_SPECIALIST",
+    "actual_route": "DETECT_SPECIALIST",
+    "correct": true
+  },
+  {
+    "query": "tree",
+    "expected_route": "DETECT_OPEN_WORLD",
+    "actual_route": "DETECT_OPEN_WORLD",
+    "correct": true
+  },
+  {
+    "query": "traffic light",
+    "expected_route": "DETECT_OPEN_WORLD",
+    "actual_route": "DETECT_OPEN_WORLD",
+    "correct": true
+  },
+  {
+    "query": "building",
+    "expected_route": "DETECT_OPEN_WORLD",
+    "actual_route": "DETECT_OPEN_WORLD",
+    "correct": true
+  }
+]

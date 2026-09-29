@@ -69,11 +69,19 @@ class QueryAgentV2:
                         )
                     )
 
-        # Add the full descriptive text as a semantic constraint for CLIP verification
-        # if there are multiple words (e.g. "person riding two wheeler" or "yellow bus")
-        if len(text.split()) > 1:
+        # Add descriptive phrase constraint only if there is additional descriptive context
+        # not already captured by extracted attributes or simple action prefixes (e.g. 'find a person')
+        cleaned_text = text
+        for prefix in ["find a ", "find an ", "find the ", "find ", "locate a ", "locate an ", "locate the ", "locate ", "detect a ", "detect an ", "detect the ", "detect "]:
+            if cleaned_text.startswith(prefix):
+                cleaned_text = cleaned_text[len(prefix):].strip()
+                break
+        if cleaned_text.startswith("a ") or cleaned_text.startswith("an ") or cleaned_text.startswith("the "):
+            cleaned_text = cleaned_text.split(" ", 1)[1].strip()
+
+        if cleaned_text and cleaned_text != query_spec.target and not query_spec.constraints and len(cleaned_text.split()) > 1:
             query_spec.constraints.append(
-                QueryConstraint(constraint_type="attribute", value=text)
+                QueryConstraint(constraint_type="attribute", value=cleaned_text)
             )
 
         return query_spec

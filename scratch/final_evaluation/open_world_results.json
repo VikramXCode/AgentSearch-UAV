@@ -1,0 +1,82 @@
+[
+  {
+    "query": "tree",
+    "image": "0000166_00558_d_0000118.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 5.101697206497192,
+    "candidates_count": 0
+  },
+  {
+    "query": "traffic light",
+    "image": "0000193_00000_d_0000103.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.047357797622680664,
+    "candidates_count": 0
+  },
+  {
+    "query": "building",
+    "image": "0000193_01497_d_0000111.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.035286903381347656,
+    "candidates_count": 0
+  },
+  {
+    "query": "swimming pool",
+    "image": "0000193_01705_d_0000112.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.03728961944580078,
+    "candidates_count": 0
+  },
+  {
+    "query": "solar panel",
+    "image": "0000193_01876_d_0000113.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.036310672760009766,
+    "candidates_count": 0
+  },
+  {
+    "query": "soccer field",
+    "image": "0000193_02029_d_0000114.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.03316521644592285,
+    "candidates_count": 0
+  },
+  {
+    "query": "roundabout",
+    "image": "0000193_02212_d_0000115.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.039519309997558594,
+    "candidates_count": 0
+  },
+  {
+    "query": "bridge",
+    "image": "0000193_02416_d_0000116.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.03675103187561035,
+    "candidates_count": 0
+  },
+  {
+    "query": "intersection",
+    "image": "0000193_02606_d_0000117.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.03351998329162598,
+    "candidates_count": 0
+  },
+  {
+    "query": "crosswalk",
+    "image": "0000193_02725_d_0000118.jpg",
+    "expected_presence": "Unknown",
+    "detected": false,
+    "latency": 0.03637838363647461,
+    "candidates_count": 0
+  }
+]

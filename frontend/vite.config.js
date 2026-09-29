@@ -35,6 +35,22 @@ export default defineConfig({
         target: 'http://localhost:5005',
         changeOrigin: true,
       },
+      '/video-progress': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/v2': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/sample-videos': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/sample-video': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
       '/result-video': {
         target: 'http://localhost:5005',
         changeOrigin: true,

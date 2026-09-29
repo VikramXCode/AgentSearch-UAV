@@ -256,6 +256,9 @@ export default function App() {
       // If video job is queued, poll for progress until completion
       if (mode === 'video' && data.job_id && data.status === 'processing') {
         const jobId = data.job_id;
+        const progressEndpoint = data.progress_url
+          ? `${API_BASE}${data.progress_url}`
+          : `${API_BASE}/video-progress/${jobId}`;
         addLog(`[Video Stream Processing] Background job engaged: ${jobId}`, 'info');
 
         let isCompleted = false;
@@ -264,8 +267,33 @@ export default function App() {
         while (!isCompleted) {
           await new Promise((resolve) => setTimeout(resolve, 350));
           try {
-            const pollRes = await fetch(`${API_BASE}/v2/video-progress/${jobId}`);
-            if (!pollRes.ok) continue;
+            const pollRes = await fetch(progressEndpoint);
+            if (!pollRes.ok) {
+              // Try fallback progress endpoint if needed
+              const fallbackUrl = progressEndpoint.includes('/v2/')
+                ? `${API_BASE}/video-progress/${jobId}`
+                : `${API_BASE}/v2/video-progress/${jobId}`;
+              const fallbackRes = await fetch(fallbackUrl);
+              if (!fallbackRes.ok) continue;
+              const fallbackStatus = await fallbackRes.json();
+              if (fallbackStatus && fallbackStatus.status) {
+                if (fallbackStatus.status === 'completed') {
+                  isCompleted = true;
+                  data = fallbackStatus.result;
+                  break;
+                } else if (fallbackStatus.status === 'failed') {
+                  throw new Error(fallbackStatus.error || 'Video tracking failed');
+                }
+                setVideoProgress({
+                  percent: fallbackStatus.progress || 0,
+                  currentFrame: fallbackStatus.current_frame || 0,
+                  totalFrames: fallbackStatus.total_frames || 0,
+                  fps: fallbackStatus.fps || 0,
+                  stage: fallbackStatus.stage || 'Tracking targets in video stream...',
+                });
+              }
+              continue;
+            }
 
             const jobStatus = await pollRes.json();
             setVideoProgress({
@@ -299,15 +327,13 @@ export default function App() {
 
       const elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
 
-
-
       addLog(`[Inference Complete] Pipeline executed in ${elapsed}s`, 'success');
       addLog(
-        `[Consensus Reached] Verified ${data.count ?? data.objects_found ?? 0} target object(s)`,
+        `[Consensus Reached] Verified ${data?.count ?? data?.objects_found ?? (data?.detections?.length || 0)} target object(s)`,
         'success'
       );
 
-      if (data.explanation?.reasoning) {
+      if (data?.explanation?.reasoning) {
         if (Array.isArray(data.explanation.reasoning)) {
           data.explanation.reasoning.forEach((step) =>
             addLog(`[Agent Reason] ${step}`, 'agent')
@@ -318,18 +344,20 @@ export default function App() {
       }
 
       setResults(data);
-      setPipelineStages(data.pipeline);
-      setToolsStatus(data.tools_status || data.tools);
+      setPipelineStages(data?.pipeline);
+      setToolsStatus(data?.tools_status || data?.tools);
 
       // Set Detection Output media
       if (mode === 'video') {
-        const videoOutput = data.output_video
-          ? `${API_BASE}${data.output_video}`
+        const vidPath = data?.output_video || data?.annotated_video_url;
+        const videoOutput = vidPath
+          ? (vidPath.startsWith('http') ? vidPath : `${API_BASE}${vidPath}`)
           : `${API_BASE}/result-video?t=${Date.now()}`;
         setDetectionMedia(videoOutput);
       } else {
-        const resultImageUrl = data.annotated_image_url 
-          ? `${API_BASE}${data.annotated_image_url}?t=${Date.now()}`
+        const imgPath = data?.annotated_image_url;
+        const resultImageUrl = imgPath 
+          ? (imgPath.startsWith('http') ? imgPath : `${API_BASE}${imgPath}?t=${Date.now()}`)
           : `${API_BASE}/result?t=${Date.now()}`;
         setDetectionMedia(resultImageUrl);
       }

@@ -598,6 +598,7 @@ def detect_video():
         "success": True,
         "status": "processing",
         "job_id": job_id,
+        "progress_url": f"/video-progress/{job_id}",
         "query": query,
         "message": "Video tracking pipeline engaged",
     })
@@ -609,19 +610,27 @@ def get_video_progress(job_id: str):
         job = VIDEO_JOBS.get(job_id)
 
     if not job:
+        try:
+            from api.v2_api import V2_VIDEO_JOBS, V2_VIDEO_JOBS_LOCK
+            with V2_VIDEO_JOBS_LOCK:
+                job = V2_VIDEO_JOBS.get(job_id)
+        except Exception:
+            pass
+
+    if not job:
         return jsonify({"status": "error", "message": f"Job '{job_id}' not found"}), 404
 
     return jsonify({
         "success": True,
-        "job_id": job["job_id"],
-        "status": job["status"],
-        "progress": job["progress"],
-        "current_frame": job["current_frame"],
-        "total_frames": job["total_frames"],
-        "fps": job["fps"],
-        "stage": job["stage"],
-        "result": job["result"],
-        "error": job["error"],
+        "job_id": job.get("job_id", job_id),
+        "status": job.get("status"),
+        "progress": job.get("progress", 0.0),
+        "current_frame": job.get("current_frame", 0),
+        "total_frames": job.get("total_frames", 0),
+        "fps": job.get("fps", 0.0),
+        "stage": job.get("stage", "Processing..."),
+        "result": job.get("result"),
+        "error": job.get("error"),
     })
 
 

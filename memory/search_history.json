@@ -2564,5 +2564,41 @@
     "processed_image_path": "datasets/VisDrone2019/VisDrone2019-DET-val/images/0000001_02999_d_0000005.jpg",
     "output_image_path": "outputs/detected_image.png",
     "status": "Completed"
+  },
+  {
+    "timestamp": "2026-09-29T05:11:49.886486+00:00",
+    "query": "car",
+    "target": "car",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "video",
+    "detector": "VisDrone YOLO-World + MOT",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 16,
+    "confidence_score": 0.54,
+    "image_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/api/uploads/4b33c07149554b7bae024e488f71b6b9_12785235-hd_1920_1080_50fps.mp4",
+    "output_video_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/outputs/detected_video.mp4",
+    "fps": 15.6,
+    "status": "Completed"
+  },
+  {
+    "timestamp": "2026-09-29T14:08:43.924038+00:00",
+    "query": "car",
+    "target": "car",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "video",
+    "detector": "VisDrone YOLO-World + MOT",
+    "use_sahi": false,
+    "use_super_resolution": false,
+    "verification_enabled": true,
+    "objects_found": 16,
+    "confidence_score": 0.54,
+    "image_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/api/uploads/03fbfe6153b0434393b5ea3a9bd3113d_12785235-hd_1920_1080_50fps.mp4",
+    "output_video_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/outputs/detected_video.mp4",
+    "fps": 14.75,
+    "status": "Completed"
   }
 ]

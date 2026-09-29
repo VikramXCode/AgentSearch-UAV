@@ -1,0 +1,3602 @@
+[
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.251708984375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2261962890625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.203369140625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2373046875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2685546875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2218017578125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2332763671875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.213134765625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2178955078125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2135009765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2064208984375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20556640625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.22119140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2109375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.216552734375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2095947265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2314453125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204345703125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.261474609375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2353515625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2171630859375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.210205078125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.229248046875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22119140625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.21484375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2193603515625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2264404296875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2218017578125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2366943359375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2156982421875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.280029296875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.231689453125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2081298828125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.211181640625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21728515625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2139892578125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.222412109375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2213134765625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2265625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.285888671875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2366943359375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1988525390625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2481689453125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2646484375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2130126953125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2470703125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2421875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2076416015625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.227294921875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2137451171875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.209716796875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2076416015625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.207275390625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2088623046875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2421875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.251708984375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21728515625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2412109375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2449951171875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2469482421875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.248291015625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2587890625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22265625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.232421875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.258056640625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2152099609375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.23681640625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2403564453125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.232177734375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2431640625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2408447265625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22998046875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2186279296875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.218994140625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.19677734375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2371826171875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.248779296875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2220458984375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2210693359375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22412109375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2254638671875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.234375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.220458984375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2061767578125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2064208984375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2286376953125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.222412109375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.260009765625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2421875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.227783203125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2281494140625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1866455078125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.196044921875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2470703125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.250244140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.197998046875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.22900390625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2315673828125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.214599609375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.22412109375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2281494140625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2125244140625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.25
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2347412109375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.194091796875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2257080078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.235595703125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.226806640625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2225341796875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2103271484375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2108154296875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2298583984375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.251708984375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.255859375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2215576171875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2139892578125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.193115234375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2137451171875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.225341796875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20166015625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.216796875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2138671875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2071533203125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.22998046875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.216796875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.228515625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.228515625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2242431640625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2005615234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2337646484375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.223388671875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.226806640625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.2274169921875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2265625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20556640625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2103271484375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2059326171875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2119140625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.215087890625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.216064453125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2271728515625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2210693359375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2060546875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2113037109375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.227294921875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2252197265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.224609375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.23779296875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1773681640625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20458984375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2034912109375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2152099609375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.188720703125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2188720703125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.171142578125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1693115234375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.255126953125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.205810546875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2005615234375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.224853515625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2252197265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.208251953125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2203369140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2091064453125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.203125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2178955078125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2015380859375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204345703125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2401123046875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2396240234375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2205810546875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.209228515625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21630859375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2303466796875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.22412109375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2254638671875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2027587890625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.233154296875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2392578125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22119140625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2421875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.240234375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2239990234375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2354736328125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.253173828125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2210693359375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.213134765625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2275390625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2288818359375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2264404296875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2138671875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.21240234375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2188720703125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22314453125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.222412109375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2142333984375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2110595703125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2225341796875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2171630859375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.224853515625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.214111328125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.199951171875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.19873046875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2208251953125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2027587890625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2091064453125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2193603515625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2083740234375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21826171875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.21630859375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2078857421875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2125244140625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2276611328125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2210693359375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2142333984375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2215576171875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2100830078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2239990234375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2158203125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20654296875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1986083984375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2130126953125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.225830078125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1884765625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2393798828125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1773681640625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2294921875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.230712890625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2261962890625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2232666015625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2039794921875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.212890625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2255859375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2254638671875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21826171875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.21435546875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.205810546875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.203369140625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.230712890625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.23779296875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2125244140625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2318115234375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1861572265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204833984375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "MATCH",
+    "score": 0.20947265625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20947265625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_motor",
+    "ground_truth": "NON_MATCH",
+    "score": 0.225341796875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "MATCH",
+    "score": 0.2203369140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.218505859375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_02999_d_0000005.jpg_people",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2005615234375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_03499_d_0000006.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.28564453125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03499_d_0000006.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.242919921875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2169189453125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2421875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22900390625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20751953125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2481689453125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.223876953125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.234130859375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.260009765625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2353515625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2237548828125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.234130859375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2333984375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2080078125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.2095947265625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2161865234375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.226806640625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.23876953125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.224853515625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2220458984375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2152099609375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2138671875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2069091796875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2003173828125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2181396484375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1973876953125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.17529296875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.196533203125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.193115234375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.234130859375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20361328125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1995849609375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.23291015625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2147216796875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.17822265625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "MATCH",
+    "score": 0.232666015625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.205322265625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_car",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2108154296875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2042236328125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.214599609375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1903076171875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2200927734375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2197265625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03499_d_0000006.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1932373046875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.258544921875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.244140625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03499_d_0000006.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.209716796875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2607421875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.25439453125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.213623046875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2255859375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03499_d_0000006.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22998046875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03499_d_0000006.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22900390625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2115478515625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2294921875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2174072265625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2379150390625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2269287109375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.196533203125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.22509765625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.222900390625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.220947265625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.21923828125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2266845703125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2078857421875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2122802734375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.213623046875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.206298828125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.224609375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2220458984375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1951904296875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.203857421875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.19873046875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2027587890625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2138671875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.215576171875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_03999_d_0000007.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.19580078125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2257080078125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2244873046875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.220947265625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.22216796875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21875
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2119140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "MATCH",
+    "score": 0.2254638671875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22509765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_pedestrian",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21435546875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2308349609375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_03999_d_0000007.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2171630859375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_03999_d_0000007.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.224609375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.255859375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2191162109375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2105712890625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_04527_d_0000008.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2362060546875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_04527_d_0000008.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.194580078125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_04527_d_0000008.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204833984375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.23388671875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.218017578125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20458984375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2236328125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2310791015625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2276611328125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_awning-tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.234375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_04527_d_0000008.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2235107421875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_04527_d_0000008.jpg_awning-tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2130126953125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2279052734375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22607421875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_04527_d_0000008.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2078857421875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2281494140625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2149658203125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_04527_d_0000008.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2100830078125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05249_d_0000009.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2440185546875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_05249_d_0000009.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.219970703125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_05249_d_0000009.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2060546875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2509765625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.25244140625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2025146484375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05499_d_0000010.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.21435546875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_05499_d_0000010.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20751953125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_05499_d_0000010.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2127685546875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.22314453125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22216796875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2081298828125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.219970703125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.18017578125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1781005859375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.22802734375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22998046875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.221923828125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.246337890625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2174072265625
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_05499_d_0000010.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1978759765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2208251953125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2218017578125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_05499_d_0000010.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2164306640625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.232421875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.234619140625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2135009765625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.282470703125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2469482421875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.224365234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.22314453125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2222900390625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.209228515625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2100830078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2130126953125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_05999_d_0000011.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1888427734375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2197265625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204833984375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.204345703125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2200927734375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2279052734375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2239990234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.23876953125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2392578125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.227783203125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.237548828125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2213134765625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.225830078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2376708984375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2364501953125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2098388671875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.212646484375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2000732421875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2099609375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.232421875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.213623046875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.215087890625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.275390625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2454833984375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.210205078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2152099609375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2174072265625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2177734375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.256103515625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2408447265625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2110595703125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.264404296875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.226806640625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_07999_d_0000012.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2261962890625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2156982421875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2139892578125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_07999_d_0000012.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.210205078125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.194580078125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1778564453125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.210205078125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2373046875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2232666015625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.220458984375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.247802734375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2452392578125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2158203125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2039794921875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20068359375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1865234375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "MATCH",
+    "score": 0.2293701171875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.219970703125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_08414_d_0000013.jpg_tricycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22509765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2061767578125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1990966796875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1876220703125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "MATCH",
+    "score": 0.2568359375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.23486328125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_08414_d_0000013.jpg_bicycle",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1973876953125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000001_08414_d_0000013.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.26025390625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000001_08414_d_0000013.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21337890625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000001_08414_d_0000013.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2249755859375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_00000_d_0000024.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.269287109375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000026_00000_d_0000024.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2349853515625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000026_00000_d_0000024.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.23876953125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.219482421875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.231689453125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1961669921875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2493896484375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22900390625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.212158203125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.251708984375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.239990234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1920166015625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.271240234375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.23974609375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000026_01000_d_0000026.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.188720703125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2325439453125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.23828125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2100830078125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.2020263671875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1783447265625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000026_02500_d_0000029.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2059326171875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_03000_d_0000030.jpg_van",
+    "ground_truth": "MATCH",
+    "score": 0.240234375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000026_03000_d_0000030.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2435302734375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000026_03000_d_0000030.jpg_van",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1981201171875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000026_04978_d_0000034.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2154541015625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000026_04978_d_0000034.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20947265625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000026_04978_d_0000034.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2186279296875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000055_00714_d_0000110.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.265380859375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000055_00714_d_0000110.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2509765625
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000055_00714_d_0000110.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2188720703125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2340087890625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2257080078125
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.172119140625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.250244140625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2215576171875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1929931640625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2393798828125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2137451171875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2015380859375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.25927734375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2325439453125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2042236328125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.23388671875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20849609375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.208251953125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2431640625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2098388671875
+  },
+  {
+    "query": "people",
+    "crop_id": "0000076_02142_d_0000009.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2193603515625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000103_02964_d_0000030.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.29736328125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000103_02964_d_0000030.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.27001953125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000103_02964_d_0000030.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.217529296875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000103_03349_d_0000031.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2164306640625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000103_03349_d_0000031.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.19873046875
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000103_03349_d_0000031.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22021484375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000103_03738_d_0000032.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.279052734375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000103_03738_d_0000032.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2227783203125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000103_03738_d_0000032.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22509765625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000115_00796_d_0000081.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.23193359375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000115_00796_d_0000081.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2281494140625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000115_00796_d_0000081.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2080078125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000116_00819_d_0000084.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2452392578125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000116_00819_d_0000084.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.25927734375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000116_00819_d_0000084.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.225830078125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2440185546875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.245849609375
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2275390625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2325439453125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.213134765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000116_01338_d_0000086.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.175537109375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000117_02708_d_0000090.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.260986328125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000117_02708_d_0000090.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2108154296875
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000117_02708_d_0000090.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1986083984375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.260009765625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.255615234375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2169189453125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.252197265625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.222900390625
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000117_03096_d_0000091.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2169189453125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000129_02411_d_0000138.jpg_truck",
+    "ground_truth": "MATCH",
+    "score": 0.2176513671875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000129_02411_d_0000138.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.210693359375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000129_02411_d_0000138.jpg_truck",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2117919921875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000153_00801_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2281494140625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000153_00801_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2178955078125
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000153_00801_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2265625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000153_01201_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2303466796875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000153_01201_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20947265625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000153_01201_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2191162109375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000153_01601_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2420654296875
+  },
+  {
+    "query": "car",
+    "crop_id": "0000153_01601_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.194091796875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000153_01601_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2041015625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000153_01801_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2529296875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000153_01801_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22314453125
+  },
+  {
+    "query": "people",
+    "crop_id": "0000153_01801_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2008056640625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000154_01601_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.209716796875
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000154_01601_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2076416015625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000154_01601_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22119140625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2288818359375
+  },
+  {
+    "query": "van",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2391357421875
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.257080078125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.270263671875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.25927734375
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000155_00001_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1937255859375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000155_01201_d_0000001.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.1978759765625
+  },
+  {
+    "query": "car",
+    "crop_id": "0000155_01201_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.191162109375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000155_01201_d_0000001.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1700439453125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000194_00000_d_0000119.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2093505859375
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000194_00000_d_0000119.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2091064453125
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000194_00000_d_0000119.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21728515625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000194_00200_d_0000120.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2254638671875
+  },
+  {
+    "query": "van",
+    "crop_id": "0000194_00200_d_0000120.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20361328125
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000194_00200_d_0000120.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2176513671875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000194_00399_d_0000121.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2279052734375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000194_00399_d_0000121.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22509765625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000194_00399_d_0000121.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2320556640625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000194_00625_d_0000122.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2149658203125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000194_00625_d_0000122.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.20751953125
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000194_00625_d_0000122.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21630859375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000199_01269_d_0000166.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2325439453125
+  },
+  {
+    "query": "van",
+    "crop_id": "0000199_01269_d_0000166.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2412109375
+  },
+  {
+    "query": "people",
+    "crop_id": "0000199_01269_d_0000166.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1861572265625
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000213_02500_d_0000240.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2188720703125
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000213_02500_d_0000240.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2093505859375
+  },
+  {
+    "query": "tricycle",
+    "crop_id": "0000213_02500_d_0000240.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.208984375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2320556640625
+  },
+  {
+    "query": "truck",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.221435546875
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21923828125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.250244140625
+  },
+  {
+    "query": "van",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2288818359375
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.230224609375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.25146484375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.1839599609375
+  },
+  {
+    "query": "pedestrian",
+    "crop_id": "0000220_01242_d_0000004.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.18798828125
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000242_03668_d_0000012.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.25537109375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000242_03668_d_0000012.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2467041015625
+  },
+  {
+    "query": "motor",
+    "crop_id": "0000242_03668_d_0000012.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2313232421875
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.249267578125
+  },
+  {
+    "query": "car",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2105712890625
+  },
+  {
+    "query": "awning-tricycle",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.22412109375
+  },
+  {
+    "query": "bus",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "MATCH",
+    "score": 0.2142333984375
+  },
+  {
+    "query": "car",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.2047119140625
+  },
+  {
+    "query": "bicycle",
+    "crop_id": "0000242_06452_d_0000018.jpg_bus",
+    "ground_truth": "NON_MATCH",
+    "score": 0.21728515625
+  }
+]

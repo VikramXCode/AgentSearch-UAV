@@ -275,7 +275,20 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
         if os.path.exists(temp_frame_path):
             os.remove(temp_frame_path)
 
+        # Transcode to browser-playable H.264 MP4 if possible
+        try:
+            from models.video_tracker import VideoTracker
+            vt = VideoTracker()
+            h264_name = f"h264_{out_name}"
+            h264_path = str(OUTPUT_FOLDER / h264_name)
+            final_path = vt._transcode_to_h264(raw_mp4_path=out_path, final_mp4_path=h264_path, fps=fps)
+            if final_path and Path(final_path).exists():
+                out_name = Path(final_path).name
+        except Exception as tr_err:
+            print(f"Warning: Video transcode fallback: {tr_err}")
+
         elapsed = time.perf_counter() - t0
+        cand_count = len(state.candidates)
         
         result_payload = {
             "status": "SUCCESS",
@@ -284,11 +297,15 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
             "total_frames": total_frames,
             "fps": fps,
             "duration": total_frames / max(1, fps),
+            "count": cand_count,
+            "objects_found": cand_count,
             "detections": [c.__dict__ for c in state.candidates], # last frame detections
             "tracks": [],
             "frame_results": [],
             "redetection_events": redetection_events,
             "annotated_video_url": f"/v2/outputs/{out_name}",
+            "output_video": f"/v2/outputs/{out_name}",
+            "result_video": f"/v2/outputs/{out_name}",
             "pipeline": [{"name": "V2 Video Pipeline", "status": "completed"}],
             "tools": [{"name": "Tracker", "status": "used"}],
             "total_time": elapsed,
@@ -300,6 +317,7 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
                 V2_VIDEO_JOBS[job_id].update({
                     "status": "completed",
                     "progress": 100.0,
+                    "stage": "Completed",
                     "result": result_payload
                 })
 
@@ -334,6 +352,14 @@ def detect_video():
             return jsonify({"status": "FAILED", "error": f"Unsupported format: {ext}"}), 400
         video_path = str(UPLOAD_FOLDER / f"{job_id}_scene{ext}")
         video_file.save(video_path)
+    elif request.form.get("video_name"):
+        sample_name = Path(request.form.get("video_name")).name
+        from api.main import SAMPLE_VIDEO_FOLDER
+        candidate = SAMPLE_VIDEO_FOLDER / sample_name
+        if candidate.exists():
+            video_path = str(candidate)
+        else:
+            return jsonify({"status": "FAILED", "error": f"Sample video '{sample_name}' not found"}), 404
 
     ref_path = None
     if has_ref:
@@ -364,12 +390,24 @@ def detect_video():
 
     return jsonify({
         "status": "processing",
-        "job_id": job_id
+        "job_id": job_id,
+        "progress_url": f"/v2/video-progress/{job_id}"
     })
 
 @v2_blueprint.route("/video-progress/<job_id>")
 def video_progress(job_id):
     with V2_VIDEO_JOBS_LOCK:
-        if job_id not in V2_VIDEO_JOBS:
-            return jsonify({"status": "failed", "error": "Job not found"}), 404
-        return jsonify(V2_VIDEO_JOBS[job_id])
+        job = V2_VIDEO_JOBS.get(job_id)
+
+    if not job:
+        try:
+            from api.main import VIDEO_JOBS, VIDEO_JOBS_LOCK
+            with VIDEO_JOBS_LOCK:
+                job = VIDEO_JOBS.get(job_id)
+        except Exception:
+            pass
+
+    if not job:
+        return jsonify({"status": "failed", "error": "Job not found"}), 404
+
+    return jsonify(job)

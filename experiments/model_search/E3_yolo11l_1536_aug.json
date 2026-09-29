@@ -1,0 +1,34 @@
+{
+    "experiment_id": "E3_yolo11l_1536_aug",
+    "git_commit": "86d05f8de8f30cdb2c83e2b2c5335a7967cc0f83",
+    "model": "YOLO11-Large",
+    "parameters": 25318190,
+    "pretrained_checkpoint": "yolo11l.pt",
+    "dataset": "configs/visdrone.yaml",
+    "train_images": 6471,
+    "val_images": 548,
+    "imgsz": 1536,
+    "batch": 4,
+    "epochs": 100,
+    "device": "cuda:0",
+    "optimizer": "auto",
+    "learning_rate": "auto",
+    "augmentation_configuration": {
+        "degrees": 10.0
+    },
+    "best_epoch": null,
+    "best_validation_mAP50": 0.6209941899664875,
+    "best_validation_mAP50_95": 0.39449060881974174,
+    "precision": 0.6707779694659777,
+    "recall": 0.6051947728989233,
+    "training_time_seconds": 11335.889242887497,
+    "inference_time": {
+        "preprocess": 3.2981213736245887,
+        "inference": 25.8666608970354,
+        "loss": 0.002302788537892982,
+        "postprocess": 5.833118822575159
+    },
+    "checkpoint_path": "runs/detect/experiments/model_search/E3_yolo11l_1536_aug/weights/best.pt",
+    "timestamp_start": "2026-09-17T18:12:48.667219+00:00",
+    "timestamp_end": "2026-09-17T21:22:17.099484+00:00"
+}

@@ -1,0 +1,1 @@
+{"mission_id": "m1", "step_index": 1, "timestamp": "2026-09-26T11:31:51.980835Z", "query_target": "car", "selected_detector": "e3", "action": "VERIFY", "rationale": "Found 2 candidates", "candidate_count": 2, "median_candidate_area": 64.0, "max_confidence": 0.8, "sahi_used": false, "sr_used": false, "verification_status": "SATISFIED", "step_runtime_ms": 15.5}

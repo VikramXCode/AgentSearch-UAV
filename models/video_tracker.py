@@ -146,6 +146,76 @@ class VideoTracker:
         cb = VideoTracker._box_center(box_b)
         return ((ca[0] - cb[0]) ** 2 + (ca[1] - cb[1]) ** 2) ** 0.5
 
+    @staticmethod
+    def _filter_detections(
+        frame_shape: tuple[int, int],
+        detections: list[dict[str, Any]],
+        query: str = "",
+        min_area: float = 600.0,
+        edge_margin: float = 15.0,
+    ) -> list[dict[str, Any]]:
+        h, w = frame_shape[:2]
+        filtered = []
+        for det in detections:
+            bbox = det.get("bbox", [])
+            if len(bbox) < 4:
+                continue
+            x1, y1, x2, y2 = [float(v) for v in bbox]
+            box_w = max(0.0, x2 - x1)
+            box_h = max(0.0, y2 - y1)
+            area = box_w * box_h
+            if area < min_area or box_w < 15 or box_h < 15:
+                continue
+            if (
+                (x1 <= edge_margin and y1 <= 50)
+                or (x2 >= w - edge_margin and y1 <= 50)
+                or (x2 >= w - edge_margin and y2 >= h - edge_margin)
+                or (x1 <= edge_margin and y2 >= h - edge_margin)
+            ):
+                continue
+            filtered.append(det)
+        return filtered
+
+    @staticmethod
+    def _select_best_detections(
+        frame_shape: tuple[int, int],
+        detections: list[dict[str, Any]],
+        query: str = "",
+        max_targets: int | None = None,
+    ) -> list[dict[str, Any]]:
+        h, w = frame_shape[:2]
+        center_x = w / 2.0
+        center_y = h / 2.0
+        max_dist = ((center_x) ** 2 + (center_y) ** 2) ** 0.5 or 1.0
+
+        filtered = VideoTracker._filter_detections(frame_shape, detections, query)
+
+        def score_det(det: dict[str, Any]) -> float:
+            bbox = det.get("bbox", [])
+            x1, y1, x2, y2 = [float(v) for v in bbox]
+            cx = (x1 + x2) / 2.0
+            cy = (y1 + y2) / 2.0
+            dist = ((cx - center_x) ** 2 + (cy - center_y) ** 2) ** 0.5
+            dist_score = max(0.0, 1.0 - (dist / max_dist))
+            area = max(0.0, x2 - x1) * max(0.0, y2 - y1)
+            area_score = min(1.0, area / (w * h * 0.15))
+            conf = float(det.get("confidence", 0.5))
+            return 0.45 * conf + 0.35 * area_score + 0.20 * dist_score
+
+        ranked = sorted(filtered, key=score_det, reverse=True)
+        if max_targets is not None:
+            return ranked[:max_targets]
+        return ranked
+
+    @staticmethod
+    def _select_best_detection(
+        frame_shape: tuple[int, int],
+        detections: list[dict[str, Any]],
+        query: str = "",
+    ) -> dict[str, Any] | None:
+        ranked = VideoTracker._select_best_detections(frame_shape, detections, query, max_targets=1)
+        return ranked[0] if ranked else None
+
     def _resolve_target_classes(self, query: str) -> list[dict[str, Any]]:
         """
         Extract canonical query components and map to target detector classes.

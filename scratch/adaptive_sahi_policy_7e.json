@@ -1,0 +1,14 @@
+{
+  "trigger": "C_density_gt_10",
+  "features": [
+    "density",
+    "frac_1024"
+  ],
+  "thresholds": {
+    "density_min": 20,
+    "frac_1024_min": 0.4
+  },
+  "dev_rate": 0.98,
+  "estimated_compute_multiplier": 4.4400356982937055,
+  "rationale": "Maximized F1 while reducing unnecessary SAHI calls using interpretable density and tiny box fraction."
+}
