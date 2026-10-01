@@ -2600,5 +2600,23 @@
     "output_video_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/outputs/detected_video.mp4",
     "fps": 14.75,
     "status": "Completed"
+  },
+  {
+    "timestamp": "2026-09-30T06:01:17.694115Z",
+    "query": "car",
+    "target": "car",
+    "attributes": {},
+    "quantity": "all",
+    "search_mode": "text",
+    "detector": "YOLO-World",
+    "use_sahi": false,
+    "use_super_resolution": true,
+    "verification_enabled": true,
+    "objects_found": 0,
+    "confidence_score": 0.0,
+    "image_path": "/home/shahinraihaana.24it/vikram/AgentSearch-UAV/api/uploads/c04cdd80762f4c2d92ee41933b2b91d8_test_image.jpg",
+    "processed_image_path": "outputs/preprocessed/c04cdd80762f4c2d92ee41933b2b91d8_test_image_srx2.jpg",
+    "output_image_path": "outputs/detected_image.png",
+    "status": "No matching objects detected"
   }
 ]

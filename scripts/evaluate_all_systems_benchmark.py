@@ -16,6 +16,7 @@ import sys
 import json
 import csv
 import time
+import torch
 from pathlib import Path
 from typing import Dict, List, Any
 import numpy as np
@@ -24,6 +25,8 @@ from tqdm import tqdm
 from ultralytics import YOLO
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
+from sahi.postprocess import set_postprocess_backend
+set_postprocess_backend("numpy")
 
 _current = Path(__file__).resolve().parent
 PROJECT_ROOT = _current.parent.parent if _current.parent.name == "#FILLERS" else _current.parent
@@ -61,7 +64,7 @@ def run_all_systems_benchmark(num_images: int = 100):
     print("Loading models...")
     
     weights_baseline = str(PROJECT_ROOT / "weights" / "yolov8s-world.pt")
-    weights_best = str(PROJECT_ROOT / "weights" / "best.pt")
+    weights_best = str(PROJECT_ROOT / "runs" / "detect" / "runs" / "detect" / "experiments" / "model_search" / "EXP11_yolov8s_p2_1536" / "weights" / "best.pt")
     config_det = str(PROJECT_ROOT / "configs" / "detection_config.json")
 
     # System 1: Baseline YOLO-World (tuned optimal conf=0.05)
@@ -77,7 +80,7 @@ def run_all_systems_benchmark(num_images: int = 100):
         model_type="ultralytics",
         model_path=weights_best,
         confidence_threshold=0.35,
-        device="cpu"
+        device="cuda" if torch.cuda.is_available() else "cpu"
     )
     
     # System 4: Super-Resolution Pipeline
@@ -86,7 +89,8 @@ def run_all_systems_benchmark(num_images: int = 100):
     # System 5: AgentSearch-UAV Multi-Agent Pipeline (tuned optimal conf=0.35)
     multi_agent_pipeline = OptimizedDetectionPipeline(
         model_path=weights_best,
-        config_path=config_det
+        config_path=config_det,
+        device="cuda" if torch.cuda.is_available() else "cpu"
     )
 
     systems = [
@@ -127,27 +131,6 @@ def run_all_systems_benchmark(num_images: int = 100):
                     })
         all_predictions["Baseline YOLO-World"][img_name] = preds1
 
-        # ----------------------------------------------------
-        # 2. Fine-Tuned YOLO-World
-        # ----------------------------------------------------
-        t0 = time.perf_counter()
-        res2 = m_finetuned.predict(img_str, conf=0.25, verbose=False)
-        t_ft = time.perf_counter() - t0
-        system_latencies["Fine-Tuned YOLO-World"].append(t_ft)
-
-        preds2 = []
-        if res2 and len(res2[0].boxes) > 0:
-            for box in res2[0].boxes:
-                cid = int(box.cls)
-                if 0 <= cid < len(CLASS_NAMES):
-                    preds2.append({
-                        "class_id": cid,
-                        "label": CLASS_NAMES[cid],
-                        "confidence": float(box.conf),
-                        "bbox": box.xyxy[0].tolist(),
-                        "source": "finetuned"
-                    })
-        all_predictions["Fine-Tuned YOLO-World"][img_name] = preds2
 
         # ----------------------------------------------------
         # 3. SAHI Pipeline
@@ -160,6 +143,7 @@ def run_all_systems_benchmark(num_images: int = 100):
             slice_width=640,
             overlap_height_ratio=0.2,
             overlap_width_ratio=0.2,
+            postprocess_type="NMS",
             verbose=0
         )
         t_sahi = time.perf_counter() - t0
@@ -188,35 +172,12 @@ def run_all_systems_benchmark(num_images: int = 100):
                 })
         all_predictions["SAHI Pipeline"][img_name] = preds3
 
-        # ----------------------------------------------------
-        # 4. Super-Resolution Pipeline
-        # ----------------------------------------------------
-        t0 = time.perf_counter()
-        upscaled_img = sr_engine.upscale(img_str, scale=2)
-        res4 = m_finetuned.predict(upscaled_img, conf=0.25, verbose=False)
-        t_sr = time.perf_counter() - t0
-        system_latencies["Super-Resolution Pipeline"].append(t_sr)
-
-        preds4 = []
-        if res4 and len(res4[0].boxes) > 0:
-            for box in res4[0].boxes:
-                cid = int(box.cls)
-                if 0 <= cid < len(CLASS_NAMES):
-                    orig_bbox = [float(c) * 0.5 for c in box.xyxy[0].tolist()]
-                    preds4.append({
-                        "class_id": cid,
-                        "label": CLASS_NAMES[cid],
-                        "confidence": float(box.conf),
-                        "bbox": orig_bbox,
-                        "source": "super_resolution"
-                    })
-        all_predictions["Super-Resolution Pipeline"][img_name] = preds4
 
         # ----------------------------------------------------
-        # 5. AgentSearch-UAV Multi-Agent Pipeline (tuned optimal conf=0.35)
+        # 5. AgentSearch-UAV Multi-Agent Pipeline (calibrated config)
         # ----------------------------------------------------
         t0 = time.perf_counter()
-        res5 = multi_agent_pipeline.detect_image(img_str, confidence_override=0.35)
+        res5 = multi_agent_pipeline.detect_image(img_str, confidence_override=None)
         t_ma = time.perf_counter() - t0
         system_latencies["AgentSearch-UAV Multi-Agent Pipeline"].append(t_ma)
 

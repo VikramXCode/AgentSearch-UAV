@@ -21,13 +21,28 @@ class QueryAgentV2:
         # Very basic deterministic parsing for demonstration in Phase 2
         text = raw_query.lower().strip()
         
-        # Determine target
-        if "person" in text:
-            query_spec.target = "person"
-        elif "car" in text:
-            query_spec.target = "car"
-        elif "motorcycle" in text or "bike" in text:
-            query_spec.target = "motorcycle"
+        # Determine target with comprehensive synonyms
+        target_mapping = {
+            "person": ["person", "people", "pedestrian", "man", "woman", "child", "boy", "girl", "human", "guy"],
+            "car": ["car", "cars", "automobile", "sedan", "suv", "taxi", "jeep", "auto"],
+            "vehicle": ["vehicle", "vehicles"],
+            "truck": ["truck", "trucks", "pickup", "lorry"],
+            "bus": ["bus", "buses", "coach", "minibus"],
+            "van": ["van", "vans", "minivan"],
+            "motorcycle": ["motorcycle", "motorcycles", "bike", "motorbike", "motor"],
+            "bicycle": ["bicycle", "bicycles", "cyclist", "cycle"],
+            "boat": ["boat", "ship", "vessel", "watercraft"],
+            "airplane": ["airplane", "plane", "aircraft", "jet"]
+        }
+        
+        found_target = None
+        for standard_target, synonyms in target_mapping.items():
+            if any(syn == text or syn in text.split() for syn in synonyms):
+                found_target = standard_target
+                break
+                
+        if found_target:
+            query_spec.target = found_target
         else:
             # Fallback to the last word as a naive target if no reference image
             words = text.split()

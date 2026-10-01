@@ -1,7 +1,7 @@
 {
   "pipeline_version": "2.5.0",
-  "base_model": "runs/detect/experiments/model_search/E3_yolo11l_1536_aug/weights/best.pt",
-  "image_size": 960,
+  "base_model": "runs/detect/runs/detect/experiments/model_search/EXP11_yolov8s_p2_1536/weights/best.pt",
+  "image_size": 1536,
   "confidence_threshold": 0.35,
   "use_class_specific_thresholds": true,
   "class_thresholds_file": "configs/class_thresholds.json",
@@ -11,27 +11,27 @@
     "min_small_ratio_trigger": 0.25,
     "default_slice_width": 640,
     "default_slice_height": 640,
-    "default_overlap": 0.20,
+    "default_overlap": 0.25,
     "dense_slice_width": 480,
     "dense_slice_height": 480,
     "dense_overlap": 0.28
   },
   "selective_super_resolution": {
-    "enabled": true,
+    "enabled": false,
     "scale": 2,
     "max_rois_per_frame": 4,
     "low_conf_trigger": 0.35,
     "tiny_area_trigger": 576.0,
-    "roi_padding_ratio": 0.25
+    "roi_padding_ratio": 0.20
   },
   "detection_fusion": {
     "enabled": true,
     "method": "weighted_box_fusion",
-    "iou_threshold": 0.55,
+    "iou_threshold": 0.65,
     "enable_consensus_boost": true,
     "source_weights": {
       "full_image": 1.0,
-      "sahi": 1.10,
+      "sahi": 1.0,
       "enhanced_roi": 1.15
     }
   },
@@ -47,7 +47,7 @@
     "enabled": true,
     "method": "class_adaptive",
     "iou_threshold": 0.32,
-    "duplicate_cutoff_iou": 0.55,
+    "duplicate_cutoff_iou": 0.40,
     "score_threshold": 0.35,
     "sigma": 0.25,
     "score_decay": 0.85,

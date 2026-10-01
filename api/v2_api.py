@@ -125,29 +125,44 @@ def detect():
 
         elapsed = time.perf_counter() - t0
 
-        # Annotate image
-        out_name = _annotate_image(image_path, state.candidates)
-
-        # Build response
+        # Build response and filter violated candidates
+        final_candidates = []
         detections = []
+        
+        attributes_dict = {}
+        for constraint in state.query_spec.constraints:
+            if constraint.constraint_type == "attribute":
+                val = constraint.value.lower()
+                colors = ["red", "blue", "white", "black", "orange", "yellow", "green", "pink", "purple", "brown", "grey", "gray", "silver"]
+                if val in colors:
+                    attributes_dict["color"] = val
+                else:
+                    attributes_dict[val] = True
+                    
         for c in state.candidates:
-            # Check verification status for this candidate
             v_status = "UNCERTAIN"
             for v in state.verification_results:
                 if v.candidate_id == c.id:
                     v_status = v.status.value
                     break
                     
+            if state.verification_results and v_status == "VIOLATED":
+                continue
+                
+            final_candidates.append(c)
             detections.append({
                 "bbox": c.bbox,
                 "confidence": c.confidence,
                 "class_label": c.class_label,
                 "source": c.source,
                 "verification_status": v_status,
-                # Frontend expects "label" and "class" for rendering
+                "attributes": attributes_dict,
                 "label": c.class_label,
                 "class": c.class_label
             })
+            
+        # Annotate image with only final candidates
+        out_name = _annotate_image(image_path, final_candidates)
             
         # Simplified pipeline for frontend compatibility
         pipeline = [
@@ -253,7 +268,10 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
                 state.plan.current_action = track_action
                 state.plan.history.append(track_action) # TRACK
                 
-                verified_cands = [c for c in state.candidates if any(v.candidate_id == c.id and v.status.value in ["SATISFIED", "UNCERTAIN"] for v in state.verification_results)]
+                if state.verification_results:
+                    verified_cands = [c for c in state.candidates if not any(v.candidate_id == c.id and v.status.value == "VIOLATED" for v in state.verification_results)]
+                else:
+                    verified_cands = state.candidates
                 state = tracker.run(state, new_candidates=verified_cands)
                 
             else:
@@ -290,6 +308,24 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
         elapsed = time.perf_counter() - t0
         cand_count = len(state.candidates)
         
+        attributes_dict = {}
+        for constraint in state.query_spec.constraints:
+            if constraint.constraint_type == "attribute":
+                val = constraint.value.lower()
+                colors = ["red", "blue", "white", "black", "orange", "yellow", "green", "pink", "purple", "brown", "grey", "gray", "silver"]
+                if val in colors:
+                    attributes_dict["color"] = val
+                else:
+                    attributes_dict[val] = True
+                    
+        final_detections = []
+        for c in state.candidates:
+            c_dict = c.__dict__.copy()
+            c_dict["attributes"] = attributes_dict
+            c_dict["label"] = c.class_label
+            c_dict["class"] = c.class_label
+            final_detections.append(c_dict)
+
         result_payload = {
             "status": "SUCCESS",
             "media_type": "VIDEO",
@@ -299,7 +335,7 @@ def _process_video_job_worker(job_id: str, video_path: str, query_text: str, ref
             "duration": total_frames / max(1, fps),
             "count": cand_count,
             "objects_found": cand_count,
-            "detections": [c.__dict__ for c in state.candidates], # last frame detections
+            "detections": final_detections,
             "tracks": [],
             "frame_results": [],
             "redetection_events": redetection_events,

@@ -91,15 +91,6 @@ class VerificationAgentV2:
         from v2.schemas.state import ConstraintStatus
         
         if constraint.constraint_type == "attribute":
-            if candidate.source == "OPEN_WORLD":
-                return ConstraintResult(
-                    constraint_id=constraint.value,
-                    status=ConstraintStatus.SATISFIED,
-                    satisfied=True,
-                    confidence=candidate.confidence,
-                    evidence="Pre-verified by YOLO-World open-vocabulary detector"
-                )
-                
             if candidate_crop is None:
                 return ConstraintResult(
                     constraint_id=constraint.value,
@@ -108,26 +99,58 @@ class VerificationAgentV2:
                     confidence=0.0,
                     evidence="Missing candidate crop, cannot evaluate semantic attribute"
                 )
-            score = self.semantic_adapter.score_image_against_text(candidate_crop, constraint.value)
+                
+            from utils.search_utils import COLOR_WORDS, COLOR_ALIASES
+            attr_val = constraint.value.lower()
             
-            # Semantic similarity thresholds
-            accept_threshold = 0.25
-            reject_threshold = 0.20
-            
-            if score >= accept_threshold:
-                status = ConstraintStatus.SATISFIED
-            elif score < reject_threshold:
-                status = ConstraintStatus.VIOLATED
+            if attr_val in COLOR_WORDS or attr_val in COLOR_ALIASES:
+                from models.color_verifier import ColorVerifier
+                from v2.models.semantic_adapter import CLIPEngineAdapter
+                
+                clip_engine = None
+                if isinstance(self.semantic_adapter, CLIPEngineAdapter):
+                    clip_engine = self.semantic_adapter.engine
+                    
+                color_matched, color_confidence, details = ColorVerifier.verify_color(
+                    candidate_crop,
+                    attr_val,
+                    candidate.class_label,
+                    clip_engine=clip_engine
+                )
+                
+                if color_matched:
+                    status = ConstraintStatus.SATISFIED
+                else:
+                    status = ConstraintStatus.VIOLATED
+                    
+                return ConstraintResult(
+                    constraint_id=constraint.value,
+                    status=status,
+                    satisfied=color_matched,
+                    confidence=color_confidence,
+                    evidence=f"Color check: matched={color_matched} ({details.get('stage', 'unknown')})"
+                )
             else:
-                status = ConstraintStatus.UNCERTAIN
-            
-            return ConstraintResult(
-                constraint_id=constraint.value,
-                status=status,
-                satisfied=(status == ConstraintStatus.SATISFIED),
-                confidence=1.0 if status == ConstraintStatus.SATISFIED else score,
-                evidence=f"Semantic similarity: {score:.3f} (Thresholds: Accept>={accept_threshold}, Reject<{reject_threshold})"
-            )
+                score = self.semantic_adapter.score_image_against_text(candidate_crop, constraint.value)
+                
+                # Semantic similarity thresholds - highly lenient to avoid missing relevant matches
+                accept_threshold = 0.15
+                reject_threshold = 0.05
+                
+                if score >= accept_threshold:
+                    status = ConstraintStatus.SATISFIED
+                elif score < reject_threshold:
+                    status = ConstraintStatus.VIOLATED
+                else:
+                    status = ConstraintStatus.UNCERTAIN
+                
+                return ConstraintResult(
+                    constraint_id=constraint.value,
+                    status=status,
+                    satisfied=(status == ConstraintStatus.SATISFIED),
+                    confidence=1.0 if status == ConstraintStatus.SATISFIED else score,
+                    evidence=f"Semantic similarity: {score:.3f} (Thresholds: Accept>={accept_threshold}, Reject<{reject_threshold})"
+                )
         elif constraint.constraint_type == "spatial":
             val = constraint.value.lower()
             if media_meta and media_meta.resolution:

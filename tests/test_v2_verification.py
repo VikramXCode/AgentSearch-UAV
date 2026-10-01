@@ -105,7 +105,7 @@ def test_ambiguous_constraint_does_not_become_false_positive():
 def test_uncertain_aggregation():
     # If the mock is updated to return UNCERTAIN, test it.
     from v2.models.semantic_adapter import MockSemanticAdapter
-    verifier = VerificationAgentV2(semantic_adapter=MockSemanticAdapter(text_score=0.22)) # 0.20 <= 0.22 < 0.25 (UNCERTAIN)
+    verifier = VerificationAgentV2(semantic_adapter=MockSemanticAdapter(text_score=0.10)) # 0.05 <= 0.10 < 0.15 (UNCERTAIN)
     query = QuerySpec(constraints=[QueryConstraint(constraint_type="attribute", value="blue")])
     c = Candidate(id="1", bbox=[10, 10, 100, 100], confidence=0.9, class_label="car")
     

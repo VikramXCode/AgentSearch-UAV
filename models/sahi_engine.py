@@ -1,5 +1,7 @@
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
+from sahi.postprocess import set_postprocess_backend
+set_postprocess_backend("numpy")
 
 from models.postprocessor import DetectionPostProcessor
 from models.enhanced_postprocessor import EnhancedPostProcessor
@@ -40,11 +42,12 @@ class SAHIEngine:
 
         print("\nLoading SAHI Engine...")
 
+        import torch
         self.model = AutoDetectionModel.from_pretrained(
             model_type="ultralytics",
             model_path=self.model_path,
             confidence_threshold=0.25,
-            device="cuda"
+            device="cuda" if torch.cuda.is_available() else "cpu"
         )
 
         self.is_visdrone = is_visdrone_checkpoint(getattr(self.model, "model", None)) or is_visdrone_checkpoint(self.model_path)
@@ -88,6 +91,7 @@ class SAHIEngine:
             slice_width=slice_width,
             overlap_height_ratio=overlap_height_ratio,
             overlap_width_ratio=overlap_width_ratio,
+            postprocess_type="NMS",
         )
 
         detections: list[Detection] = []

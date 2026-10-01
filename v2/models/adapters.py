@@ -61,28 +61,38 @@ class SpecialistDetectorAdapter(BaseDetectorAdapter):
         valid_classes = set()
         if query_spec.target:
             t = query_spec.target.lower()
-            if t == "person" or t == "pedestrian":
-                valid_classes.update(["pedestrian", "people", "person"])
-            elif t == "motorcycle" or t == "bike" or t == "motor":
-                valid_classes.update(["motor", "motorcycle"])
-            elif t == "bicycle":
-                valid_classes.update(["bicycle"])
-            elif t == "car":
-                valid_classes.update(["car"])
-            elif t == "bus":
-                valid_classes.update(["bus"])
-            elif t == "truck":
-                valid_classes.update(["truck"])
-            elif t == "van":
-                valid_classes.update(["van"])
+            if t in ["person", "pedestrian", "people", "man", "woman", "human", "guy", "girl", "boy", "child"]:
+                valid_classes.update(["pedestrian", "people", "person", "man", "woman", "human"])
+            elif t in ["motorcycle", "bike", "motor", "motorbike"]:
+                valid_classes.update(["motor", "motorcycle", "bike", "motorbike"])
+            elif t in ["bicycle", "cycle", "cyclist"]:
+                valid_classes.update(["bicycle", "cycle", "cyclist"])
+            elif t in ["car", "automobile", "sedan", "suv", "taxi", "jeep", "auto"]:
+                valid_classes.update(["car", "automobile", "suv", "taxi", "jeep", "vehicle"])
+            elif t in ["bus", "coach", "minibus"]:
+                valid_classes.update(["bus", "coach"])
+            elif t in ["truck", "pickup", "lorry"]:
+                valid_classes.update(["truck", "pickup", "lorry"])
+            elif t in ["van", "minivan"]:
+                valid_classes.update(["van", "minivan"])
+            elif t in ["vehicle", "vehicles"]:
+                valid_classes.update(["car", "bus", "truck", "van", "motorcycle", "bicycle", "vehicle", "suv", "jeep", "taxi"])
             elif "tricycle" in t:
                 valid_classes.update(["tricycle", "awning-tricycle"])
             else:
                 valid_classes.add(t)
         
         for res in raw_results:
-            if valid_classes and res["label"].lower() not in valid_classes and query_spec.target != "object":
-                continue
+            label_lower = res["label"].lower()
+            if valid_classes and query_spec.target != "object":
+                # Loosen the exact-match requirement
+                is_match = False
+                for v in valid_classes:
+                    if v in label_lower or label_lower in v:
+                        is_match = True
+                        break
+                if not is_match:
+                    continue
                 
             try:
                 candidates.append(self._normalize_candidate(
@@ -90,7 +100,7 @@ class SpecialistDetectorAdapter(BaseDetectorAdapter):
                     conf=res["conf"],
                     label=res["label"],
                     source=self.source_name,
-                    frame_id=None # We will mock frame_id logic inside tracking agent
+                    frame_id=frame_id
                 ))
             except ValueError as e:
                 # Log rejection, but continue
@@ -103,7 +113,8 @@ class SpecialistDetectorAdapter(BaseDetectorAdapter):
         if isinstance(self.model, str):
             return [] # Mock
             
-        results = self.model(image, verbose=False)
+        # Use a very low confidence threshold to avoid unnecessarily excluding matches
+        results = self.model(image, verbose=False, conf=0.05)
         out = []
         for r in results:
             boxes = r.boxes

@@ -21,6 +21,7 @@ import json
 import csv
 import time
 import argparse
+import torch
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 import numpy as np
@@ -28,6 +29,8 @@ from tqdm import tqdm
 from ultralytics import YOLO
 from sahi import AutoDetectionModel
 from sahi.predict import get_sliced_prediction
+from sahi.postprocess import set_postprocess_backend
+set_postprocess_backend("numpy")
 
 # Setup paths
 _current = Path(__file__).resolve().parent
@@ -144,7 +147,7 @@ def run_sahi_evaluation(eval_images: List[Path], output_dir: Path) -> Tuple[Dict
     predictions = load_checkpoint(checkpoint_path)
     latencies = load_latencies(latency_path)
     
-    weights_best = str(PROJECT_ROOT / "weights" / "best.pt")
+    weights_best = str(PROJECT_ROOT / "runs" / "detect" / "experiments" / "model_search" / "E3_yolo11l_1536_aug" / "weights" / "best.pt")
     print(f"\n[2/3] Running SAHI Pipeline on {len(eval_images)} images (conf=0.35)...")
     print(f"Loaded {len(predictions)} already completed predictions from checkpoint.")
     
@@ -154,7 +157,7 @@ def run_sahi_evaluation(eval_images: List[Path], output_dir: Path) -> Tuple[Dict
             model_type="ultralytics",
             model_path=weights_best,
             confidence_threshold=0.35,
-            device="cpu"
+            device="cuda" if torch.cuda.is_available() else "cpu"
         )
         
         save_counter = 0
@@ -216,17 +219,18 @@ def run_agentsearch_evaluation(eval_images: List[Path], output_dir: Path) -> Tup
     predictions = load_checkpoint(checkpoint_path)
     latencies = load_latencies(latency_path)
     
-    weights_best = str(PROJECT_ROOT / "weights" / "best.pt")
+    weights_best = str(PROJECT_ROOT / "runs" / "detect" / "experiments" / "model_search" / "E3_yolo11l_1536_aug" / "weights" / "best.pt")
     config_det = str(PROJECT_ROOT / "configs" / "detection_config.json")
     
-    print(f"\n[3/3] Running AgentSearch-UAV Multi-Agent Pipeline on {len(eval_images)} images (conf=0.35)...")
+    print(f"\n[3/3] Running AgentSearch-UAV Multi-Agent Pipeline on {len(eval_images)} images (calibrated conf)...")
     print(f"Loaded {len(predictions)} already completed predictions from checkpoint.")
     
     remaining_images = [p for p in eval_images if p.name not in predictions]
     if remaining_images:
         pipeline = OptimizedDetectionPipeline(
             model_path=weights_best,
-            config_path=config_det
+            config_path=config_det,
+            device="cuda" if torch.cuda.is_available() else "cpu"
         )
         
         save_counter = 0
@@ -235,7 +239,7 @@ def run_agentsearch_evaluation(eval_images: List[Path], output_dir: Path) -> Tup
             img_str = str(img_path)
             
             t0 = time.perf_counter()
-            res = pipeline.detect_image(img_str, confidence_override=0.35)
+            res = pipeline.detect_image(img_str, confidence_override=None)
             t_elapsed = time.perf_counter() - t0
             latencies.append(t_elapsed)
             
