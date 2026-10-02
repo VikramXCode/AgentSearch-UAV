@@ -35,13 +35,20 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
 UPLOAD_FOLDER = PROJECT_ROOT / "api" / "uploads"
 OUTPUT_FOLDER = PROJECT_ROOT / "outputs"
-SAMPLE_FOLDER = PROJECT_ROOT / "sample_images"
-SAMPLE_VIDEO_FOLDER = PROJECT_ROOT / "sample_images" / "video_test"
+TREASURE_FOLDER = PROJECT_ROOT / "treasure"
+TREASURE_IMAGES_FOLDER = TREASURE_FOLDER / "images"
+TREASURE_VIDEOS_FOLDER = TREASURE_FOLDER / "videos"
 MEMORY_FOLDER = PROJECT_ROOT / "memory"
 HISTORY_FILE = MEMORY_FOLDER / "search_history.json"
 
 UPLOAD_FOLDER.mkdir(parents=True, exist_ok=True)
 OUTPUT_FOLDER.mkdir(parents=True, exist_ok=True)
+TREASURE_IMAGES_FOLDER.mkdir(parents=True, exist_ok=True)
+TREASURE_VIDEOS_FOLDER.mkdir(parents=True, exist_ok=True)
+
+# Compatibility aliases
+SAMPLE_FOLDER = TREASURE_IMAGES_FOLDER
+SAMPLE_VIDEO_FOLDER = TREASURE_VIDEOS_FOLDER
 
 ALLOWED_EXTENSIONS = {
     ".jpg",
@@ -71,6 +78,7 @@ def home():
         "version": "2.5.0",
         "message": "AgentSearch-UAV Multi-Agent Vision Server is online",
         "endpoints": [
+            "/health",
             "/detect",
             "/result",
             "/detect-video",
@@ -83,6 +91,36 @@ def home():
             "/benchmark",
             "/history",
         ],
+    })
+
+
+@app.route("/health")
+def health_check():
+    import torch
+    from utils.model_paths import DEFAULT_YOLO_WORLD_WEIGHTS
+    
+    cuda_available = torch.cuda.is_available()
+    e3_exists = Path(DEFAULT_YOLO_WORLD_WEIGHTS).exists()
+    
+    # Check OV detector
+    from utils.model_paths import PROJECT_ROOT
+    ov_path = PROJECT_ROOT / "weights" / "yolov8l-worldv2.pt"
+    ov_exists = ov_path.exists()
+    
+    clip_available = True
+    try:
+        import clip
+    except ImportError:
+        clip_available = False
+
+    return jsonify({
+        "status": "success" if e3_exists else "error",
+        "cuda_available": cuda_available,
+        "e3_detector_found": e3_exists,
+        "e3_path": str(DEFAULT_YOLO_WORLD_WEIGHTS),
+        "ov_detector_found": ov_exists,
+        "ov_path": str(ov_path),
+        "clip_available": clip_available
     })
 
 
@@ -112,10 +150,11 @@ def detect():
     # Validate query
     # -----------------------------------------------------
     query = request.form.get("query", "").strip()
-    if not query:
+    has_ref = "reference_image" in request.files and request.files["reference_image"].filename
+    if not query and not has_ref:
         return jsonify({
             "status": "error",
-            "message": "Search query is required",
+            "message": "Search query or reference image is required",
         }), 400
 
     # -----------------------------------------------------
@@ -136,6 +175,14 @@ def detect():
     image_path = UPLOAD_FOLDER / unique_name
     image.save(image_path)
 
+    reference_image_path = None
+    if has_ref:
+        ref_image = request.files["reference_image"]
+        ref_safe = secure_filename(ref_image.filename) or f"ref_{uuid4().hex[:8]}.png"
+        ref_path = UPLOAD_FOLDER / f"{uuid4().hex}_{ref_safe}"
+        ref_image.save(ref_path)
+        reference_image_path = str(ref_path)
+
     try:
         # =================================================
         # RUN REAL MULTI-AGENT PIPELINE
@@ -144,6 +191,7 @@ def detect():
         pipeline_result = run_pipeline(
             query=query,
             image_path=str(image_path),
+            reference_image_path=reference_image_path,
         )
         if isinstance(pipeline_result, tuple):
             state, total_pipeline_time = pipeline_result
@@ -362,7 +410,8 @@ def _execute_video_pipeline(job_id: str, video_path: str, query: str, output_dir
     result = tracker.process_video(
         video_path=video_path,
         query=query,
-        output_dir=str(output_dir),
+        output_dir=str(OUTPUT_FOLDER),
+        output_filename="detected_video.mp4",
         progress_callback=progress_callback,
     )
     elapsed = perf_counter() - start
@@ -377,8 +426,8 @@ def _execute_video_pipeline(job_id: str, video_path: str, query: str, output_dir
         "status": "success",
         "job_id": job_id,
         "query": query,
-        "output_video": f"/result-video?path={result.output_video_path}",
-        "result_video": f"/result-video?path={result.output_video_path}",
+        "output_video": f"/result-video?t={int(perf_counter() * 1000)}",
+        "result_video": f"/result-video?t={int(perf_counter() * 1000)}",
         "count": unique_targets,
         "objects_found": unique_targets,
         "confidence": avg_conf,
@@ -509,8 +558,7 @@ def detect_video():
     test_cap.release()
 
     job_id = f"vjob_{uuid4().hex[:12]}"
-    output_dir = OUTPUT_FOLDER / f"video_{job_id}"
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = OUTPUT_FOLDER
 
     is_sync = request.args.get("sync") == "1" or request.form.get("sync") == "1"
 
@@ -550,6 +598,7 @@ def detect_video():
         "success": True,
         "status": "processing",
         "job_id": job_id,
+        "progress_url": f"/video-progress/{job_id}",
         "query": query,
         "message": "Video tracking pipeline engaged",
     })
@@ -561,35 +610,43 @@ def get_video_progress(job_id: str):
         job = VIDEO_JOBS.get(job_id)
 
     if not job:
+        try:
+            from api.v2_api import V2_VIDEO_JOBS, V2_VIDEO_JOBS_LOCK
+            with V2_VIDEO_JOBS_LOCK:
+                job = V2_VIDEO_JOBS.get(job_id)
+        except Exception:
+            pass
+
+    if not job:
         return jsonify({"status": "error", "message": f"Job '{job_id}' not found"}), 404
 
     return jsonify({
         "success": True,
-        "job_id": job["job_id"],
-        "status": job["status"],
-        "progress": job["progress"],
-        "current_frame": job["current_frame"],
-        "total_frames": job["total_frames"],
-        "fps": job["fps"],
-        "stage": job["stage"],
-        "result": job["result"],
-        "error": job["error"],
+        "job_id": job.get("job_id", job_id),
+        "status": job.get("status"),
+        "progress": job.get("progress", 0.0),
+        "current_frame": job.get("current_frame", 0),
+        "total_frames": job.get("total_frames", 0),
+        "fps": job.get("fps", 0.0),
+        "stage": job.get("stage", "Processing..."),
+        "result": job.get("result"),
+        "error": job.get("error"),
     })
 
 
 @app.route("/result-video")
 def result_video():
     requested_path = request.args.get("path")
-    if not requested_path:
-        return jsonify({"status": "error", "message": "Result path is required"}), 400
+    if requested_path:
+        path = Path(requested_path).resolve()
+        if str(path).startswith(str(PROJECT_ROOT.resolve())) and path.exists() and path.stat().st_size > 0:
+            return send_file(path, mimetype="video/mp4", conditional=True)
 
-    path = Path(requested_path).resolve()
+    default_video = OUTPUT_FOLDER / "detected_video.mp4"
+    if default_video.exists() and default_video.stat().st_size > 0:
+        return send_file(default_video, mimetype="video/mp4", conditional=True)
 
-    # Safety check: ensure path is within project root
-    if not str(path).startswith(str(PROJECT_ROOT.resolve())) or not path.exists():
-        return jsonify({"status": "error", "message": "Result video not found or invalid"}), 404
-
-    return send_file(path, mimetype="video/mp4", conditional=True)
+    return jsonify({"status": "error", "message": "Result video not found or invalid"}), 404
 
 
 # =========================================================
@@ -598,15 +655,20 @@ def result_video():
 
 @app.route("/result")
 def result_image():
-    result_path = OUTPUT_FOLDER / "detection_result.jpg"
+    result_path = OUTPUT_FOLDER / "detected_image.png"
 
-    if not result_path.exists():
-        return jsonify({
-            "status": "error",
-            "message": "Result image not found. Execute a detection first.",
-        }), 404
+    if not result_path.exists() or result_path.stat().st_size == 0:
+        alt_path = OUTPUT_FOLDER / "detection_result.jpg"
+        if alt_path.exists() and alt_path.stat().st_size > 0:
+            result_path = alt_path
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "Result image not found. Execute a detection first.",
+            }), 404
 
-    response = send_file(result_path, mimetype="image/jpeg", max_age=0)
+    mime = "image/png" if result_path.suffix.lower() == ".png" else "image/jpeg"
+    response = send_file(result_path, mimetype=mime, max_age=0)
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     response.headers["Expires"] = "0"
@@ -800,12 +862,37 @@ def get_history():
 
 
 # =========================================================
+# V2 INTEGRATION
+# =========================================================
+
+from api.v2_api import v2_blueprint
+app.register_blueprint(v2_blueprint)
+
+# =========================================================
 # RUN SERVER
 # =========================================================
 
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5005))
+    
+    # Pre-load models into cache before starting server to avoid lazy loading blocks
+    print("Pre-loading models...")
+    try:
+        from models.yolo_world import YOLOWorldDetector
+        from utils.model_paths import DEFAULT_YOLO_WORLD_WEIGHTS, PROJECT_ROOT
+        
+        if Path(DEFAULT_YOLO_WORLD_WEIGHTS).exists():
+            YOLOWorldDetector(model_path=str(DEFAULT_YOLO_WORLD_WEIGHTS))
+            
+        ov_path = PROJECT_ROOT / "weights" / "yolov8l-worldv2.pt"
+        if ov_path.exists():
+            YOLOWorldDetector(model_path=str(ov_path))
+        else:
+            print(f"OV Model {ov_path} not found. Skipping preload (must be downloaded manually).")
+    except Exception as e:
+        print(f"Warning: Model pre-loading failed: {e}")
+        
     app.run(
         host="0.0.0.0",
         port=port,

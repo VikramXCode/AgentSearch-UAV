@@ -1,7 +1,0 @@
-Category Type,Condition,Images Count,GT Count,TP,FP,FN,Recall,Precision,F1-Score
-Occlusion,No Occlusion (0%),-,16810,13909,-,2901,0.8274,-,-
-Occlusion,Partial Occlusion (1-50%),-,18863,13386,-,5477,0.7096,-,-
-Occlusion,Heavy Occlusion (>50%),-,3086,1830,-,1256,0.5930,-,-
-Scene Density,Sparse Scene (<=25 objs/img),79,998,888,14850,110,0.8898,0.0564,0.1061
-Scene Density,Moderate Scene (26-75 objs/img),243,12488,10292,62414,2196,0.8242,0.1416,0.2416
-Scene Density,Dense Scene (>75 objs/img),226,25273,17945,49855,7328,0.7100,0.2647,0.3856

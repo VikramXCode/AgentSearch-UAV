@@ -1,0 +1,299 @@
+AgentUAV: Multi-Agent Query-Guided UAV Target Detection with Super-Resolution and SAHI
+
+
+
+Abstract — UAV-based surveillance, search, and rescue and environ-mental monitoring applications require reliable detection of different targets under various aerial conditions. Conventional models employed in UAV-based detection systems are unlikely to detect effectively small distant partially visible, and low-resolution targets. Single-model detection systems might treat every input the same way, regardless of its simplicity, which could result in the waste of computing resources or a drop in the system's performance under difficult conditions. In this paper, we present a new multi-agent query-guided UAV target detection system called AgentUAV that integrates open-vocabulary detection, SAHI-based sliced inference, Super-Resolution enhancement, and adaptive agent-based processing methods. This system receives as input UAV images or video frames and a target query and first identifies the target through the YOLO-World model. Next, detection and analysis agents estimate the target features and make a decision as to whether sliced inference or image enhancement would be necessary through further processing. The proposed system combines query-guided detection with dynamic processing to solve the problem of detecting small and challenging targets. Among the primary characteristics of our approach are the use of open-vocabulary target detection for accommodating natural language queries, the use of SAHI-based inference to enhance small-object detection, and Super-Resolution enhancement to retrieve useful visual information from low-resolution images.
+Keywords — UAV Target Detection, Multi-Agent Framework, Query-Guided Detection, Open-Vocabulary Object Detection, SAHI-Based Sliced Inference, Super-Resolution
+     I. INTRODUCTION
+A. Background
+The development of Artificial Intelligence (AI), computer vision, deep learning, and novel object detection methods has brought about completely new possibilities for drone-based target detection and airborne surveillance. Generally speaking, to detect a target in drone imagery involves the manual inspection by analysts or training an object detection model to recognize a fixed number of categories - a process that can be painstaking and CPU-intensive. With the use of AI detection, human workers are relieved from the need to scan aerial images manually, as AI systems can be used to perform such activities and then report the presence of identified targets. What is more, open vocabulary object detection lets the computer make sense of human speech instructions and pick out objects which have no category in predefined sets. Yet drone target detection can not rely solely on object recognition in clear images, as the characteristics of the targets can vary - they can be small ones, far away, partially occluded, or have a degraded image resolution due to the environmental factors. Also, variations in drone altitudes alongside changes in scene conditions create significant issues for reliable detection. The tiny features might only carry a little visual information, whereas clutter and image degradations make the situation even more ambiguous. This way, the UAV-based system for detecting targets has to rely on adaptive methods of object identification to operate effectively under changing image conditions and environmental disturbances.
+To address these challenges, the current work proposes AgentUAV, a Multi-Agent Query-Guided UAV Target Detection framework. It integrates query understanding, open-vocabulary object detection, SAHI-based sliced inference, Super-Resolution enhancement, adaptive processing, target verification, and detection analysis. To perform adaptive target detection based on UAV images and video sequences, the system includes specialized components such as a Query Agent, Detection Agent, Analysis Agent, Enhancement Agent, and SAHI Processing Agent.
+
+B. Problem Statement
+Existing UAV target detection systems mainly focus on conventional object detection, fixed-class recognition, or individual image enhancement techniques, which are often treated as independent processes. Users may need to manually search through large aerial images and video sequences to identify a specific target. Conventional detection models may also be limited to predefined object categories and can struggle to understand the complete meaning of a user-defined target query.
+The images from UAV can have a target with great variation in size, range, illumination, orientation, and image quality. In such cases, a detection system that applies the same processing pipeline to all inputs may waste processing resources on simple cases or provide insufficient processing for distant, small, or low-quality targets. Moreover, single-model systems in general cannot adapt their detection algorithm to the properties of a particular scene.
+Complex aerial environments may contain multiple objects, challenging backgrounds, partially visible targets, and uncertain detection outcomes, thus presenting the result of only one detection stage may lead to missing some hard targets or provide unreliable results. As such, there is a need for a system, which can understand a user defined query, perform open-vocabulary target detection, analyze the detected results, selectively apply Super-Resolution or SAHI-based sliced inference when needed, verify the targets and reconfigure the processing pipeline before presenting the final UAV target detection result.
+
+C. Research Motivation
+The main motivation behind this work is to design a UAV target detection system that not only performs conventional fixed-class object detection, but has understanding of user defined target queries and adapts its processing strategy according to the characteristics of the aerial scene. This explains why this work has adopted open-vocabulary detection and query guided target identification.
+In addition, UAV images can have targets of different sizes, distances, resolutions and visual conditions. A detection method may not be optimal for all scenarios. To solve this problem, the paper has adopted SAHI based sliced inference and Super-Resolution enhancement to improve detection accuracy for small, distant and challenging targets when further processing is required.
+
+Furthermore, UAV scenes can have uncertain detection results and complex visual conditions. To deal with this issue, adaptive multi-agent processing is used in the design of the system. Agents analyze the input scene and detection results to decide whether further processing is required and to produce final target detection output.
+
+D. Contributions
+The main contributions of present study are three-fold: Query Guided Open-Vocabulary UAV Target Detection addresses the issue of detecting UAV targets in different surveillance scenarios based on natural language queries, which goes beyond pre-defined object categories. This approach enables better flexibility in target identification.
+SAHI-Based Small Target Detection and Super-Resolution Enhancement focuses on sliced inference along with image enhancement and reconstruction techniques, which helps in achieving improved results in detecting small, distant, and low-resolution targets. Such methodologies assist in acquiring additional visual and spatial information for such aerial detection scenarios.
+
+Adaptive Multi-Agent Processing analyzes the UAV input and detection results to decide if additional processing is necessary. This framework incorporates the open-vocabulary approaches, SAHI-based sliced inference, Super-Resolution enhancement, and target analysis to constitute an adaptive and query driven UAV target detection.
+
+            II. LITERATURE SURVEY
+
+UAV-Based Target Detection
+
+One of the crucial directions of computer vision research is UAV-based target detection, which is mainly concerned with the identification of objects and targets from aerial images by using computational models. In their research, Cheng et al. introduced YOLO-World and presented an example of real-time open-vocabulary ob-ect detection, stressing the importance of combining visu-al information with natural-language queries [1]. Akyon et al. presented Slicing Aided Hyper Inference (SAHI) that improves the detection of small objects by making inference on larger images through smaller slices [2]. Finally, Wang et al. introduce Real-ESRGAN for real-world image Super-Resolution and discuss the model's ability to enhance visual details in degraded and low-resolution images [3].
+
+The recent research has explored deep learning methods for object detection in aerial and UAV imaging. YOLO-based architectures offer efficient detection models and are widely applied in real-time applications. However, UAV images often have objects that vary significantly in their size, scale, orientation, and background. Small and distant targets could occupy only a few pixels, making them hard to detect with conventional object detection approaches.
+
+Other computer vision methodologies have also explored techniques for small-object detection in aerial im-agery. SAHI is the example of such an approach, which makes use of sliced infer-ence to improve the visibility of small objects during detection [2]. Similarly, Super-Resolution methods such as Real-ESRGAN could be used to enhance low-resolution images and retrieve the necessary visual information before proceeding to further analysis [3]. Although these techniques serve various processing pur-poses, they show that it is possible to combine several computer vision com-ponents in order to address challenging detection problems.
+
+However, these systems are focused primarily on individual object detection, sliced inference, or image enhancement processes. These systems do not include an adaptive mechanism, which determines what processing strategy should be applied depending on the tar-get query and detection results. Therefore, it is essential to shift from conventional fixed UAV detection pipelines, towards adaptive and query-guided multi-agent target detection frameworks.
+
+B. Small Object Detection, SAHI, and Super-Resolution
+
+Accurate detection of small objects is extremely important for UAV imagery, since aerial images often include targets, occupying only a small amount of pixels. Akyon et al. introduced the Slicing Aided Hyper Inference (SAHI) approach and showed how a big image can be sliced into smaller pieces to improve small-object detection performance [2]. Such sliced inference is helpful to identify small and far targets, which might not be picked up during processing the whole aerial image in its original size.
+
+Super-Resolution techniques aim to improve image resolution by reconstructing the high-resolution image from the low-resolution version. Wang et al. introduced Real-ESRGAN, the method for real-world blind Super-Resolution, which can restore degraded images and recover valuable visual details [3]. Previously, Wang et al. proposed ESRGAN, which demonstrated the use of generative adversarial networks for enhanced image Super-Resolution [15].
+
+In addition, various studies explored the use of deep learning for improved object detection performance. Liu et al. presented a comprehensive survey of deep learning methods for generic object detection and discussed the development of modern detection architectures [9]. Zhao et al. reviewed the major deep learning-based object detection approaches and emphasized the importance of feature representation and multi-scale detection for challenging objects [10]. Zou et al. further provided a broad overview of the development of object detection methods and their continuous improvement in recent years [11].
+
+Other research activities were devoted to the specifics of object detection in aerial and UAV environment. Du et al. introduced the UAV benchmark for object detection and tracking, which provided an important comparison framework for evaluating aerial detection methods [5]. Xia et al. developed the DOTA dataset for object detection in aerial images [6], while Zhu et al. presented the Vis-Drone benchmark for drone-based object detection [7]. These datasets and benchmarks highlight the challenges related to the detection of objects of various sizes and appearances from aerial viewpoints.
+
+Despite the efforts made, conventional UAV detection systems usually concentrate on applying individual detection, sliced inference, or image enhancement methods separately. The fact that a certain approach improves performance in a given scene does not necessarily mean that it is required for every aerial scenario, which creates a need for adaptive processing mechanisms.
+
+C. Multi-Agent Legal Reasoning
+Multi-agent systems offer a mechanism for leveraging multiple specialized components to enhance the adaptability and efficiency of complex computational processes. In UAV target detec-tion, different processing stages may be necessary depending on the characteristics of the input image and the detected target. An adaptive framework can therefore analyze the de-tection results and determine whether further processing methods should be utilized.
+Recent developments in open-vocabulary object detection have introduced models capable of identifying targets using textual descriptions. YOLO-World combines real-time ob-ject detection with open-vocabulary recognition, enabling target categories to be specified using natural-language queries [1]. This feature is particularly applicable to UAV ap-plications, as the required target can differ depending on the surveillance, search, or monitoring objective.
+Multi-stage and adaptive processing approaches are particularly beneficial when a single approach cannot yield optimal results for each input. UAV images often contain simple scenes which can be processed directly, plus complex scenes which contain small, distant, partially visible or low-resolution targets. Applying computationally intensive processing to all images can lead to unnecessary increases in processing requirements, while omitting processing can cause challenging targets to be missed.
+In general, the existing literature has made great progress in open-vocabulary detection, small-object detection, aerial image analysis and image Super-Resolution. However, such techniques are usually considered as stand-alone modules and not integrated into an adaptive decision-making framework. And therefore there is a need for a query-guided architecture that unifies detection, target analysis, sliced inference and image enhancement tasks via an adaptive multi-agent paradigm within a single UAV target detection system.
+
+
+D. Research Gap
+The literature under review reveals significant progress in core areas of open-vocabulary object detection, UAV-based object detection, small-object detection and image Super-Resolution. Open-vocabulary detection has extended traditional object detection by allowing targets to be identified using textual queries [1], while SAHI has demonstrated the benefits of sliced inference for improving small-object detection [2]. Super-Resolution approaches such as Real-ESRGAN have also provided methods for enhancing degraded and low-resolution images [3].
+In addition, the development of UAV and aerial object detection benchmarks has significantly improved the evaluation of detection models in challenging aerial environments. The UAV benchmark provides data sets for object detection and tracking from aerial viewpoints [5], while DOTA and VisDrone highlight the challenges of object scale, orientation, density and complex backgrounds in aerial imagery [6], [7]. These studies demonstrate that UAV target detection requires specialized approaches beyond traditional object detection.
+Research on deep learning-based object detection has also produced significant improvements in feature representation and multi-scale detection. Surveys and reviews have documented the development of modern detection architectures and their applications in different visual environments [9]–[12]. However, these approaches mainly concentrate on improving the detection model itself rather than determining whether different processing strategies should be selectively applied according to the characteristics of an input UAV scene.
+The following gaps can be identified based on the studied literature. First, existing UAV detection systems generally apply a fixed detection or processing pipeline, while there is limited integration of adaptive decision-making for selecting additional processing methods based on detection difficulty [1]–[3]. Secondly, SAHI and Super-Resolution techniques can improve challenging detection conditions, but they are generally considered as separate processing approaches rather than being dynamically chosen in a unified framework [2], [3], [15]. Thirdly, open-vocabulary detection provides query-based target identification, but current approaches do not necessarily combine target queries with adaptive multi-stage processing for UAV environments [1].
+Thus, the research gap is the lack of a unified UAV target detection framework which can perform query-guided open-vocabulary detection, analyze detection conditions, adaptively select SAHI-based sliced inference or Super-Resolution enhancement, and coordinate these processes through an adaptive multi-agent workflow. Therefore, the proposed AgentUAV framework has been developed to investigate whether adaptive and query-guided processing can improve the detection of small, distant, low-resolution and challenging targets in UAV imagery. Additionally, existing systems often lack coordinated decision-making between multiple specialized processing stages. A unified multi-agent architecture can enable different components to analyze the scene and select appropriate processing strategies. This motivates the development of an intelligent framework capable of adapting its workflow to varying UAV detection conditions.
+
+
+III. PROPOSED METHODOLOGY
+
+A. System Architecture
+AgentUAV is an adaptive and query-guided UAV target detection framework designed for aerial surveillance and target search. The system takes input in the form of either a UAV image or a video frame together with a natural-language target query. Based on the given target query, the system performs open-vocabulary detection, whereas challenging targets can undergo additional adaptive processing.
+Firstly, input analysis is carried out using the YOLO-World model, and initial target detection is performed through open-vocabulary detection based on the given query. The detection results are further analyzed using target characteristics, confidence scores, object size, and visual conditions. Based on this analysis, the system determines whether additional processing through SAHI-based sliced inference or Super-Resolution enhancement is required.
+Detection results are processed according to the identified target conditions, and challenging small or distant objects can be analyzed through sliced inference. Low-resolution or visually degraded inputs can undergo Super-Resolution enhancement before further detection. The adaptive processing agents coordinate these stages and analyze the resulting outputs before forming the final query-guided UAV target detection result.
+     
+Fig. 1.  Proposed AgentUAV System Architecture
+
+B. Query Understanding and Target Analysis
+Query understanding is concerned with interpreting the natural-language target query provided by the user together with the UAV image or video input. The system identifies the requested target and uses the query to guide the detection process. The visual input is then analyzed to obtain initial information about the target, including its location, size, confidence, and surrounding visual conditions.
+The analyzed information is used to determine the appropriate processing strategy for the input. It allows the system to identify whether the target can be detected directly or requires additional processing because of small size, distance, low resolution, or other challenging visual conditions.
+C. Adaptive Detection Processing
+UAV targets can vary in size, distance, resolution, and visual quality. Hence, the Adaptive Detection Processing module takes into account the characteristics of the initial detection results along with the visual conditions of the input. Through this, the system is able to differentiate between targets that can be detected directly and those requiring additional processing.
+Detection results are initially obtained by the system using YOLO-World, and then target characteristics are taken into consideration before selecting further processing. Based on the identified conditions, SAHI-based sliced inference or Super-Resolution can be applied. In this way, it is possible to reduce unnecessary processing while providing additional support for small, distant, and low-resolution targets.
+
+D. Query-Guided Detection and Adaptive Processing
+AgentUAV uses different processing methods to detect relevant targets from UAV images and video frames. Initially, the natural-language target query and UAV input are processed by YOLO-World to obtain the initial detection results. The model provides target locations, bounding boxes, and confidence scores based on the given query.
+The detection results are further analyzed to identify challenging target conditions. SAHI is used when small or distant targets require sliced inference, while Super-Resolution enhancement is considered for low-resolution or visually degraded inputs. The adaptive processing mechanism allows the system to select additional processing according to the characteristics of the detected targets.
+The resulting outputs provide the target detection information required for the final stage. This approach allows the framework to combine standard detection with specialized processing methods while avoiding unnecessary processing for suitable inputs.
+Query-Guided Detection: 
+
+where II represents the UAV image or video frame, QQ represents the natural-language target query, and D(I,Q)D(I,Q) represents the initial query-guided detection result.
+
+ Target Detection Confidence:
+
+
+
+where CC represents the detection confidence, TT represents the target, II represents the UAV image or video frame, and QQ represents the natural-language target query.
+
+
+
+E. SAHI and Super-Resolution Agents
+The SAHI Processing Agent is responsible for handling UAV images containing small or distant targets. It applies sliced inference by dividing the input image into smaller regions and processing them separately. This approach can help identify targets that may be difficult to detect when the complete UAV image is processed directly.
+On the other hand, the Super-Resolution Agent is responsible for handling low-resolution or visually degraded inputs. It enhances the visual quality of the image before further target detection. Its processing is intended to recover useful visual details that can support the detection of challenging targets.
+F. Detection Verification and Result Analysis
+Detection Verification is concerned with evaluating the target detections produced by the different processing stages. Consideration is given to detection confidence, target location, bounding box information, and consistency of the detected target with the given query. In doing so, the system can evaluate the detection results before presenting the final output.
+The system can also analyze the results obtained from standard detection, SAHI-based sliced inference, and Super-Resolution processing. If additional processing produces useful detection improvements, the corresponding results can be considered for the final output. The verified detection information is then passed to the final decision stage.
+G. Adaptive Decision Agent
+The Adaptive Decision Agent serves as the main decision-making component within the AgentUAV framework. It takes as input the initial detection results, target characteristics, and outputs obtained from the additional processing methods. The agent determines the appropriate processing path based on the identified conditions of the target.
+Based on the available detection information, the Adaptive Decision Agent determines whether the standard detection result is sufficient or whether SAHI-based sliced inference or Super-Resolution enhancement should be considered. If the available results are insufficient for reliable target identification, further processing may be initiated.
+H. Final Detection and Output
+The final output stage constitutes the last stage of the AgentUAV framework. The verified detection results obtained from the selected processing methods are analyzed and prepared for presentation. Detection results that satisfy the required target and confidence conditions are retained for the final output.
+Once the detection results are finalized, the system presents the identified targets together with their corresponding bounding boxes and detection information. This final output incorporates the result of the query-guided detection process and the adaptive processing stages used for challenging UAV target conditions.
+
+Fig. 2.  Dataset split and multi-agent adaptive processing pipeline of the 
+proposed AgentUAV framework.
+
+IV. DATASET AND BENCHMARK CONSTRUCTION
+A. Dataset 
+Evaluation of the proposed AgentUAV framework is performed using UAV and aerial object detection datasets selected for evaluating challenging target detection scenarios. The datasets contain aerial images with objects appearing at different scales, orientations, distances, and background conditions. Public UAV benchmarks such as VisDrone and UAVDT can be used to evaluate the performance of the proposed framework.
+The benchmark is used for evaluating the query-guided detection capability of the system and its performance under challenging conditions involving small, distant, and low-resolution targets. The selected images contain different object categories and visual conditions that allow the proposed detection pipeline to be evaluated across different UAV environments.
+B. Data Filtering and Deduplication
+The raw UAV images are preprocessed and passed through data preparation procedures before evaluation. Images that are corrupted, duplicated, or unsuitable for the selected target detection scenarios can be removed during the filtering process. The remaining images are organized according to the required object categories and evaluation conditions.
+Data filtering and preparation are important for ensuring reliable evaluation and avoiding duplicate images or overlapping samples between experimental sets. Therefore, the final benchmark should be structured so that training, validation, and testing data remain properly separated, ensuring that the evaluation results represent the actual detection and generalization capability of the proposed AgentUAV framework.
+The UAV dataset is examined and prepared before being used for training and evaluation. Invalid annotations, corrupted images, duplicate samples, and unsupported object categories are identified during preprocessing. The remaining images and annotations are then organized according to the required detection classes and experimental settings for the proposed AgentUAV framework. The preprocessing stage also ensures consistency between image files and their corresponding annotations. This helps maintain data quality and supports reliable model training and evaluation.
+
+     
+Fig. 3.  Dataset construction, annotation preprocessing, and evaluation split for the AgentUAV framework.
+
+
+C. Annotation Representation
+Each UAV image is represented using standardized object annotations before being processed by the detection pipeline. The annotations contain bounding-box information in the form of normalized coordinates and dimensions, along with the corresponding target class labels.
+The standardized representation ensures consistency between the UAV dataset and the YOLO-World-based detection pipeline. These prepared annotations are used for dataset organization and evaluation of target detection performance.
+
+D. Benchmark Partitioning
+The final AgentUAV benchmark contains 7,019 aerial images and is partitioned according to the project dataset configuration. 6,471 images (92.2%) form the training corpus, while 548 images (7.8%) are reserved as a held-out validation and evaluation set. This partitioning separates the training data from the held-out evaluation images, allowing the detection framework to be assessed on images that are not part of the training corpus.
+E. Benchmark Usage
+The training corpus of 6,471 aerial images provides the dataset used for preparing and evaluating the UAV target detection pipeline. The held-out set of 548 images is used to evaluate the detection performance of the proposed AgentUAV framework.
+In this way, the benchmark supports both the development and evaluation stages of the proposed framework, including the assessment of query-guided detection performance under UAV imaging conditions.
+
+V. EXPERIMENT SETUP
+A. Experimental Configuration
+The proposed AgentUAV framework is evaluated using three experimental configurations to analyze the contribution of the different detection and enhancement components. System A uses standard YOLO-World detection and serves as the baseline configuration. System B combines YOLO-World with SAHI-based sliced inference to evaluate the contribution of small-target detection. System C represents the enhanced configuration, incorporating YOLO-World detection, SAHI-based sliced inference, and Real-ESRGAN Super-Resolution enhancement for challenging low-resolution targets.
+The comparison between these configurations helps determine whether each additional processing component provides a measurable improvement over the baseline. Performance will be evaluated using the same dataset and evaluation conditions to ensure a fair comparison. This experimental setup makes it possible to analyze the individual contribution of SAHI and Super-Resolution while assessing the overall effectiveness of the complete AgentUAV pipeline.
+Table 1. Experimental System Configurations
+
+B. Dataset and Evaluation Split
+The experimental evaluation is performed using the AgentUAV dataset described in the previous section. The prepared benchmark contains 7,019 aerial images, with 6,471 images (92.2%) used for training and 548 images (7.8%) reserved for validation and held-out evaluation.
+All experimental configurations are evaluated under the same dataset conditions to ensure a fair comparison. The same evaluation images and target categories are used across System A, System B, and System C so that any performance differences can be attributed to the detection and enhancement components.
+C. Detection and Processing Configuration
+The proposed framework first receives a UAV image or video frame together with a natural-language target query. YOLO-World performs the initial open-vocabulary detection and identifies target regions relevant to the given query. The detection results are then analyzed to determine whether additional processing is required.
+The enhanced configurations incorporate SAHI-based sliced inference and Super-Resolution processing for challenging detection conditions. SAHI processes large UAV images through overlapping slices to improve small-target detection, while Real-ESRGAN enhancement is applied to improve visual information in low-resolution target regions. The resulting detections are used for the final evaluation.
+D. Small-Target and Low-Resolution Processing
+The AgentUAV framework uses additional processing methods to address challenging UAV detection conditions involving small, distant, or low-resolution targets. SAHI-based sliced inference divides the input image into smaller overlapping regions, allowing the detection model to analyze targets at a more suitable scale..
+For low-resolution visual regions, Real-ESRGAN Super-Resolution enhancement is included as an additional processing component in the complete configuration. The enhanced image information can then support target detection under difficult visual conditions. This processing is evaluated through comparison with the standard YOLO-World baseline and the YOLO-World + SAHI configuration.
+E. Adaptive Agent-Based Processing Configuration
+The complete AgentUAV framework incorporates adaptive processing to determine whether additional detection methods are required for challenging UAV images. The initial detection is performed using YOLO-World based on the given natural-language target query. The detection and analysis stages examine the characteristics of the detected targets and the visual conditions of the input.
+Based on the analysis, the framework can select additional processing through SAHI-based sliced inference or Super-Resolution enhancement. This adaptive approach avoids treating every UAV image in exactly the same way and allows additional processing to be applied when challenging target conditions are identified.
+F. SAHI-Based Processing Configuration
+The SAHI configuration extends standard YOLO-World detection by processing UAV images through smaller overlapping slices. This allows small and distant targets to occupy a larger effective area during inference and can improve their visibility to the detection model.
+The detection results obtained from the individual image slices are combined to produce the final detection output. This configuration is compared with standard YOLO-World detection to evaluate the contribution of sliced inference to small-target detection.
+G. Super-Resolution Enhancement Configuration
+The complete enhanced configuration includes Real-ESRGAN Super-Resolution processing for challenging low-resolution visual conditions. The enhancement stage is intended to improve the visual representation of low-resolution image regions before or during additional detection processing.
+The enhanced configuration combines YOLO-World, SAHI-based sliced inference, and Real-ESRGAN to evaluate whether Super-Resolution provides an additional benefit beyond sliced inference. Its performance is compared with the baseline and SAHI configurations under the same evaluation conditions.
+H. Final Detection and Evaluation Configuration
+The final detection results produced by each experimental configuration are evaluated using the same benchmark and target categories. Standard object detection metrics, including Precision, Recall, mAP@50, and F1-score, can be used to compare the detection performance of the different configurations.
+This evaluation setup makes it possible to determine whether the additional SAHI and Super-Resolution components provide measurable improvements over standard detection. The comparison also helps identify the effectiveness and limitations of the complete AgentUAV processing pipeline.
+I. Evaluation Metrics
+The evaluation uses standard object detection metrics to measure the performance of the proposed AgentUAV framework across the different experimental configurations.
+1. Precision
+Precision measures the proportion of detected targets that are correctly identified. 
+
+where TP represents True Positives and FP represents False Positives.
+2. Recall
+Recall measures the ability of the system to correctly identify all relevant targets present in the UAV images.
+
+where FN represents False Negatives.
+3. F1-Score
+The F1-score provides a balanced measure of Precision and Recall. 
+
+A higher F1-score indicates a better balance between correct detections and missed or incorrect detections.
+
+4. Mean Average Precision
+Mean Average Precision (mAP) measures overall object detection performance by considering Precision and Recall across different confidence thresholds and object categories.
+
+where AP represents the Average Precision for each target category and N represents the total number of categories.
+5. AUROC and AUPRC
+For evaluating the overall discrimination capability of the different detection configurations, AUROC and AUPRC can also be considered where applicable. AUROC measures the ability to distinguish positive and negative predictions, while AUPRC provides additional insight when evaluating detection performance under class imbalance.
+
+J. Statistical Evaluation
+Because the primary real-inference evaluation contains only 30 cases, binary performance measures are reported together with 95% Wilson score confidence intervals. The Wilson interval is calculated using z=1.96z=. This provides an uncertainty estimate for the observed proportions and avoids presenting the results obtained from the small evaluation batch as unconditional performance guarantees.
+This provides an estimate of the consistency of the observed performance and avoids presenting results from a limited evaluation set as unconditional performance guarantees.
+V. RESULTS AND DISCUSSION
+A. Overall Performance Evaluation
+The proposed AgentUAV framework has been tested with five different detection system configurations: Baseline YOLO-World (Zero-Shot), Fine-Tuned YOLO-World, SAHI Pipeline, Super-Resolution Pipeline, and the Full AgentUAV Multi-Agent Pipeline. The baseline system performs zero-shot object detection without dataset-specific adaptation, whereas the fine-tuned system uses VisDrone-based training. The remaining systems incorporate sliced inference, super-resolution, and multi-stage adaptive detection techniques to improve UAV target detection. All five systems were tested using the same real-inference evaluation with 30 images and 1,430 ground-truth objects.
+
+
+
+ Fig. 4. Comparative performance of the experimental configurations of the proposed AgentUAV framework.
+
+Table II: Performance Comparison of the Evaluated Systems 
+ 
+Fig. 5. Performance Comparison of UAV Detection Methods
+The findings reveal that the proposed detection enhancements significantly improve UAV target detection performance. The baseline YOLO-World system achieves only 9.44% recall and 3.95% mAP@50, whereas the SAHI Pipeline improves these values to 65.45% and 38.60%, respectively. Likewise, the proposed AgentUAV Multi-Agent Pipeline achieves the highest recall of 69.65%. While maintaining competitive detection performance, the system also provides additional capabilities through adaptive detection, multi-stage processing, selective enhancement, detection fusion, and the intelligent target analysis.
+
+
+B. Precision Analysis
+The Baseline YOLO-World achieves a Precision of 61.36%, whereas the SAHI Pipeline achieves 60.08% and the AgentUAV Multi-Agent Pipeline achieves 48.33%. The lower precision of the proposed multi-agent system is mainly caused by the increased number of candidate detections generated during multi-stage processing.
+C. Recall Analysis
+The Baseline YOLO-World achieves only 9.44% Recall, which increases significantly to 65.45% with the SAHI Pipeline and 69.65% with the AgentUAV Multi-Agent Pipeline. The improved recall demonstrates that sliced inference and multi-stage processing help detect a larger number of targets, particularly small objects in UAV imagery.
+D. Detection Performance Analysis
+The Baseline YOLO-World achieves an mAP@50 of 3.95% and an F1-Score of 16.36%, whereas the SAHI Pipeline achieves the highest mAP@50 of 38.60% and F1-Score of 62.65%. The proposed AgentUAV Multi-Agent Pipeline achieves an mAP@50 of 36.38% and an F1-Score of 57.06%, while providing the highest Recall among all evaluated systems.
+E. Retrieval Performance
+The detection performance of the proposed AgentUAV framework was evaluated using Precision, Recall, mAP@50, and F1-Score across different system configurations.
+
+Fig. 6. Performance Comparison of different Systems
+The SAHI Pipeline achieved the highest mAP@50 of 38.60% and F1-Score of 62.65%, demonstrating strong overall detection performance for UAV imagery. The proposed AgentUAV Multi-Agent Pipeline achieved the highest Recall of 69.65%, indicating its ability to identify a larger number of target objects.
+The Baseline YOLO-World achieved only 9.44% Recall and 3.95% mAP@50, showing the limitations of direct zero-shot detection for small and densely distributed UAV targets. These findings demonstrate that adaptive sliced inference and multi-stage detection strategies significantly improve target detection coverage in complex aerial scenes.
+
+
+F. Ablation Analysis
+The contribution of the major components of the proposed AgentUAV framework was analyzed by comparing the baseline YOLO-World detector, the SAHI-enhanced detection pipeline, and the full multi-agent system.
+
+Fig. 7. Submodule Ablation Impact on AgentUAV Detection Performance
+
+The experimental results show that each component contributes differently to the overall detection performance. The SAHI pipeline significantly improves small-object detection, increasing Recall to 65.45% and achieving the highest mAP@50 of 38.60% and F1-Score of 62.65% among the evaluated systems. The full AgentUAV multi-agent system further improves Recall to 69.65%, demonstrating its ability to identify more targets in challenging UAV scenes.
+ G. Confidence Interval Analysis
+The performance results were obtained from a limited evaluation set of 30 VisDrone2019-DET validation images containing 1,430 ground-truth objects. Therefore, the reported Precision, Recall, and F1-Score should be interpreted with consideration of sampling variability. Confidence interval analysis provides additional insight into the reliability of the measured detection performance and helps avoid overinterpreting results from the evaluated subset.
+
+
+Fig. 8. Performance Estimates with 95% Confidence Intervals for AgentUAV Systems
+
+
+H. Discussion
+In summary, the experimental results demonstrate that the proposed AgentUAV framework improves UAV target detection through adaptive small-object detection and multi-stage processing. The full AgentUAV Multi-Agent System achieves the highest Recall of 69.65%, while in the YOLO-World + SAHI configuration achieves the highest mAP@50 of 38.60% and F1-Score of 62.65%.
+The ablation analysis further shows that different components contribute to detection performance in distinct ways. SAHI substantially improves small-object detection and recall, whereas the full multi-agent framework increases overall target coverage.
+However, the evaluation was conducted using only 30 images from the VisDrone2019-DET validation dataset, containing 1,430 ground-truth objects. Therefore, a larger-scale evaluation using the complete validation dataset and additional UAV datasets is necessary to further validate the generalization and robustness of the proposed framework.
+VIII. CONCLUSION AND FUTURE WORK
+A. Conclusion
+The proposed AgentUAV framework presents an adaptive multi-agent approach for query-guided target detection in UAV imagery. The system combines open-vocabulary detection, SAHI-based sliced inference, Super-Resolution enhancement, and agent-based adaptive processing to address the challenges of detecting small, distant, partially visible, and low-resolution targets.
+The proposed framework integrates three key capabilities: query-guided open-vocabulary detection, adaptive SAHI-based sliced inference, and Super-Resolution enhancement. YOLO-World enables the system to detect targets based on natural-language queries, while SAHI improves the analysis of small and dense targets through sliced inference. Super-Resolution enhancement is incorporated to improve visual information in challenging low-resolution scenarios, with the agents determining whether additional processing is required.
+The AgentUAV pipeline further incorporates multiple agents for query understanding, knowledge and strategy selection, detection, verification, and result explanation. This adaptive workflow allows the system to select appropriate processing methods according to the characteristics and difficulty of the input UAV image or video frame. The verified baseline evaluation establishes the initial detection of the system, while further evaluation is required to quantitatively measure the contribution of SAHI and the complete AgentUAV framework.
+B. Limitations and Future Work
+The current AgentUAV framework has primarily been developed and evaluated for UAV target detection scenarios involving challenging aerial imagery. Its performance may vary depending on factors such as target size, image resolution, viewing altitude, object density, environmental conditions, and the availability of suitable target queries. In addition, the complete quantitative evaluation of the SAHI and Full AgentUAV configurations is still limited, which restricts broader conclusions regarding their comparative performance.
+Future work will focus on conducting larger-scale evaluations using complete UAV benchmark datasets and diverse  aerial environments. Further work can evaluate the individual contributions of SAHI, Super-Resolution, verification, and adaptive agent-based processing through dedicated ablation experiments. Improving the efficiency of the framework for real-time UAV applications, supporting additional target categories, and testing the system under different environmental and surveillance conditions can further improve its practical usefulness.
+XI. ACKNOWLEDGMENT
+The authors extend their gratitude to the Intel Unnati Centre of Excellence at Kongu Engineering College, Erode – 638060, India for the computing and technical support provided for the completion of their work. We express appreciation for the help and assistance provided by the institution during the entire course of the research work including development and testing.
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ REFERENCES:
+[1] T. Cheng, L. Song, Y. Ge, W. Liu, X. Wang, and Y. Shan, “YOLO-World: Real-Time Open-Vocabulary Object Detection,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), 2024, pp. 16901–16911, doi: 10.1109/CVPR52733.2024.01599. 
+[2] F. C. Akyon, S. O. Altinuc, and A. Temizel, “Slicing Aided Hyper Inference and Fine-Tuning for Small Object Detection,” in Proc. 2022 IEEE Int. Conf. Image Process. (ICIP), 2022, pp. 966–970, doi: 10.1109/ICIP46576.2022.9897990. 
+[3] X. Wang, L. Xie, C. Dong, and Y. Shan, “Real-ESRGAN: Training Real-World Blind Super-Resolution With Pure Synthetic Data,” in Proc. IEEE/CVF Int. Conf. Comput. Vis. Workshops (ICCVW), 2021, pp. 1905–1914, doi: 10.1109/ICCVW54120.2021.00217. 
+[4] D. Du, Y. Qi, H. Yu, Y. Yang, K. Duan, G. Li, W. Zhang, Q. Huang, and Q. Tian, “The Unmanned Aerial Vehicle Benchmark: Object Detection and Tracking,” in Proc. Eur. Conf. Comput. Vis. (ECCV), 2018, pp. 370–386.
+[5] G. Tang, J. Ni, Y. Zhao, Y. Gu, and W. Cao, “A Survey of Object Detection for UAVs Based on Deep Learning,” Remote Sens., vol. 16, no. 1, Art. no. 149, 2024, doi: 10.3390/rs16010149. 
+[6] G.-S. Xia, X. Bai, J. Ding, Z. Zhu, S. Belongie, J. Luo, M. Datcu, M. Pelillo, and L. Zhang, “DOTA: A Large-Scale Dataset for Object Detection in Aerial Images,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), 2018, pp. 3974–3983, doi: 10.1109/CVPR.2018.00418. 
+[7] L. H. Li et al., “Grounded Language-Image Pre-Training,” in Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit. (CVPR), 2022, pp. 10965–10975, doi: 10.1109/CVPR52688.2022.01069. 
+[8] S. Liu et al., “Grounding DINO: Marrying DINO With Grounded Pre-Training for Open-Set Object Detection,” in Proc. Eur. Conf. Comput. Vis. (ECCV), 2024, pp. 38–55, doi: 10.1007/978-3-031-72970-6_3. 
+[9] D. Lam, R. Kuzma, K. McGee, S. Dooley, M. Laielli, M. Klaric, Y. Bulatov, and B. McCord, “xView: Objects in Context in Overhead Imagery,” 2018.
+[10] J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, “You Only Look Once: Unified, Real-Time Object Detection,” in Proc. IEEE Conf. Comput. Vis. Pattern Recognit. (CVPR), 2016, pp. 779–788, doi: 10.1109/CVPR.2016.91.
+[11] J. Redmon and A. Farhadi, “YOLOv3: An Incremental Improvement,” arXiv:1804.02767, 2018.
+[12] X. Wang, K. Yu, S. Wu, J. Gu, Y. Liu, C. Dong, Y. Qiao, and C. C. Loy, “ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks,” in Proc. Eur. Conf. Comput. Vis. Workshops (ECCVW), 2018, pp. 63–79, doi: 10.1007/978-3-030-11021-5_5.
+[13] P. Zhu et al., “VisDrone-DET2018: The Vision Meets Drone Object Detection in Image Challenge Results,” in Proc. Eur. Conf. Comput. Vis. Workshops (ECCVW), 2018.
+[14] Z. Ge, S. Liu, F. Wang, Z. Li, and J. Sun, “YOLOX: Exceeding YOLO Series in 2021,” arXiv:2107.08430, 2021.
+[15] T.-Y. Lin et al., “Microsoft COCO: Common Objects in Context,” in Proc. Eur. Conf. Comput. Vis. (ECCV), 2014, pp. 740–755, doi: 10.1007/978-3-319-10602-1_48.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

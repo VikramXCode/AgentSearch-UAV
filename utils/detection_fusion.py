@@ -114,14 +114,11 @@ class DetectionFusionEngine:
             if len(cluster) == 1:
                 fused_list.append(cluster[0])
             else:
-                # Weighted average box coordinates
+                # Select the box coordinates from the detection with the highest weight
                 weights = [self.source_weights.get(d.source, 1.0) * d.confidence for d in cluster]
-                total_w = sum(weights)
-
-                w_x1 = sum(w * d.bbox[0] for w, d in zip(weights, cluster)) / max(1e-6, total_w)
-                w_y1 = sum(w * d.bbox[1] for w, d in zip(weights, cluster)) / max(1e-6, total_w)
-                w_x2 = sum(w * d.bbox[2] for w, d in zip(weights, cluster)) / max(1e-6, total_w)
-                w_y2 = sum(w * d.bbox[3] for w, d in zip(weights, cluster)) / max(1e-6, total_w)
+                best_idx = weights.index(max(weights))
+                best_box = cluster[best_idx].bbox
+                w_x1, w_y1, w_x2, w_y2 = best_box[0], best_box[1], best_box[2], best_box[3]
 
                 # Confidence calculation
                 max_conf = max(d.confidence for d in cluster)

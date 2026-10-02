@@ -1,123 +1,43 @@
-# AgentSearch-UAV
+# AgentUAV / AgentSearch-UAV (V2 Architecture)
 
-This project is a small UAV object-search demo built around a YOLO-World detector, a SAHI-based sliced detector, and a simple agent workflow.
+This repository contains the final V2 architecture of the AgentUAV system—a dynamically routed, multi-agent pipeline designed for rigorous UAV object detection, verification, and tracking across complex aerial streams.
 
-## What this repo runs
+## FINAL CAPABILITIES
 
-- `models/inference.py` - interactive object detection demo.
-- `models/test_sahi.py` - interactive SAHI detection demo.
-- `workflows/graph.py` - main end-to-end multi-agent UAV detection pipeline.
-- `tests/test_iou.py` - simple IoU sanity check.
-- `tests/upscale.py` - image upscaling sample script.
+The final architecture supports the following robust modes:
+1. **Image + Text Query**: Target detection from a natural language query in a still image.
+2. **Image + Reference Image**: Cross-verifying and filtering candidates against a visual reference crop.
+3. **Video + Text Query**: Temporal tracking and detection natively processed on a `.mp4`/`.mov` array via textual specification.
+4. **Video + Reference Image**: Temporal tracking bounded by visual reference matching.
 
-## Important note for Windows
+## FINAL DETECTION ROUTING
+Model initialization is actively governed via a memory-safe Mutual Exclusion Model Registry:
+- **Known/in-ontology target** → Routed mathematically to `YOLOv8s + P2 specialist` (optimized for dense, small-object VisDrone aerial views).
+- **Unknown/open-world target** → Dynamically routed to the open-world `YOLO-World` inference model.
 
-The project can run into Windows path-length issues when installing PyTorch in a deeply nested folder. The safest working setup is a short path like `C:\v\agentsearch-venv`.
+*(Note: The previous E3 / YOLO11-L experiments were highly informative and remain preserved in the `historical_artifacts/` directory for record-keeping but are deactivated from the runtime path.)*
 
-## Setup
+## VIDEO PIPELINE
+The `TrackingAgentV2` continuously tracks objects per frame:
+- **Primary Loop**: Detection → Verification → Tracking
+- **Failure Handling**: Tracking degradation → Redetection trigger → Verification → Tracking resumes seamlessly.
 
-1. Open PowerShell.
-2. Go to the project root.
-3. Create a virtual environment:
+*(No quantitative MOTA/HOTA tracking accuracy metrics, ReID, or exact-instance recognition capabilities are mathematically claimed. System tracks objects contextually via bounding dynamics.)*
 
-```powershell
-python -m venv C:\v\agentsearch-venv
+## GETTING STARTED
+
+The system supports a fully functional backend Flask API endpoint mapped to a React frontend.
+
+**1. Launch the Backend API (Terminal 1)**
+```bash
+PYTHONPATH=. python api/main.py
 ```
 
-4. Activate it:
-
-```powershell
-C:\v\agentsearch-venv\Scripts\Activate.ps1
+**2. Launch the Frontend UI (Terminal 2)**
+```bash
+cd frontend
+npm install  # (First time only)
+npm run dev
 ```
 
-5. Install the base requirements:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-6. Install the runtime packages used by the code but not listed in `requirements.txt`:
-
-```powershell
-python -m pip install pillow opencv-python sahi ultralytics
-python -m pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
-```
-
-
-
-## Run the demos
-
-Run all commands from the project root so the package imports like `from models...` and `from workflows...` resolve correctly.
-
-### 1. Object detection demo
-
-```powershell
-python -m models.inference
-```
-
-It will ask for:
-
-- image path
-- target object
-
-Example:
-
-```powershell
-X:\sample_images\cars.jpg
-car
-```
-
-Output:
-
-- prints model details and detections in the terminal
-- saves an annotated image to `outputs/detection_result.jpg`
-
-### 2. SAHI demo
-
-```powershell
-python -m models.test_sahi
-```
-
-It will ask for:
-
-- image path
-- target object
-
-### 3. Main pipeline (query)
-
-```powershell
-python -m workflows.graph
-```
-
-It will ask for:
-
-- search query
-- image path
-  
-It then runs query parsing, knowledge loading, strategy selection, detection, optional verification, explanation, annotation saving, and prints the final AgentState JSON.
-
-### 4. IoU sanity check
-
-```powershell
-python tests/test_iou.py
-```
-
-### 5. Image upscaling sample
-
-```powershell
-python tests/upscale.py
-```
-
-This reads `sample_images/cars.jpg` and writes `sample_images/upscaled/cars_4x.jpg`.
-
-## Files the demos expect
-
-- `weights/yolov8s-world.pt`
-- `sample_images/cars.jpg`
-- `memory/search_history.json`
-
-## Troubleshooting
-
-- If `python -m models.inference` says `No module named 'models'`, you are not running from the project root.
-- If PyTorch installation fails on Windows, use the short environment path shown above.
-- If the detector runs but finds no objects, try a different image or a different target label.
+Navigate your browser to the local Vite port (usually `http://localhost:5173`). Upload local media files and invoke queries freely.

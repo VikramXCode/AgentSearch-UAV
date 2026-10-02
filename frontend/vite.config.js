@@ -11,6 +11,10 @@ export default defineConfig({
   server: {
     port: 5173,
     proxy: {
+      '/health': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
       '/detect': {
         target: 'http://localhost:5005',
         changeOrigin: true,
@@ -28,6 +32,22 @@ export default defineConfig({
         changeOrigin: true,
       },
       '/detect-video': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/video-progress': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/v2': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/sample-videos': {
+        target: 'http://localhost:5005',
+        changeOrigin: true,
+      },
+      '/sample-video': {
         target: 'http://localhost:5005',
         changeOrigin: true,
       },

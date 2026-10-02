@@ -168,4 +168,26 @@ class AdaptiveSAHI:
                 )
                 global_detections.append(d_copy)
 
-        return global_detections
+        # Apply NMS across patch detections
+        if not global_detections:
+            return []
+            
+        bboxes = [[d.bbox[0], d.bbox[1], d.bbox[2] - d.bbox[0], d.bbox[3] - d.bbox[1]] for d in global_detections]
+        scores = [d.confidence for d in global_detections]
+        
+        # We process NMS per class to avoid suppressing different objects
+        final_detections = []
+        class_ids = set(d.class_id for d in global_detections)
+        
+        import cv2
+        for cid in class_ids:
+            c_indices = [i for i, d in enumerate(global_detections) if d.class_id == cid]
+            c_bboxes = [bboxes[i] for i in c_indices]
+            c_scores = [scores[i] for i in c_indices]
+            
+            indices = cv2.dnn.NMSBoxes(c_bboxes, c_scores, score_threshold=0.05, nms_threshold=0.35)
+            if len(indices) > 0:
+                for idx in indices.flatten():
+                    final_detections.append(global_detections[c_indices[idx]])
+                    
+        return final_detections

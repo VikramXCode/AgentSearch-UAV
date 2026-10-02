@@ -194,8 +194,37 @@ class VerificationAgent:
         # Stage 3 — General semantic CLIP verification
         # ----------------------------------
         has_attributes = bool(attributes.get("color") or attributes.get("size"))
+        ref_image_path = getattr(state.query, "reference_image_path", None)
 
-        if not requested_color and prompts:
+        if ref_image_path and os.path.exists(ref_image_path):
+            t_ai_start = time.perf_counter()
+            ref_image = Image.open(ref_image_path).convert("RGB")
+            surviving_crops = [item["crop"] for item in surviving_candidates]
+            
+            # Score against reference image
+            image_scores = self.clip_engine.score_images_against_image(surviving_crops, ref_image)
+            ai_verification_time += time.perf_counter() - t_ai_start
+
+            filtered_after_clip = []
+            for item, score in zip(surviving_candidates, image_scores):
+                print()
+                print(f"Candidate: {item['detection'].label} {item['detection'].confidence:.3f}")
+                print(f"Image Similarity: {score:.3f}")
+
+                # CLIP image similarity acceptance
+                if score < state.strategy.target_similarity_threshold:
+                    print(f"Rejected: Image similarity too low ({score:.3f} < {state.strategy.target_similarity_threshold})")
+                    continue
+                
+                # We reuse clip_score for image similarity
+                item["best_prompt"] = f"Similar to reference image"
+                item["clip_score"] = float(score)
+                item["clip_margin"] = 0.0
+                filtered_after_clip.append(item)
+            
+            surviving_candidates = filtered_after_clip
+
+        elif not requested_color and prompts:
             t_ai_start = time.perf_counter()
             surviving_crops = [item["crop"] for item in surviving_candidates]
             score_results = self.clip_engine.score_images_against_texts(surviving_crops, prompts)
@@ -328,7 +357,9 @@ class VerificationAgent:
 
     @staticmethod
     def _target_similarity(requested_target: str, candidate_target: str) -> float:
-        if not requested_target or not candidate_target:
+        if not requested_target:
+            return 1.0
+        if not candidate_target:
             return 0.0
         if requested_target == candidate_target:
             return 1.0
