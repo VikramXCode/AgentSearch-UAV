@@ -1,1 +1,0 @@
-Max VRAM used: 21340 MiB

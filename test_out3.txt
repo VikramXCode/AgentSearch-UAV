@@ -1,9 +1,0 @@
-============================= test session starts ==============================
-platform linux -- Python 3.12.7, pytest-9.1.1, pluggy-1.6.0
-rootdir: /home/shahinraihaana.24it/vikram/AgentSearch-UAV
-plugins: anyio-4.15.0, langsmith-0.14.1
-collected 1 item
-
-tests/test_v2_video_smoke.py .                                           [100%]
-
-============================== 1 passed in 3.53s ===============================

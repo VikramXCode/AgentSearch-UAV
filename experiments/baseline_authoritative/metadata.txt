@@ -1,3 +1,0 @@
-Git Commit: 86d05f8de8f30cdb2c83e2b2c5335a7967cc0f83
-Checkpoint Hash: 2e68d914a2e148645c80efd2eb2f6161  weights/best.pt
-Timestamp: 2026-09-16T05:40:46Z
