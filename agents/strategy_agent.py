@@ -15,7 +15,19 @@ class StrategyAgent:
         reasoning = []
         execution = []
 
-        detector = self._detector_name
+        from utils.search_utils import get_visdrone_classes_for_target
+        if target:
+            visdrone_classes = get_visdrone_classes_for_target(target)
+            if len(visdrone_classes) > 0:
+                detector = "YOLO-World-E3"
+                reasoning.append(f"Target '{target}' mapped to known E3 vocabulary: {visdrone_classes}. Routing to baseline high-accuracy detector.")
+            else:
+                detector = "YOLO-World-OV"
+                reasoning.append(f"Target '{target}' is out-of-vocabulary. Routing to Open-Vocabulary fallback detector.")
+        else:
+            # Pure image query without target text
+            detector = "YOLO-World-OV"
+            reasoning.append("Empty target for Image-as-Query. Routing to Open-Vocabulary detector with robust COCO vocabulary to propose candidates.")
 
         small_objects = {
             "person",
@@ -46,6 +58,10 @@ class StrategyAgent:
         if len(attribute_filters) > 0 or state.query.target:
             state.strategy.enable_clip_verification = True
             reasoning.append("Semantic attribute search detected. Enable CLIP verification.")
+
+        if getattr(state.query, "reference_image_path", None) is not None:
+            state.strategy.enable_clip_verification = True
+            reasoning.append("Reference image provided. Enable CLIP verification for similarity scoring.")
 
         state.strategy.detector = detector
         state.strategy.execution_priority = self._build_execution_priority(state, detector, execution)
@@ -83,10 +99,21 @@ class StrategyAgent:
             state.strategy.enable_super_resolution = True
             state.strategy.reasoning.append("Low-quality or small-object search detected. Enable Super Resolution.")
 
+        # Disable SAHI if doing image-to-image matching to keep it fast
+        if getattr(state.query, "reference_image_path", None) is not None:
+            state.strategy.enable_sahi = False
+            state.strategy.reasoning.append("Reference image provided. Disabling SAHI for standard E3 performance.")
+
+        # Force disable SAHI for Open-Vocabulary to prevent massive inference overhead
+        if state.strategy.detector == "YOLO-World-OV":
+            if state.strategy.enable_sahi:
+                state.strategy.enable_sahi = False
+                state.strategy.reasoning.append("Disabling SAHI for Open-Vocabulary detector to prevent massive inference overhead.")
+
         # Keep confidence threshold >= 0.30 by default for user-facing results
         state.strategy.confidence_threshold = max(0.30, state.strategy.confidence_threshold)
 
-        state.strategy.execution_priority = self._build_execution_priority(state, self._detector_name, state.strategy.execution_priority)
+        state.strategy.execution_priority = self._build_execution_priority(state, state.strategy.detector, state.strategy.execution_priority)
         return state
 
     def _build_execution_priority(self, state: AgentState, detector: str, execution: list[str]) -> list[str]:

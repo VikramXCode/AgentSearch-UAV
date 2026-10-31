@@ -1,4 +1,0 @@
-Occlusion Level,GT Instances,TP Matched,FN Missed,Recall
-No Occlusion (0%),16810,13909,2901,0.8274
-Partial Occlusion (1-50%),18863,13386,5477,0.7096
-Heavy Occlusion (>50%),3086,1830,1256,0.5930

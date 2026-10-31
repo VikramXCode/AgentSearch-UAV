@@ -1,6 +1,0 @@
-Class Pair,Class A,Class B,GT A Total,GT B Total,A predicted as B,A Confused Rate,B predicted as A,B Confused Rate,Total Mutual Confusions
-pedestrian vs people,pedestrian,people,8844,5125,303,3.4300%,1097,21.4000%,1400
-bicycle vs motor,bicycle,motor,1287,4886,264,20.5100%,279,5.7100%,543
-car vs van,car,van,14064,1975,333,2.3700%,868,43.9500%,1201
-truck vs bus,truck,bus,750,251,12,1.6000%,42,16.7300%,54
-tricycle vs awning-tricycle,tricycle,awning-tricycle,1045,532,63,6.0300%,64,12.0300%,127

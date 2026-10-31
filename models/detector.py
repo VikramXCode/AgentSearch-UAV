@@ -41,12 +41,14 @@ class DetectionEngine:
 
         raw_count = len(raw_detections)
 
-        requested_target = canonicalize_target(target)
-
-        target_matched = [
-            d for d in raw_detections
-            if canonicalize_target(d.label) == requested_target
-        ]
+        if target == "":
+            target_matched = raw_detections
+        else:
+            requested_target = canonicalize_target(target)
+            target_matched = [
+                d for d in raw_detections
+                if canonicalize_target(d.label) == requested_target
+            ]
 
         # Use enhanced post-processor
         img = Image.open(image_path)

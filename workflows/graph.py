@@ -16,10 +16,10 @@ from workflows.state import AgentState
 from utils.paths import DETECTION_OUTPUT_PATH
 
 
-def run_pipeline(query: str, image_path: str) -> tuple[AgentState, float]:
+def run_pipeline(query: str, image_path: str, reference_image_path: str | None = None) -> tuple[AgentState, float]:
 
-    if not query.strip():
-        raise ValueError("Query is required.")
+    if not query.strip() and not reference_image_path:
+        raise ValueError("Query or Reference Image is required.")
 
     if not image_path.strip():
         raise ValueError("Image path is required.")
@@ -73,6 +73,11 @@ def run_pipeline(query: str, image_path: str) -> tuple[AgentState, float]:
             state,
             query=query,
         )
+        if reference_image_path:
+            state.query.reference_image_path = reference_image_path
+            state.query.search_mode = "hybrid" if query else "image"
+        elif query:
+            state.query.search_mode = "text"
 
         state.mission.current_step = 1
 

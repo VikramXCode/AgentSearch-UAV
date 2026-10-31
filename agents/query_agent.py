@@ -18,8 +18,10 @@ class QueryAgent:
         if query is None:
             query = input("Enter your search query: ").strip()
 
-        if not query:
-            raise ValueError("Search query is required.")
+        if not query and getattr(state.query, "reference_image_path", None) is None:
+            # We don't raise an error here because graph.py already checked this, 
+            # and it will allow empty query if reference_image_path is provided.
+            pass
 
         state.query.raw_query = query
 

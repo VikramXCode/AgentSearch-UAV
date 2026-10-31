@@ -1,4 +1,0 @@
-Object Size Scale,Pixel Area Definition,GT Count,Pred Count,TP,FP,FN,Precision,Recall,F1-Score
-Small,Area < 32^2 (< 1024 px^2),26575,118106,17440,100666,9135,0.1477,0.6563,0.2411
-Medium,32^2 <= Area <= 96^2 (1024-9216 px^2),11117,35304,9568,25736,1549,0.2710,0.8607,0.4122
-Large,Area > 96^2 (> 9216 px^2),1067,2834,976,1858,91,0.3444,0.9147,0.5004

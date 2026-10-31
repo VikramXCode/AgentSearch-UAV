@@ -44,9 +44,14 @@ export default function TargetSearchPanel({
   mode = 'image',
   setMode,
   videoProgress = null,
+  selectedReferenceFile,
+  setSelectedReferenceFile,
+  referencePreviewUrl,
+  setReferencePreviewUrl,
 }) {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const refFileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -96,6 +101,25 @@ export default function TargetSearchPanel({
     setSelectedFile(null);
     setPreviewUrl(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleReferenceFileChange = (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0];
+      if (!file.type.startsWith('image/')) {
+        alert('Please upload a valid image file (JPG, PNG, WEBP).');
+        return;
+      }
+      setSelectedReferenceFile(file);
+      setReferencePreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const clearReferenceFile = (e) => {
+    e.stopPropagation();
+    setSelectedReferenceFile(null);
+    setReferencePreviewUrl(null);
+    if (refFileInputRef.current) refFileInputRef.current.value = '';
   };
 
   const exampleQueries = mode === 'video' ? EXAMPLE_VIDEO_QUERIES : EXAMPLE_IMAGE_QUERIES;
@@ -180,6 +204,36 @@ export default function TargetSearchPanel({
               {item.label}
             </button>
           ))}
+        </div>
+
+        {/* Reference Image Input */}
+        <div className="pt-2">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => refFileInputRef.current?.click()}
+              className="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-900 hover:bg-slate-800 text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition-colors"
+            >
+              <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
+              {referencePreviewUrl ? "Change Reference Image" : "Upload Reference Image (Optional)"}
+            </button>
+            <input
+              type="file"
+              ref={refFileInputRef}
+              onChange={handleReferenceFileChange}
+              accept="image/png, image/jpeg, image/jpg, image/webp"
+              className="hidden"
+            />
+            {referencePreviewUrl && (
+              <div className="flex items-center gap-2 border border-slate-700 rounded-lg p-1 pr-2 bg-slate-900">
+                <img src={referencePreviewUrl} alt="Reference" className="w-8 h-8 object-cover rounded" />
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-mono text-cyan-300 truncate max-w-[100px]">{selectedReferenceFile?.name || 'Ref'}</span>
+                  <button onClick={clearReferenceFile} className="text-[9px] text-rose-400 hover:underline text-left">Clear</button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -300,14 +354,14 @@ export default function TargetSearchPanel({
                   <ImageIcon className="w-3.5 h-3.5 text-cyan-400" />
                 )}
                 <h3 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">
-                  Sample Scenes
+                  Treasure Media
                 </h3>
               </div>
-              <span className="text-[9px] font-mono text-slate-500">1-Click Presets</span>
+              <span className="text-[9px] font-mono text-cyan-500">treasure/</span>
             </div>
 
             <p className="text-[11px] text-slate-400 mb-2">
-              Select verified UAV benchmark footage:
+              Select media from treasure folder:
             </p>
 
             <div className="space-y-1.5">
@@ -332,27 +386,12 @@ export default function TargetSearchPanel({
                     </button>
                   ))
                 ) : (
-                  ['12 sec.mp4', 'traffic video clip 1.mp4'].map((name, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => onSelectSample({ name, url: `/sample-video?name=${name}` }, 'video')}
-                      className={`w-full px-2.5 py-1.5 rounded-lg border flex items-center justify-between text-xs font-mono transition-all text-left group cursor-pointer ${
-                        selectedFile?.name === name
-                          ? 'bg-cyan-950/40 border-cyan-500/60 text-cyan-300 font-semibold'
-                          : 'bg-slate-950 hover:bg-slate-900 border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-white'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2 truncate">
-                        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                        <span className="truncate">{name}</span>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-cyan-400 flex-shrink-0" />
-                    </button>
-                  ))
+                  <div className="text-[11px] text-slate-500 italic p-3 border border-dashed border-slate-800 rounded-lg text-center">
+                    No videos in <code className="text-cyan-400">treasure/videos</code>. Drop .mp4 files there or upload above.
+                  </div>
                 )
               ) : samples && samples.length > 0 ? (
-                samples.slice(0, 3).map((sample, idx) => (
+                samples.map((sample, idx) => (
                   <button
                     key={idx}
                     type="button"
@@ -371,24 +410,9 @@ export default function TargetSearchPanel({
                   </button>
                 ))
               ) : (
-                ['uav3.png', 'cctv.jpg', 'red car.jpg'].map((name, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => onSelectSample({ name, url: `/sample-image?name=${name}` }, 'image')}
-                    className={`w-full px-2.5 py-1.5 rounded-lg border flex items-center justify-between text-xs font-mono transition-all text-left group cursor-pointer ${
-                      selectedFile?.name === name
-                        ? 'bg-cyan-950/40 border-cyan-500/60 text-cyan-300 font-semibold'
-                        : 'bg-slate-950 hover:bg-slate-900 border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-white'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 truncate">
-                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                      <span className="truncate">{name}</span>
-                    </div>
-                    <ChevronRight className="w-3.5 h-3.5 text-slate-600 group-hover:text-cyan-400 flex-shrink-0" />
-                  </button>
-                ))
+                <div className="text-[11px] text-slate-500 italic p-3 border border-dashed border-slate-800 rounded-lg text-center">
+                  No images in <code className="text-cyan-400">treasure/images</code>. Drop image files there or upload above.
+                </div>
               )}
             </div>
           </div>

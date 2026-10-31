@@ -129,6 +129,8 @@ class EnhancedPostProcessor:
                         label=orig_det.label,
                         confidence=best_score,
                         bbox=orig_det.bbox,
+                        class_id=orig_det.class_id,
+                        source=orig_det.source
                     )
                 )
             

@@ -8,6 +8,7 @@ __pycache__/
 # Virtual Environment
 venv/
 .env
+node_modules/
 
 # ==========================
 # IDE
@@ -95,3 +96,4 @@ htmlcov/
 Thumbs.db
 # macOS AppleDouble metadata
 ._*
+.venv/

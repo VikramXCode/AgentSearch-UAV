@@ -1,0 +1,89 @@
+# EXP09: YOLO11-L High-Resolution Feature Fusion
+# Architecture: YOLO11-L + lightweight HR-bypass on P3 pathway
+#
+# Design:
+#   - Standard YOLO11-L backbone (layers 0-10) IDENTICAL to E3.
+#   - Standard P5->P4->P3 top-down FPN head (layers 11-16) IDENTICAL to E3.
+#   - NEW: From backbone P3 (layer 4), a lightweight parallel branch
+#     applies an extra C3k2 "detail-enhancement" block, then the output
+#     is fused (concat) back into the P3 head feature before detection.
+#   - The Detect head still sees only 3 scales: P3, P4, P5.
+#   - No P2 head. No resolution change. imgsz=1536 same as E3.
+#   - ~0.3M extra parameters vs E3.
+#
+# Layer index map (l-scale):
+#   0   P1/2 Conv
+#   1   P2/4 Conv
+#   2   P2  C3k2
+#   3   P3/8 Conv
+#   4   P3  C3k2  <-- backbone P3 features, tapped for HR-bypass
+#   5   P4/16 Conv
+#   6   P4  C3k2
+#   7   P5/32 Conv
+#   8   P5  C3k2
+#   9   SPPF
+#  10   C2PSA
+#  11   Upsample (P5->P4)
+#  12   Concat [11, 6]
+#  13   C3k2 (P4 head)
+#  14   Upsample (P4->P3)
+#  15   Concat [14, 4]          <-- standard cat with backbone P3
+#  16   C3k2 (P3 head base)     <-- will be enhanced by HR-bypass below
+#
+#  HR-BYPASS:
+#  17   C3k2 on backbone P3 (from 4) — detail enhancement branch
+#  18   Concat [16, 17]           — fuse standard P3 head + bypass
+#  19   Conv 1x1 bottleneck       — project back to 256-ch
+#
+#  DOWNSAMPLING:
+#  20   Conv [256, 3, 2]  (P3->P4 stride)
+#  21   Concat [20, 13]
+#  22   C3k2 (P4 output)
+#  23   Conv [512, 3, 2]
+#  24   Concat [23, 10]
+#  25   C3k2 (P5 output)
+#
+#  26   Detect([19, 22, 25])   P3/P4/P5
+
+nc: 10  # VisDrone classes
+scales:
+  l: [1.00, 1.00, 512]
+
+backbone:
+  - [-1, 1, Conv, [64, 3, 2]]          # 0-P1/2
+  - [-1, 1, Conv, [128, 3, 2]]         # 1-P2/4
+  - [-1, 2, C3k2, [256, False, 0.25]]  # 2
+  - [-1, 1, Conv, [256, 3, 2]]         # 3-P3/8
+  - [-1, 2, C3k2, [512, False, 0.25]]  # 4  <-- backbone P3 (tapped)
+  - [-1, 1, Conv, [512, 3, 2]]         # 5-P4/16
+  - [-1, 2, C3k2, [512, True]]         # 6
+  - [-1, 1, Conv, [1024, 3, 2]]        # 7-P5/32
+  - [-1, 2, C3k2, [1024, True]]        # 8
+  - [-1, 1, SPPF, [1024, 5]]           # 9
+  - [-1, 2, C2PSA, [1024]]             # 10
+
+head:
+  # --- Standard top-down FPN (identical to E3) ---
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]  # 11
+  - [[-1, 6], 1, Concat, [1]]                   # 12 cat backbone P4
+  - [-1, 2, C3k2, [512, False]]                 # 13 (P4 head features)
+
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]  # 14
+  - [[-1, 4], 1, Concat, [1]]                   # 15 cat backbone P3
+  - [-1, 2, C3k2, [256, False]]                 # 16 (P3 head base — standard)
+
+  # --- HR-bypass: lightweight enhancement from raw backbone P3 ---
+  - [4, 1, C3k2, [256, False]]                  # 17 detail-enhancement branch (from backbone P3)
+  - [[-1, 16], 1, Concat, [1]]                  # 18 fuse bypass + standard P3 head
+  - [-1, 1, Conv, [256, 1, 1]]                  # 19 1x1 bottleneck → 256-ch (P3 output, small)
+
+  # --- Bottom-up path (standard) ---
+  - [-1, 1, Conv, [256, 3, 2]]                  # 20
+  - [[-1, 13], 1, Concat, [1]]                  # 21 cat P4 head features
+  - [-1, 2, C3k2, [512, False]]                 # 22 (P4 output, medium)
+
+  - [-1, 1, Conv, [512, 3, 2]]                  # 23
+  - [[-1, 10], 1, Concat, [1]]                  # 24 cat C2PSA features
+  - [-1, 2, C3k2, [1024, True]]                 # 25 (P5 output, large)
+
+  - [[19, 22, 25], 1, Detect, [nc]]             # Detect(P3, P4, P5)

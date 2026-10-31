@@ -14,6 +14,7 @@ class QueryState(BaseModel):
     quantity_value: Optional[int] = None
     canonical_query: str = ""
     search_mode: str = "text"
+    reference_image_path: Optional[str] = None
 
 
 # -----------------------------

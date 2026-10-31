@@ -51,7 +51,7 @@ python scripts\evaluate_optimized_pipeline.py --num-images 30
 
 
 
-
+# If you are new :O
 
 cd "c:\\Users\\hp\\OneDrive\\Documents\\Projects\\AgentSearch\\AgentSearch-UAV"
 

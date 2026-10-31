@@ -5,7 +5,7 @@ from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_YOLO_WORLD_WEIGHTS = PROJECT_ROOT / "weights" / "best.pt"
+DEFAULT_YOLO_WORLD_WEIGHTS = PROJECT_ROOT / "runs" / "detect" / "experiments" / "model_search" / "E3_yolo11l_1536_aug" / "weights" / "best.pt"
 BASELINE_YOLO_WORLD_WEIGHTS = PROJECT_ROOT / "weights" / "yolov8s-world.pt"
 YOLO_WORLD_WEIGHTS_ENV = "AGENTSEARCH_YOLO_WORLD_WEIGHTS"
 
@@ -26,6 +26,11 @@ VISDRONE_CLASS_NAMES = [
 def resolve_yolo_world_weights(explicit_path: str | os.PathLike[str] | None = None) -> str:
     candidate = explicit_path or os.environ.get(YOLO_WORLD_WEIGHTS_ENV) or DEFAULT_YOLO_WORLD_WEIGHTS
     candidate_path = Path(candidate)
+
+    path_str = str(candidate_path)
+    if "weights/best.pt" == path_str or "E1" in path_str or "E2" in path_str or "E4" in path_str or "E5" in path_str:
+        print(f"Warning: Intercepted request for obsolete weights '{path_str}'. Forcing E3 production detector.")
+        candidate_path = DEFAULT_YOLO_WORLD_WEIGHTS
 
     if not candidate_path.is_absolute():
         candidate_path = (PROJECT_ROOT / candidate_path).resolve()

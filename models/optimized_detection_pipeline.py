@@ -147,14 +147,19 @@ class OptimizedDetectionPipeline:
         if not images:
             return []
 
-        results = self.model.predict(
-            source=images,
-            imgsz=imgsz,
-            conf=conf,
-            iou=0.45,
-            device=self.device,
-            verbose=False,
-        )
+        results = []
+        batch_size = 4
+        for i in range(0, len(images), batch_size):
+            chunk = images[i:i + batch_size]
+            chunk_results = self.model.predict(
+                source=chunk,
+                imgsz=imgsz,
+                conf=conf,
+                iou=0.45,
+                device=self.device,
+                verbose=False,
+            )
+            results.extend(chunk_results)
 
         batch_detections: List[List[Detection]] = []
         for r in results:
@@ -207,41 +212,31 @@ class OptimizedDetectionPipeline:
         )[0]
         latencies["base_detection"] = round(time.perf_counter() - t0, 4)
 
-        # 3. Object Size & Scene Density Analysis
+        # 3. Adaptive Difficulty Analysis & Processing
         t0 = time.perf_counter()
-        sahi_enabled = self.config.get("adaptive_sahi", {}).get("enabled", True) if enable_sahi is None else enable_sahi
-        should_sahi, sahi_reason, sahi_info = self.adaptive_sahi.should_trigger_sahi(
-            base_dets, orig_w, orig_h, force_sahi=False
+        if not hasattr(self, 'adaptive_processor'):
+            from utils.adaptive_region_processor import AdaptiveRegionProcessor
+            self.adaptive_processor = AdaptiveRegionProcessor()
+            
+        def _detect_wrapper(patches, conf=0.10, imgsz=640):
+            return self._raw_predict_images(patches, imgsz=imgsz, conf=conf)
+            
+        processed_dets, filtered_base_dets, processing_logs = self.adaptive_processor.process_regions(
+            pil_image,
+            base_dets,
+            detect_fn=_detect_wrapper
         )
+        latencies["adaptive_processing"] = round(time.perf_counter() - t0, 4)
 
-        # 4. Adaptive SAHI Processing
-        sahi_dets: List[Detection] = []
-        if sahi_enabled and should_sahi:
-            sahi_dets = self.adaptive_sahi.run_sliced_inference(
-                pil_image,
-                detect_fn=lambda patches: self._raw_predict_images(patches, imgsz=640, conf=0.10),
-                strategy=sahi_info.get("strategy", "standard"),
-            )
-        latencies["adaptive_sahi"] = round(time.perf_counter() - t0, 4)
+        # 3.5 Filter out raw unverified noise
+        # Any base detection that wasn't verified by an adaptive branch and has very low confidence is likely noise.
+        strong_base_dets = [d for d in filtered_base_dets if d.confidence >= 0.35]
 
-        # 5. Selective Super-Resolution
+        # 4. Detection Fusion
         t0 = time.perf_counter()
-        sr_enabled = self.config.get("selective_super_resolution", {}).get("enabled", True) if enable_sr is None else enable_sr
-        sr_dets: List[Detection] = []
-        if sr_enabled and (len(base_dets) > 0 or len(sahi_dets) > 0):
-            combined_for_roi = base_dets + sahi_dets
-            sr_dets = self.selective_sr.process_image(
-                pil_image,
-                combined_for_roi,
-                detect_fn=lambda patches: self._raw_predict_images(patches, imgsz=640, conf=0.10),
-            )
-        latencies["selective_super_resolution"] = round(time.perf_counter() - t0, 4)
-
-        # 6. Detection Fusion
-        t0 = time.perf_counter()
-        raw_all = base_dets + sahi_dets + sr_dets
+        raw_all = strong_base_dets + processed_dets
         if self.config.get("detection_fusion", {}).get("enabled", True):
-            fused_dets = self.fusion_engine.fuse(base_dets, sahi_dets, sr_dets)
+            fused_dets = self.fusion_engine.fuse(strong_base_dets, processed_dets, [])
         else:
             fused_dets = raw_all
         latencies["detection_fusion"] = round(time.perf_counter() - t0, 4)
@@ -294,13 +289,10 @@ class OptimizedDetectionPipeline:
             filtered_detections=final_dets,
             latency_breakdown=latencies,
             pipeline_metadata={
-                "sahi_triggered": should_sahi and sahi_enabled,
-                "sahi_reason": sahi_reason,
-                "super_resolution_triggered": sr_enabled and len(sr_dets) > 0,
+                "adaptive_processing_logs": processing_logs,
                 "raw_count": len(raw_all),
                 "final_count": len(final_dets),
                 "base_count": len(base_dets),
-                "sahi_count": len(sahi_dets),
-                "sr_count": len(sr_dets),
+                "processed_count": len(processed_dets),
             },
         )
